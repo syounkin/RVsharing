@@ -19,6 +19,15 @@ related, format unkown}
 between the founders in relfounders, or a square symmetric matrix of
 kinship coefficients for every pair of founders in relfounders}
 }
+\value{
+  \item{num}{no details yet}
+  \item{p0}{no details yet}
+  \item{iancestors}{no details yet}
+  \item{desfounders}{no details yet}
+  \item{id}{no details yet}
+  \item{dad.id}{no details yet}
+  \item{mom.id}{no details yet}
+  }
 \details{
 For now, there can only be one lineage of intermediate ancestors with
 more than one child each Multiple mariages can only involve one of the
