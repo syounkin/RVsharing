@@ -11,7 +11,9 @@ Depends: R (>= 3.0.0), methods, kinship2
 Imports:
 Suggests:
 Enhances:
-Collate: approx2_functions.R		  
+Collate: AllGenerics.R
+	 methods-pedigree.R
+	 approx2_functions.R		  
 	 compute_kinship_prop_coef.R
 	 rare_variant_sharing_v3.R
 	 rare_variant_sharing_approx2_v2.R 
