@@ -1,41 +1,29 @@
-# Computing probability of transmission of a rare variant to sets of subjects in a pedigree from a single ancestor, for 
-# the setting where introduction by more than one founder is allowed (and computed separately)
-# This function applies with method 1 for approximating variant sharing probabilities in presence of know or unknown
+# Computing probability of transmission of a rare variant to sets of
+# subjects in a pedigree from a single ancestor, for the setting where
+# introduction by more than one founder is allowed (and computed
+# separately) This function applies with method 1 for approximating
+# variant sharing probabilities in presence of know or unknown
 # relationships between founders
 
 # By Alexandre Bureau
 
 # Based on function RVsharing
 
-# Version 0.1 
+# Version 0.1
 
-# Only a specified pair of founders are related with specified kinship coefficient
+# Only a specified pair of founders are related with specified kinship
+# coefficient
 
-# Version 0.2 
-# 2013/05/01
+# Version 0.2 2013/05/01
 
-# Many founder pairs can have non-zero kinship coefficients specified in a matrix
-# Correction of an error in Version 0.1 that gave probabilities too low
+# Many founder pairs can have non-zero kinship coefficients specified
+# in a matrix Correction of an error in Version 0.1 that gave
+# probabilities too low
 
-library(kinship2)
+#library(kinship2)
 
 RVsharing.weighted = function(id, dad.id, mom.id,relfounders,phi)
 {
-# The function RV sharing computes the probability that all final descendants in the pedigree share a rare variant
-# given that a rare variant has been detected in any one of these final descendants
-# For now, there can only be one lineage of intermediate ancestors with more than one child each
-# Multiple mariages can only involve one of the top founders. Intermediate ancestors can have only one spouse
-# All final descendants must share a common ancestor or couple of ancestors, otherwise an erroneous response may be obtained
-# Correction to the extration of the kth name : names(tmp)[k]
-
-# The function RVsharing.weighted computes the probability that all sequenced subjects inherit the variant from a single ancestor (num)
-# and the probability that no sequenced subject inherited the variant from any of the founders given that a single copy of the variant 
-# is present in the founders (p0), weighted by the probability that each founder was the only one to introduce the variant.
-
-# relfounders : vector specifying the ids of the founders who are related
-# phi : either a scalar giving the constant kinhsip coefficient between the founders in relfounders,
-#       or a square symmetric matrix of kinship coefficients for every pair of founders in relfounders
-
 if (!is.matrix(phi))
   {
   if(length(phi)==1) phi = matrix(c(0,phi,phi,0),2,2)
