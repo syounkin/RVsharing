@@ -1,0 +1,18 @@
+% Sweave(file = './RVsharing.Rnw')
+\documentclass[10pt, final]{article}
+\usepackage{Sweave}
+\SweaveOpts{eps=FALSE,echo=TRUE,figs.only=TRUE,keep.source=FALSE, prefix.string=figures/RVsharing}
+\usepackage{graphicx} %should be removed before submission!
+%\input{/home/sgy/jhsph/latex/sgy}
+\begin{document}
+<<options, echo=FALSE, eval = TRUE, echo = FALSE>>=
+  options(width=75, continue = " ")
+  library("Bureau")
+@ 
+<<RVsharing.toy>>=
+id <- paste0("sub", 1:8)
+fa.id <- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5")
+ma.id <- c(NA,NA,NA,"sub2","sub2", NA,"sub4","sub6")
+Bureau:::RVsharing( id = id, dad.id = fa.id, mom.id = ma.id )
+@ 
+\end{document}
