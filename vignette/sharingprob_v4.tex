@@ -1,0 +1,331 @@
+\documentclass[12pt]{aastex}
+\usepackage{graphicx}
+
+\begin{document}
+\title{Probability of sharing a rare variant by related individuals}
+
+\author{Alexandre Bureau\altaffilmark{1,2}, Ingo Ruczinski\altaffilmark{3}}
+\altaffiltext{1}{Centre de recherche de l'Institut universitaire en sant\'{e} mentale de Qu\'{e}bec}
+\altaffiltext{2}{D\'{e}partement de m\'{e}decine sociale et pr\'{e}ventive, Universit\'{e} Laval}
+\altaffiltext{3}{Johns Hopkins Bloomberg School of Public Health}
+
+\section{Methods}
+
+Our goal is to compute the probability that a set of related subjects whose DNA sequence is observed through sequencing or other means (sequenced subjects) share a rare variant (RV) identical-by-descent given that a RV has been observed at a site in the sequence. We assume that the variant for which we compute a sharing probability is rare enough that there exists a single copy of that variant among the alleles present in the $n_f$ founders of the pedigree relating the subject for which we want to compute a sharing probability. In the basic setting, all founders are unrelated and a single copy of the variant is present among the founders. In a generalization, we later allow founders to be related, and two copies of the allele to be introduced in the pedigree by a pair of related founders.
+
+\subsection{Computation assuming all founders are unrelated}
+
+We define the following random variables and constants:
+
+\begin{itemize}
+\item[$C_i$] Number of copies of the RV received by sequenced subject $i$
+\item[$F_j$] Indicator variable that founder $j$ introduces one copy of the RV in the pedigree
+\item[$B_k$] Number of copies of the RV in subject $k$ where a line of descent from a founder branches into two separate lines of descents to a subset of sequenced subjects
+\item[$D_{ij}$] Number of generations (meioses) between subject $i$ and his ancestor $j$
+\end{itemize}
+
+For a set of $n$ sequenced subjects for which the pedigree structure limits to one the number of copies of the rare variant that they can share, we want to compute the probability
+
+\pagebreak
+
+\begin{eqnarray}
+P[\mbox{RV shared}] &=& P[C_1 = \dots = C_n = 1 | C_1 + \dots + C_n \geq 1] = \frac{P[C_1 = \dots = C_n = 1 ]}{P[C_1 + \dots + C_n \geq 1]}\\
+ &=& \frac{\sum_{j=1}^{n_f} P[C_1 = \dots = C_n = 1 | F_j] P[F_j]}{\sum_{j=1}^{n_f} P[C_1 + \dots + C_n \geq 1 | F_j]P[F_j]} \nonumber
+ \label{sharingp}
+\end{eqnarray}
+
+where the expression on the second line results from our assumption that there exists a single copy of that variant among the alleles present in the $n_f$ founders. The probabilities $P[F_j] = {1 \over n_f}$ cancel from the numerator and denominator. For the other terms, we first derive expressions for the special case where all the sequenced subjects descend from every founder among their ancestors through independent lines of descent. In that case,
+
+\begin{equation}
+P[C_1 = \dots = C_n = 1 | F_j] = \left\{ \begin{array}{ll} \prod_i \left(1 \over 2 \right)^{D_{ij}} = \left(1 \over 2 \right)^{D_j} & \mbox{if $F_j$ is a common ancestor to the $n$ sequenced subjects}\\
+                                                          0 & \mbox{otherwise} \end{array} \right.
+\label{numerator}
+\end{equation}
+
+and 														  
+\begin{equation}
+P[C_1 + \dots + C_n \geq 1 | F_j] = 1 - P[C_1 = \dots = C_n = 0 | F_j] = 1 - \prod_{i \in d(j)} \left(1 - \left(1 \over 2 \right)^{D_{ij}} \right)
+\label{denominator}
+\end{equation}
+where $D_j = \sum_i D_{ij}$ and $d(j)$ is the subset of sequenced individuals who descend from founder $j$.
+
+The global expression is then
+\begin{equation}
+P[\mbox{RV shared}] = \frac{\sum_{j=1}^{n_f}  \left(1 \over 2 \right)^{D_j} I(\mbox{$F_j$ is a common ancestor to the $n$ sequenced subjects)}}{\sum_{j=1}^{n_f}  \left[ 1 - \prod_{i \in d(j)} \left(1 - \left(1 \over 2 \right)^{D_{ij}} \right) \right]}
+\label{generalform}
+\end{equation}
+
+We note here that equation~\ref{generalform} covers the general case of pedigrees without inbreeding, including individuals marrying multiple times and marriage loops. For the common special case of a pedigree with a founder couple ancestral to all descendants in the pedigree, the numerator simplifies and we obtain the following expression:
+\begin{equation}
+P[\mbox{RV shared}] = \frac{  \left(1 \over 2 \right)^{D_f-1} }{\sum_{j=1}^{n_f} \left[ 1 - \prod_{i \in d(j)} \left(1 - \left(1 \over 2 \right)^{D_{ij}} \right) \right]}
+\label{ancescoupleform}
+\end{equation}
+
+where $f$ is any of the two founders forming the ancestral couple.\\
+
+When the lineages of sequenced individuals "coalesce" at a branching individual $k$ below a founder of the pedigree, we can no longer write a general expression like~\ref{generalform}, and recursive computations are required. Without loss of generality, let $k$ be the branching individual who has sequenced subjects $1, \dots, i_k$ as descendants through independent lines of descent. We have 
+\begin{equation}
+P[C_1 = \dots = C_n = 1 ] = P[C_1 = \dots = C_{i_k} = 1 | B_k = 1] P[ B_k = C_{i_k+1} = \dots = C_n = 1] 
+\label{recurnum}
+\end{equation}
+
+because $P[C_1 = \dots = C_{i_k} = 1 | B_k = 0] = 0$. The term $ P[C_1 = \dots = C_{i_k} = 1 | B_k = 1]$ is computed from equation~\ref{numerator} replacing $F_j$ by $B_k$. The term $P[ B_k = C_{i_k+1} = \dots = C_n = 1]$ is computed by reapplying equation~\ref{recurnum} recursively with every branching individual. 
+
+Also, for a founder above a branching individual in the pedigree, we have
+\begin{eqnarray}
+P[C_1 = \dots = C_n = 0 | F_j] &=& P[C_1 = \dots = C_{i_k} = 0 | B_k = 1, F_j] P[ B_k = 1, C_{i_k+1} = \dots = C_n = 0 | F_j]\nonumber \\
+ & & + P[C_1 = \dots = C_{i_k} = 0 | B_k = 0, F_j] P[ B_k = C_{i_k+1} = \dots = C_n = 0 | F_j]\nonumber \\
+ &=& P[C_1 = \dots = C_{i_k} = 0 | B_k = 1] P[ B_k = 1, C_{i_k+1} = \dots = C_n = 0 | F_j] \\ \label{recurdenom}
+ & & + P[ B_k = C_{i_k+1} = \dots = C_n = 0 | F_j] \nonumber
+\end{eqnarray}
+
+The term $ P[C_1 = \dots = C_{i_k} = 0 | B_k = 1] $ is computed from the right-hand side of equation~\ref{denominator} replacing $F_j$ by $B_k$. The two terms $ P[ B_k = a, C_{i_k+1} = \dots = C_n = 0 | F_j], a = 0,1$ require recursive computations. If $h$ is a branching individual who is an ancestor of $k$ and a descendant of founder $j$, then
+\begin{eqnarray}
+& P[ B_k = 1, C_{i_k+1} = \dots = C_n = 0 | F_j] & \nonumber \\
+= & P[ B_k = 1, C_{i_k+1} = \dots = C_{i_h} = 0 | B_h = 1] P[ B_h = 1, C_{i_h+1} = \dots = C_n = 0 | F_j] & \nonumber \\ 
+& + P[ B_k = 1, C_{i_k+1} = \dots = C_{i_h} = 0 | B_h = 0] P[ B_h = C_{i_h+1} = \dots = C_n = 0 | F_j] & \nonumber \\
+ =& \left( 1 \over 2 \right)^{D_{kh}} P[ C_{i_k+1} = \dots = C_{i_h} = 0 | B_h = 1] P[ B_h = 1, C_{i_h+1} = \dots = C_n = 0 | F_j] & 
+\end{eqnarray}
+ 
+and similarly to~\ref{recurdenom}
+\begin{eqnarray}
+& P[ B_k = C_{i_k+1} = \dots = C_n = 0 | F_j] & \nonumber \\
+= &  \left( 1 - \left( 1 \over 2 \right)^{D_{kh}} \right) P[ C_{i_k+1} = \dots = C_{i_h} = 0 | B_h = 1] P[ B_h = 1, C_{i_h+1} = \dots = C_n = 0 | F_j]  & \nonumber \\
+& + P[ B_h = C_{i_h+1} = \dots = C_n = 0 | F_j] &
+\end{eqnarray}
+where the computation of the term $ P[ C_{i_k+1} = \dots = C_{i_h} = 0 | B_h = 1]$ can itself involve other branching individuals below $h$.
+
+\subsection{Computation allowing for relatedness between founders or inbreeding loops within a pedigree}
+
+We generalize our computation to the setting where founders are related, while still excluding that the founders are themselves inbred (only their children will be). This includes the setting where inbreeding loops are known and are included in the pedigree structure. One can then define a noninbred subpedigree by removing some familial links. The relatedness between the "founders" of that subpedigree can be captured by their kinship coefficient based on the removed links, and the first approximation described below can then be applied. When familial links between founders are unknown, they sometime can be estimated from genotype data on these founders. Other times, genotype data is only available on the sequenced subjects.\\ 
+
+We propose two methods to approximate sharing probabilities between sequenced subjects in presence of IBD sharing in excess of what is expected based on the pedigree structure. With the first method, only one founder allele (not necessarily the RV considered in the computation) can be shared by only one pair of founders. This method gives an exact sharing probability when only two founders are related, and a good approximation when a few founders are related. Known founder pair-specific kinship coefficients can be used. With the second method, up to T alleles can be shared by two pairs of founders, with T set to 2 or 3 depending on the level of sharing between founders. It requires to assume that all founders are related to the same extent, i.e. all pairs of founders have the same kinship coefficient calculated to explain the excess sharing between sequenced subjects. The method gives a good approximation for more extensive hidden relatedness than the first method. Note that in this second approximation, we still assume that only two founders introduce a copy of the RV considered in the computation.
+
+The elements that we need to implement either approach are:
+
+\begin{enumerate}
+  \item The probability that a pair of related founders introduce the RV in the pedigree.
+  \item The sharing probabilities conditional on the introduction of the RV by two of the founders.
+\end{enumerate}
+
+The two methods to approximate the probability that a pair of related founders introduce the RV in the pedigree are described below. The formulas for the sharing probabilities conditional on the introduction of the RV by two of the founders are given in Appendix~\ref{twointroduce}.\\ 
+
+Once the required elements have been computed, we get an adjusted estimate of sharing probability with the following formula:
+
+ \begin{eqnarray}
+P[\mbox{RV shared}] 
+ &=& \frac{\sum_{j=1}^{n_f} P[C_1 = \dots = C_n = 1 | F_j^U] P[F_j^U] + \sum_j \sum_{k>j}  P[C_1 = \dots = C_n = 1 | F_j, F_k] P[F_j, F_k] }{\sum_{j=1}^{n_f} P[C_1 + \dots + C_n \geq 1 | F_j^U]P[F_j^U] + \sum_j \sum_{k>j}  P[C_1 + \dots + C_n \geq 1 | F_j, F_k]P[F_j, F_k]}
+\end{eqnarray}
+
+where $F_j^U$ is the event that founder $j$ is the only one to introduce the RV in the family.
+
+\subsubsection{Method 1}
+
+The probability that two related founders, say $j$ and $k$, introduce the RV in the pedigree is expressed as follows:
+\begin{eqnarray}
+P[F_j, F_k] &=& P[\mbox{Allele shared is RV} | j \& k \mbox{ share allele IBD}] P[j \& k \mbox{ share allele IBD}] \\
+ &=& {1 \over 2n_f - 1} 2 \phi_{jk} = {2 \phi_{jk} \over 2n_f - 1} \nonumber
+\end{eqnarray}
+
+where $\phi_{jk}$ is the kinship coefficient between founders $j$ and $k$. The first term represents the probability that the RV is the allele IBD between the two founders among the $2n_f - 1$ distinct alleles in all founders. The marginal probability that any founder $h$ introduces the RV needs to be adjusted compared to the unrelated case. In that computation, we make the simplifying assumption that the probability that 3 or more founders share an allele IBD is 0 so that the event "$i$ and $j$ share an allele IBD" means that they are the only ones to do so. This assumption is true only when a single pair of founders are related. While the formula allows all pairs of founders to be related, we recommend using this approximation when only a few of the $\phi_{jk}$ are non-zero.
+
+\begin{eqnarray}
+P[F_h] &=& \sum_j \sum_{k>j} P[F_h| j \& k \mbox{ share allele IBD}] P[j \& k \mbox{ share allele IBD}] \\
+ & & + P[F_h| \mbox{no founder pair shares allele IBD}] P[\mbox{no founder pair shares allele IBD}] \nonumber \\
+ &=& {2 \over 2n_f - 1} \sum_j \sum_{k>j} P[j \& k \mbox{ share allele IBD}] + {1 \over n_f} \left(1 - \sum_j \sum_{k>j} P[j \& k \mbox{ share allele IBD}]\right ) \nonumber \\
+&=& {4 \sum_j \sum_{k>j} \phi_{jk} \over 2n_f - 1} + {1 \over n_f} \left(1 - \sum_j \sum_{k>j} 2 \phi_{jk}\right)\nonumber
+\end{eqnarray}
+
+We obtain the probability of $F_j^U$, the event that founder $j$ is the only one to introduce the RV in the family, as
+
+\begin{equation}
+P[F_j^U] = P[F_j] - \sum_{k \neq j} P[F_j,F_k]
+\label{FU}
+\end{equation}
+
+If we know which founders $j$ and $k$ are related, then their degree of relatedness is usually also known, and specifies their kinship coefficient $\phi_{jk}$. If it is possible to identify a subset of founders that are suspected to be related, with the other founders unrelated to that subset and between themselves, then this method can still be applied, with the kinship coefficient between the subset of founders suspected to be related estimated as described in section~\ref{method2}. If instead familial links between founders are completely unknown, we generally recommend to apply the second method. 
+
+\subsubsection{Method 2}
+\label{method2}
+
+For the second method, we assume $\phi_{jk} = \phi^f \forall j,k$. This is an assumption that we prefer to make when the relatedness between specific pairs of founders is unknown and we need to rely on genotye data to estimate it. Even with perfect information on IBD sharing between subjects, there is considerable variation in the kinship coefficient based on IBD sharing estimated for pairs of subjects with the same degree of relatedness due to variation in the length of genome shared from pair to pair~\citep{Manichaikul10}, and reliable inference can only be obtained for the mean or other central tendency parameter.\\
+
+Two situations can occur with respect to the genotype data available to estimate kinship between founders:
+
+\begin{enumerate}
+\item Polymorphic markers have been genotyped on the pedigree founders, typically a genomewide SNP array. Then $\phi_{jk}$ can be estimated for each founder pair $j$ and $k$, and a global estimate $\hat{\phi}^f$ obtained by averaging the $\hat{\phi}_{jk}$ over all founder pairs from the same population.
+\item Genotype data is only available on the sequenced subjects (either from the sequencing data itself of from other genotyping). The common $\phi^f$ is estimated based on the estimated kinship coefficients between sequenced subjects and the relationship between the sequenced subjects and all founders. 
+
+\begin{eqnarray}
+\phi_{i_1i_2} &=& \phi^f \sum_j \sum_{k>j} \left[ \left( {1 \over 2} \right)^{D_{i_1j} + D_{i_2k}} I(j \& k \mbox{ not mating}) + \left( {1 \over 2} \right)^{D_{i_1j} + D_{i_2k} - 1} I(j \& k \mbox{ mating}) \right] + \phi_{i_1i_2}^p \nonumber \\
+&=& \phi^f \kappa_{i_1i_2} + \phi_{i_1i_2}^p 
+\end{eqnarray}
+ 
+An estimate of $\phi^f$ is then obtained for every pair $i_1,i_2$ as
+\begin{equation}
+\hat{\phi}_{i_1,i_2}^f = { (\hat{\phi}_{i_1i_2} - \phi_{i_1i_2}^p)  \over \kappa_{i_1i_2} }
+\end{equation}
+
+These pair-specific estimates can then be averaged over all pairs of sequenced subjects from the same population to obtain a global $\hat{\phi}^f$. 
+\end{enumerate}
+
+This second method of approximation relates the estimated mean kinship $\hat{\phi}^f$ to the distribution of the number of alleles distinct by descent in the founders. Then, $P[F_j, F_k]$ and $P[F_j]$  are derived from that distribution. The rest of this sub-subsection explains in detail how to compute the approximate values of these quantities.\\
+
+The number of alleles $A$ distinct by descent in the founders can take values $1, \dots, 2n_f$. We will assume only the values $2n_f-T, \dots, 2n_f$ have nonzero probability. For the sake of simplicity, we will present the case where T = 2. We parameterize the probabilities $P[A]$ to be proportional to
+
+\begin{equation}
+\begin{array}{ccc}
+2n_f-2 & 2n_f-1 & 2n_f\\
+{1 \over 2} \theta^2 & \theta & 1
+\end{array}
+\end{equation}
+inspired from a truncated Poisson distribution. The expected kinship coefficient among the $n_f$ founders is then 
+
+\begin{equation}
+E[\Phi] = \frac{\theta \bar{\phi}_{2n_f-1} + {1 \over 2} \theta^2 \bar{\phi}_{2n_f-2}}{1 + \theta + {1 \over 2} \theta^2 }
+\end{equation}
+
+where $\bar{\phi}_a$ is the mean kinship coefficient among the $n_f$ founders when there are $a$ alleles distinct by descent. Assuming no inbreeding among the founders, we show in Appendix~\ref{kinship} that:
+
+\begin{eqnarray}
+\bar{\phi}_a &=& {1 \over 2(n_f-1)} P[\mbox{Any founder shares an allele IBD with 2 other founders}] \nonumber \\
+& & + {1 \over 4(n_f-1)}P[\mbox{Any founder shares an allele IBD with 1 other founder}] \nonumber \\
+&=& {1 \over 2(n_f-1)} \frac{2 n_f - a}{n_f} \frac{2n_f - a - 1}{n_f-1}\\
+& & + {1 \over 4(n_f-1)} \frac{2(a-n_f)(4n_f - 2a)}{2(a-n_f)(4n_f - 2a) + (a-n_f)(2(a - n_f) - 1) + (4n_f - 2a)(2n_f - a - 1)}\nonumber 
+\end{eqnarray}
+
+Equating $E[\Phi] = \hat{\phi}^f$, we solve for $\theta$:
+
+\begin{equation}
+\hat{\theta} = \frac{- (\hat{\phi}^f - \bar{\phi}_{2n_f-1}) - \sqrt{(\hat{\phi}^f - \bar{\phi}_{2n_f-1})^2 - 2(\hat{\phi}^f - \bar{\phi}_{2n_f-2})\hat{\phi}^f}}{ \hat{\phi}^f - \bar{\phi}_{2n_f-2}} 
+\end{equation}
+
+We then need $P[F_j, F_k|A=a]$:
+
+\begin{eqnarray}
+P[F_j, F_k|A=a] &=& P[\mbox{Allele shared is RV} | j \& k \mbox{ share allele IBD},A=a] P[j \& k \mbox{ share allele IBD}|A=a] \nonumber \\
+ &=& {1 \over a} 2 \bar{\phi}_a
+\end{eqnarray} 
+
+Finally, $P[F_j, F_k]$ is obtained as
+
+\begin{eqnarray}
+P[F_j, F_k] &=& \sum_{a=2nf-2}^{2nf} P[F_j, F_k|A=a]P[A=a] \nonumber \\
+&=& \left( \frac{2 \bar{\phi}_{2n_f-2} {1 \over 2} \theta^2}{2n_f-2} + \frac{ 2 \bar{\phi}_{2n_f-1} \theta}{2n_f-1} \right) \frac{1}{1 + \theta + {1 \over 2} \theta^2 }\nonumber \\
+&=& \left( \frac{\bar{\phi}_{2n_f-2} \theta^2}{2n_f-2} + \frac{2 \bar{\phi}_{2n_f-1} \theta}{2n_f-1} \right) \frac{1}{1 + \theta + {1 \over 2} \theta^2 }
+\end{eqnarray}
+
+The marginal probability that any founder $j$ introduces the RV is 
+\begin{eqnarray}
+P[F_j] &=& \sum_{a=2nf-2}^{2nf} P[F_j|A=a]P[A=a] \nonumber \\
+&=& \left( \frac{ \theta^2}{2n_f-2} +\frac{2 \theta}{2n_f-1} + \frac{1}{n_f} \right) \frac{1}{1 + \theta + {1 \over 2} \theta^2 }\nonumber \\
+\end{eqnarray}
+
+As with method 1, the probability of $F_j^U$, the event that founder $j$ is the only one to introduce the RV in the family, is obtained using equation~\ref{FU}.
+
+When $\hat{\phi}^f$ is moderately high, say greater than $\phi_{2n_f-1}$, one should allow up to three alleles to be shared, i.e. set T = 3 and give the event $A = 2n_f-3$ a nonzero probability equal to ${1 \over 6} \theta^3$. The estimation of $\theta$ then requires solving a cubic polynomial, but the other formulas generalize easily. 
+
+\subsection{Validation of the approximation of the sharing probabilities}
+
+We simulated small populations from which we sampled founders of a pedigree to validate the quality of the approximation of the sharing probabilities.
+
+\subsubsection{Simulated populations}
+
+
+\appendix 
+
+\subsection{Sharing probabilities conditional on the introduction of the RV by two of the founders}
+\label{twointroduce}
+We need to introduce an additional type of subjects, the descendants that are common to the two founders introducing the RV, and who can therefore receive two copies of the variant. We note the number of copies of the RV in such a subject $h$ by $T_h$.
+
+As before, we begin by the expressions for the special case where all the sequenced subjects descend from every founder among their ancestors through independent lines of descent. With two founders introducing the RV, we further need to distinguish four events.
+
+\subsubsection{The lines of descent to every sequenced subject are common to the two founders introducing the variant}
+
+This implies that the two founders introducing the RV are mates and their descendants in common are their children. With the assumption of independent lines of descent, the $n$ sequenced individuals descend from $n$ children of the founders and
+
+\begin{eqnarray}
+P[C_1 = \dots = C_n = 1 | F_j, F_k] &=& \sum_{x=0}^n  P[C_1 = \dots = C_n = 1 | \sharp \{ i : T_i = 2\} = x, \sharp \{ i : T_i = 1\} = n - x, F_j, F_k] \nonumber \\
+& &  P[\sharp \{ i : T_i = 2\} = x, \sharp \{ i : T_i = 1\} = n - x| F_j, F_k]\\
+ &=& \sum_{x=0}^n \left( {1 \over 2} \right)^{\sum_{\{ i : T_i = 2\}} D_{ij}-2} \left( {1 \over 2} \right)^{\sum_{\{ i : T_i = 1\}} D_{ij}-1} {n \choose x} \left( {1 \over 4} \right)^x \left( {1 \over 2} \right)^{n-x} \nonumber \\
+ &=& \sum_{x=0}^n \left( {1 \over 2} \right)^{D^s - n - x}  {n \choose x} \left( {1 \over 2} \right)^{2x} \left( {1 \over 2} \right)^{n-x} = \left( {1 \over 2} \right)^{D^s} \sum_{x=0}^n  {n \choose x} \nonumber \\
+&=& \left( {1 \over 2} \right)^{D^s - n}  \nonumber
+\end{eqnarray}
+where $D^s = \sum_i D_{ij}$ and $D_{ij} = D_{ik} \forall i$. This expression applies if all $D_{ij} \geq 2$, i.e. the sequenced subjects are grand-children or more distant descendants of the founders. When a sequenced subject is a children of the founders, then $C_i = T_i$. We adapt the formula to distinguish the $n_c$ sequenced subjects who are children of the founders from the others.
+
+\begin{eqnarray}
+P[C_1 \geq 1, \dots, C_{n_c} \geq 1, C_{n_c+1} = \dots = C_n = 1 | F_j, F_k] &=& P[C_1 \geq 1, \dots, C_{n_c} \geq 1| F_j, F_k] \\
+& & P[ C_{n_c+1} = \dots = C_n = 1 | F_j, F_k] \nonumber \\
+&=& \left( {3 \over 4} \right)^{n_c} \left( {1 \over 2} \right)^{(D^s - n_c) - (n - n_c)} \nonumber \\ 
+&=& \left( {3 \over 4} \right)^{n_c} \left( {1 \over 2} \right)^{D^s - n} \nonumber 
+\end{eqnarray}
+
+The expression for the probability of not seeing the variant in any sequenced individual when all $D_{ij} \geq 2$ is:
+
+\begin{eqnarray}
+P[C_1 = \dots = C_n = 0 | F_j, F_k] &=& \sum_{x=0}^n \sum_{y=0}^{n-x}  P[C_1 = \dots = C_n = 0 | \sharp \{ i : T_i = 2\} = x, \sharp \{ i : T_i = 1\} = y, F_j, F_k] \nonumber \\
+& &  P[\sharp \{ i : T_i = 2\} = x, \sharp \{ i : T_i = 1\} = y| F_j, F_k]\\
+&=& \sum_{x=0}^n \sum_{y=0}^{n-x} \prod_{\{ i : T_i = 2\}} \left( 1 - \left( {1 \over 2} \right)^{D_{ij}-2}\right) \prod_{\{ i : T_i = 1\}} \left( 1 - \left( {1 \over 2} \right)^{ D_{ij}-1}\right)  \nonumber \\
+& &  {n \choose x,y,n-x-y} \left( {1 \over 4} \right)^x \left( {1 \over 2} \right)^y \left( {1 \over 4} \right)^{n-x-y} \nonumber
+\end{eqnarray}
+without obvious simplification. The modification for  sequenced subjects who are children of the founders is similar to that for the joint sharing probability, with probability equal to ${1 \over 4}$ of not receiving the variant instead of ${3 \over 4}$ of receiving it.
+
+\subsubsection{One founder is ancestor of all sequenced subjects and the other is ancestor of only one subject}
+
+We note $j$ the founder who is ancestor of all sequenced subjects and 1 the sequenced subject descendant of the two founders $j$ and $k$. There is only one child of founder $k$ who  can receive two copies of the variant (possibly subject 1 himself) and we note that child $h$. The number of copies he received is noted T.
+
+\begin{eqnarray}
+P[C_1 = \dots = C_n = 1 | F_j, F_k] &=& P[C_1 = \dots = C_n = 1 | T = 2, F_j, F_k] P[T = 2 | F_j, F_k]\\
+& & + P[C_1 = \dots = C_n = 1 | T = 1, F_j, F_k] P[T = 1 | F_j, F_k]  \nonumber \\
+&=& \left( {1 \over 2} \right)^{D_{1h}-1 + \sum_{i=2}^n D_{ij}} \left( {1 \over 2} \right)^{D_{hj}} {1 \over 2}  \nonumber \\
+& & + \left( {1 \over 2} \right)^{D_{1h} + \sum_{i=2}^n D_{ij}} \left[ \left( {1 \over 2} \right)^{D_{hj}} {1 \over 2} + \left( 1 - \left( {1 \over 2} \right)^{D_{hj}} \right) {1 \over 2} \right] \nonumber \\
+&=& \left( {1 \over 2} \right)^{D_{1h} + \sum_{i=2}^n D_{ij}} \left[ \left( {1 \over 2} \right)^{D_{hj}} + {1 \over 2} \right] \nonumber
+\end{eqnarray}
+
+This expression applies if $D_{1h} \geq 1$, i.e. subject 1 is not $h$ himself, he or she is a grand-child or more distant descendant of the founder $k$. When subject 1 is a child of founder $k$, the expression becomes:
+
+\begin{eqnarray}
+P[C_1 \geq 1, C_2 = \dots = C_n = 1 | F_j, F_k] &=& P[C_1 = 2, C_2 = \dots = C_n = 1 | F_j, F_k]\\
+& & + P[C_1 = \dots = C_n = 1 | F_j, F_k]  \nonumber \\
+&=& \left( {1 \over 2} \right)^{D^s} {1 \over 2} + \left( {1 \over 2} \right)^{\sum_{i=2}^n D_{ij}} {1 \over 2} \nonumber \\
+&=& \left( {1 \over 2} \right)^{D^s + 1} \left[ 1 + 2^{D_{1j}} \right] \nonumber
+\end{eqnarray}
+
+The expression for the probability of not seeing the variant in any sequenced subject when $D_{ih} \geq 1$ is:
+
+\begin{eqnarray}
+P[C_1 = \dots = C_n = 0 | F_j, F_k] &=& \prod_{i=1}^n P[C_i = 0 | F_j, F_k] \\
+&=& \left[ \begin{array}{c} 
+P[C_1 = 0 | T = 2, F_j, F_k] P[ T = 2| F_j, F_k] \\
++ P[C_1 = 0 | T = 1, F_j, F_k] P[ T = 1| F_j, F_k] \\
++ P[C_1 = 0 | T = 0, F_j, F_k] P[ T = 0| F_j, F_k] 
+\end{array} \right] \prod_{i=2}^n P[C_i = 0 | F_j] \nonumber \\
+&=& \left[ \begin{array}{c} 
+\left( 1 - \left( {1 \over 2} \right)^{D_{1h}-1} \right) \left( {1 \over 2} \right)^{D_{hj}} {1 \over 2} \\
++  \left( 1 - \left( {1 \over 2} \right)^{D_{1h}} \right) {1 \over 2} \\
++ \left( 1 - \left( {1 \over 2} \right)^{D_{hj}} \right) {1 \over 2} 
+\end{array} \right] \prod_{i = 2}^n \left(1 - \left(1 \over 2 \right)^{D_{ij}} \right) \nonumber
+\end{eqnarray}
+
+The same probability when subject 1 is a child of founder $k$ is 
+\begin{equation}
+P[C_1 = \dots = C_n = 0 | F_j, F_k] = \prod_{i=1}^n P[C_i = 0 | F_j, F_k] =  {1 \over 2} 
+\prod_{i = 1}^n \left(1 - \left(1 \over 2 \right)^{D_{ij}} \right)
+\end{equation}
+
+\subsubsection{Each founder is ancestor of his own independent sequenced subject}
+
+We assume that founder $j$ is ancestor of subject 1 and founder $k$ is ancestor of subject 2. If there are $n>2$ sequenced subjects, then $P[C_1 = \dots = C_n = 1 | F_j, F_k] = 0$. If $n=2$, then
+
+\begin{equation}
+P[C_1 = C_2 = 1 | F_j, F_k] = P[C_1 = 1 | F_j] P[C_2 = 1 | F_k] = \left(1 \over 2 \right)^{D_{1j} + D_{2k}}
+\end{equation}
+
+The expression for the probability of not seeing the variant in any sequenced subject is
+
+\begin{eqnarray}
+P[C_1 = \dots = C_n = 0 | F_j, F_k] &=& P[C_1 = 0 | F_j] P[C_2 = 0 | F_k]\\
+&=& \left(1 - \left(1 \over 2 \right)^{D_{1j}} \right) \left(1 - \left(1 \over 2 \right)^{D_{2k}} \right)\nonumber
+\end{eqnarray}
+
+\end{document}
