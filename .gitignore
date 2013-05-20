@@ -1,0 +1,23 @@
+# History files
+.Rhistory
+# Example code in package build process
+*-Ex.R
+# Emacs backup files
+*~
+*.aux
+*.log
+*.out
+*.tex
+data
+foo
+extdata
+*.bbl
+*.blg
+log
+foo*
+*-script.R
+small.*
+script
+compile
+scan-trios-cpp*
+8q24*
