@@ -1,0 +1,7 @@
+exportClasses()
+exportMethods()
+export()
+## exportClasses( FamilyExperiment, PedClass )
+## exportMethods(  pedigree, completeTrios, ids, geno, cnv, logR, baf, PedClass, FamilyExperiment, trios, TransCount, "[", parents, offspring, MAF, aTDT, ScanTrio, CNVMatrix, allSubjects, intersect2 )
+## export(aTDT)
+## importMethodsFrom(GenomicRanges, "[")
