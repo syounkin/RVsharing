@@ -2,7 +2,7 @@
 # Version 0.1
 # 2013/02/08
 
-RVsharing = function(id, dad.id, mom.id)
+RVsharing.fn = function(id, dad.id, mom.id)
 {
 
 N = length(id)
