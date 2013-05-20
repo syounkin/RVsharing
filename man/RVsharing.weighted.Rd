@@ -1,5 +1,5 @@
 \name{RVsharing.weighted}
-\alias{RVsharing}
+\alias{RVsharing.weighted}
 \title{Main function of package Bureau}
 \description{
 The function RV sharing computes the probability that all final

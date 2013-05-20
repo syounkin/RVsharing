@@ -12,7 +12,8 @@ Imports:
 Suggests:
 Enhances:
 Collate: approx2_functions.r		  
-	 compute_kinship_prop_coef.R	  
+	 compute_kinship_prop_coef.R
+	 rare_variant_sharing_v3.r
 	 rare_variant_sharing_approx2_v2.r 
 	 rare_variant_sharing_weighted_v2.r
          zzz.R
