@@ -34,31 +34,31 @@ Now apply the RVsharing method which calls the function defined in ``rare\_varia
 <<test>>=
 RVsharing(test.ped)
 @ 
-\clearpage
-\subsection{More Siblings}
-<<RVsharing.toy2, eval = TRUE, echo = FALSE>>=
-id <- paste0("sub", 1:5)
-fa.id <- c(NA,NA,"sub1","sub1","sub1")
-ma.id <- c(NA,NA,"sub2","sub2","sub2")
-test.ped <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1))
-@ 
-<<showped>>=
-test.ped
-@ 
-\begin{center}
-\begin{figure}
-<<plotped, fig = TRUE, eval = TRUE, echo = FALSE>>=
-plot(test.ped)
-@ 
-\end{figure}
-\end{center}
-<<kinship>>=
-2*kinship(test.ped)
-@ 
-Now apply the RVsharing method which calls the function defined in ``rare\_variant\_sharing\_v3.R.''
-<<test>>=
-RVsharing(test.ped)
-@ 
+%% \clearpage
+%% \subsection{More Siblings}
+%% <<RVsharing.toy2, eval = TRUE, echo = FALSE>>=
+%% id <- paste0("sub", 1:5)
+%% fa.id <- c(NA,NA,"sub1","sub1","sub1")
+%% ma.id <- c(NA,NA,"sub2","sub2","sub2")
+%% test.ped <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1))
+%% @ 
+%% <<showped>>=
+%% test.ped
+%% @ 
+%% \begin{center}
+%% \begin{figure}
+%% <<plotped, fig = TRUE, eval = TRUE, echo = FALSE>>=
+%% plot(test.ped)
+%% @ 
+%% \end{figure}
+%% \end{center}
+%% <<kinship>>=
+%% 2*kinship(test.ped)
+%% @ 
+%% Now apply the RVsharing method which calls the function defined in ``rare\_variant\_sharing\_v3.R.''
+%% <<test>>=
+%% RVsharing(test.ped)
+%% @ 
 \clearpage
 \subsection{Cousins}
 <<RVsharing.toy, eval = TRUE, echo = FALSE>>=
