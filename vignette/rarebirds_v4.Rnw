@@ -32,7 +32,7 @@ low.freq = read.table(paste(vardir,"/allsharedlowfrequency.txt",sep=""),header=T
 low.freq.all = read.table(paste(vardir,"/alllowfrequency.txt",sep=""),header=TRUE,sep="\t",na.strings=c("NA","."))
 
 # Reading the list of candidate genes (from the current directory)
-candidate.genes = scan("data/candidate.genes.txt", what=character(), skip=1)
+candidate.genes = scan("~syounkin/R/packages/Bureau/inst/extdata/candidate.genes.txt", what=character(), skip=1)
 @
 
 We extract data for the candidate genes from the data frames containing all genes.
@@ -46,7 +46,7 @@ candidate.low.freq.all = low.freq.all[low.freq.all$RefgeneGeneName%in%candidate.
 We began by reading the pedigree data, removing the singletons from the file and creating a pedigree object.
 <<read ped data>>=
 # Reading in the data
-ocped = read.csv2("data/germ_pitts_tw_iowa_syr_pedigree_jbh.csv")
+ocped = read.csv2("~syounkin/R/packages/Bureau/inst/extdata/germ_pitts_tw_iowa_syr_pedigree_jbh.csv")
 # Removing the subjects with the DNA variable = 2 (these are singletons)
 ocped = ocped[ocped$DNA<2,]
 
@@ -75,7 +75,7 @@ list.suj.kin=apply(tmp2.suj,2,function(vec) paste(vec[1],vec[2],sep="_"))
 dimnames(ocaffected.kin)=list(list.suj.kin,list.suj.kin)
 
 # Reading King kinship estimates
-ocaffected.inferedkin = read.table("data/oc_cleaned05_related.kin",header=T)
+ocaffected.inferedkin = read.table("~syounkin/R/packages/Bureau/inst/extdata/oc_cleaned05_related.kin",header=T)
 seqfam = ocaffected.inferedkin$FID[-1]
 
 # Extracting the expected kinship corresponding to the infered kinship
@@ -133,7 +133,7 @@ length(ped.tocompute)
 
 # Computation of sharing probabilities
 # source("rcode/rare_variant_sharing_v3.r")
-oc.pshare = sapply(ped.tocompute,RVsharing.ped.pshare)
+oc.pshare = sapply(ped.tocompute,Bureau:::RVsharing.ped.pshare)
 
 # Correction of probability for pedigree 17103 because of marriage loop
 expectedkin.f17103 = expected.kin.by.pair[seqfam=="17103"]
@@ -386,23 +386,23 @@ Another change that we make is to estimate a mean kinship coefficient between fo
 
 <<excess sharing>>=
 # Estimating excess sharing per population
-german.fams = scan("data/german.fams.txt")
+german.fams = scan("~syounkin/R/packages/Bureau/inst/extdata/german.fams.txt")
 
 expectedkin.german = expected.kin.by.pair[seqfam%in%german.fams]
 inferedkin.german = ocaffected.inferedkin$Kinship[ocaffected.inferedkin$FID%in%german.fams]
 
 
-indian.fams = scan("data/indian.fams.txt")
+indian.fams = scan("~syounkin/R/packages/Bureau/inst/extdata/indian.fams.txt")
 
 expectedkin.indian = expected.kin.by.pair[seqfam%in%indian.fams]
 inferedkin.indian = ocaffected.inferedkin$Kinship[ocaffected.inferedkin$FID%in%indian.fams]
 
-filipino.fams = scan("data/filipino.fams.txt")
+filipino.fams = scan("~syounkin/R/packages/Bureau/inst/extdata/filipino.fams.txt")
 
 expectedkin.filipino = expected.kin.by.pair[seqfam%in%filipino.fams]
 inferedkin.filipino = ocaffected.inferedkin$Kinship[ocaffected.inferedkin$FID%in%filipino.fams]
 
-syrian.fams = scan("data/syrian.fams.txt")
+syrian.fams = scan("~syounkin/R/packages/Bureau/inst/extdata/syrian.fams.txt")
 
 expectedkin.syrian = expected.kin.by.pair[seqfam%in%syrian.fams]
 inferedkin.syrian = ocaffected.inferedkin$Kinship[ocaffected.inferedkin$FID%in%syrian.fams]
