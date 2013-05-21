@@ -35,6 +35,17 @@ phi.diff = (phi - phi.vec)
 (-phi.diff[2] - sqrt(phi.diff[2]^2 - 2*phi.diff[1]*phi))/phi.diff[1]
 }
 
+infer.theta.cubic = function(phi,phi.vec)
+# Solve the parameter theta when the distribution of a is limited to values from 2*nf-3 to 2*nf
+# phi is the mean estimated kinship between founders
+# phi.vec contains phi_a for a = 2*nf-3 and 2*nf-1
+{
+phi.diff = (phi - phi.vec)
+racines = polyroot(c(phi,phi.diff[3:1]*c(1,1/2,1/6)))
+# Return only the real roots
+Re(racines)[abs(Im(racines))<1e-10]
+}
+
 get.LODallshare <- function(vec,pshare)
 {
 if (any(pshare$ped.tocompute.vec%in%vec)) sum(pshare$mlog10pshare[pshare$ped.tocompute.vec%in%vec])
