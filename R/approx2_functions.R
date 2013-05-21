@@ -40,3 +40,24 @@ get.LODallshare <- function(vec,pshare)
 if (any(pshare$ped.tocompute.vec%in%vec)) sum(pshare$mlog10pshare[pshare$ped.tocompute.vec%in%vec])
 else NA
 }
+
+# Wrappers for pedigree object
+# Returns only pshare
+RVsharing.ped.pshare = function(ped)
+{
+id = ped$id
+dad.id = mom.id = numeric(length(id))
+dad.id[ped$findex>0] = ped$id[ped$findex]
+mom.id[ped$mindex>0] = ped$id[ped$mindex]
+RVsharing(id,dad.id,mom.id)$pshare
+} 
+
+# Returns object
+RVsharing.ped = function(ped)
+{
+id = ped$id
+dad.id = mom.id = numeric(length(id))
+dad.id[ped$findex>0] = ped$id[ped$findex]
+mom.id[ped$mindex>0] = ped$id[ped$mindex]
+RVsharing(id,dad.id,mom.id)
+}
