@@ -34,3 +34,9 @@ infer.theta = function(phi,phi.vec)
 phi.diff = (phi - phi.vec)
 (-phi.diff[2] - sqrt(phi.diff[2]^2 - 2*phi.diff[1]*phi))/phi.diff[1]
 }
+
+get.LODallshare <- function(vec,pshare)
+{
+if (any(pshare$ped.tocompute.vec%in%vec)) sum(pshare$mlog10pshare[pshare$ped.tocompute.vec%in%vec])
+else NA
+}
