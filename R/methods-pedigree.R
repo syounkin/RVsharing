@@ -27,7 +27,7 @@
 ## })
 
 setMethod("RVsharing",  signature(object="pedigree"), function(object){
-    RVsharing.fn( id = object$id, dad.id = object$id[ifelse(object$findex!=0,object$findex,NA)], mom.id = object$id[ifelse(object$mindex!=0,object$mindex,NA)] )
+    RVsharing.fn( id = object$id, dad.id = ifelse(object$findex!=0,object$id[object$findex],0), mom.id = ifelse(object$mindex!=0,object$id[object$mindex],0) )
 })
 
 ## setMethod("offspring",  signature(object="PedClass"), function(object){
