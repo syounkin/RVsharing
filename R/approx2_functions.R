@@ -2,8 +2,7 @@
 
 # By Alexandre Bureau
 
-# Version 0.1
-# 2013/05/16
+# 2013/05/22
 
 infer.nalleles = function(phi,nf)
 # Returns the most likely number of distinct alleles among nf founders based on mean estimated kinship phi
@@ -42,6 +41,17 @@ infer.theta.cubic = function(phi,phi.vec)
 {
 phi.diff = (phi - phi.vec)
 racines = polyroot(c(phi,phi.diff[3:1]*c(1,1/2,1/6)))
+# Return only the real roots
+Re(racines)[abs(Im(racines))<1e-10]
+}
+
+infer.theta.order4 = function(phi,phi.vec)
+# Solve the parameter theta when the distribution of a is limited to values from 2*nf-3 to 2*nf
+# phi is the mean estimated kinship between founders
+# phi.vec contains phi_a for a = 2*nf-3 and 2*nf-1
+{
+phi.diff = (phi - phi.vec)
+racines = polyroot(c(phi,phi.diff[4:1]*c(1,1/2,1/6,1/24)))
 # Return only the real roots
 Re(racines)[abs(Im(racines))<1e-10]
 }
