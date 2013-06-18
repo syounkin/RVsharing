@@ -10,7 +10,6 @@
 *.tex
 data
 foo
-extdata
 *.bbl
 *.blg
 log
