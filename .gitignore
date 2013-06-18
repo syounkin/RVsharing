@@ -13,7 +13,6 @@ foo
 *.bbl
 *.blg
 log
-foo*
 *-script.R
 small.*
 script
