@@ -15,6 +15,7 @@ Collate: AllGenerics.R
 	 methods-pedigree.R
 	 approx2_functions.R		  
 	 compute_kinship_prop_coef.R
+	 PFU.r
 	 rare_variant_sharing_v3.R
 	 rare_variant_sharing_approx2_v2.R 
 	 rare_variant_sharing_weighted_v2.R
