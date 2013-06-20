@@ -130,9 +130,10 @@ approxsharing = function(nf,ord,phihat,sharingobj,fam.id,fam.dadid,fam.momid,nsi
 # Value:
 # papprox: vector of approximations of the sharing probability obtained with the analytical method for every value in phihat
 # pMC: vector of approximations of the sharing probability obtained by Monte Carlo simulation for every value in phihat
+# PFU.vec: vector of approximations of the probability that a founder is the unique founder to introduce the RV in the pedigree
 
 nrep = length(phihat)
-papprox = pMC = rep(NA,nrep)
+papprox = pMC = PFU.vec = rep(NA,nrep)
 
 # Retrieving elements from sharing obj
 numa = sharingobj$numa
@@ -154,7 +155,7 @@ for (r in 1:nrep)
   numam = weighted.mean(numa,npairs)
   p0am2 = weighted.mean(p0a,npairs)
 
-  PFU = PFU.direct(nf,theta,ord)
+  PFU.vec[r] = PFU = PFU.direct(nf,theta,ord)
   
   p.approx2 = RVsharing.approx2(fam.id,fam.dadid,fam.momid,PFU=PFU)
   
@@ -207,7 +208,7 @@ for (r in 1:nrep)
   pMC[r] = sumshared/sumseen
   }
   }
-list (papprox=papprox,pMC=pMC)
+list (papprox=papprox,pMC=pMC,PFU.vec=PFU.vec)
 }
 
 
