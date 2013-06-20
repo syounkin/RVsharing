@@ -1,0 +1,168 @@
+:toc:
+:numbered:
+:data-uri:
+
+
+== RVSharing Examples ==
+
+=== Siblings ===
+
+----
+> id <- paste0("sub", 1:4)
+> fa.id <- c(NA,NA,"sub1","sub1")
+> ma.id <- c(NA,NA,"sub2","sub2")
+> test.ped <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2))
+----
+----
+> test.ped
+Pedigree object with 4 subjects
+Bit size= 2 
+----
+----
+> plot(test.ped)
+----
+image::figures/fig-plotped.jpg[]
+
+Apply the RVsharing method using three id vectors. // which calls the function defined in "rare_variant_sharing_v3.R"
+----
+> RVsharing(test.ped)
+$pshare
+[1] 0.3333333
+
+$iancestors
+[1] "sub1"
+
+$desfounders
+$desfounders$sub3
+sub2 sub1 
+   1    1 
+
+$desfounders$sub4
+sub2 sub1 
+   1    1 
+
+
+$id
+[1] "sub1" "sub2" "sub3" "sub4"
+
+$dad.id
+[1] "0"    "0"    "sub1" "sub1"
+
+$mom.id
+[1] "0"    "0"    "sub2" "sub2"
+----
+Now use the pedigree object defined in kinship2.
+----
+> RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+$pshare
+[1] 0.3333333
+
+$iancestors
+[1] "sub1"
+
+$desfounders
+$desfounders$sub3
+sub2 sub1 
+   1    1 
+
+$desfounders$sub4
+sub2 sub1 
+   1    1 
+
+
+$id
+[1] "sub1" "sub2" "sub3" "sub4"
+
+$dad.id
+[1] NA     NA     "sub1" "sub1"
+
+$mom.id
+[1] NA     NA     "sub2" "sub2"
+----
+=== First Cousins ===
+
+image::figures/fig-plotped2.jpg[]
+
+
+For first cousins it works right now with ID
+ vectors...
+----
+> RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+$pshare
+[1] 0.04347826
+
+$iancestors
+[1] "sub1"
+
+$desfounders
+$desfounders$sub7
+$desfounders$sub7$<NA>
+[1] 1
+
+$desfounders$sub7$sub2
+[1] 2
+
+$desfounders$sub7$sub1
+[1] 2
+
+
+$desfounders$sub8
+$desfounders$sub8$sub6
+[1] 1
+
+$desfounders$sub8$sub2
+[1] 2
+
+$desfounders$sub8$sub1
+[1] 2
+
+
+
+$id
+[1] "sub1" "sub2" "sub3" "sub4" "sub5" "sub6" "sub7" "sub8"
+
+$dad.id
+[1] NA     NA     NA     "sub1" "sub1" NA     "sub3" "sub5"
+
+$mom.id
+[1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"
+----
+...but not with the pedigree object.  I think it has to do with how the parents are indexed in the pedigree object of kinship2.
+----
+> RVsharing(test.ped)
+----
+Gives the following warnings and error.
+----
+Error in fdi[nfd] = which(id == iancestors[ia]) : 
+  replacement has length zero
+In addition: Warning messages:
+1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
+2: NAs introduced by coercion 
+3: In match(x, table, nomatch = 0L) : NAs introduced by coercion
+4: In match(x, table, nomatch = 0L) : NAs introduced by coercion
+Execution halted
+----
+=== Second Cousins ===
+
+image::figures/fig-plotped3.jpg[]
+
+
+----
+> RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+----
+Not working for either.
+----
+Error in sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],  : 
+  invalid 'type' (list) of argument
+In addition: Warning messages:
+1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
+2: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+  number of items to replace is not a multiple of replacement length
+3: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+  number of items to replace is not a multiple of replacement length
+4: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+  number of items to replace is not a multiple of replacement length
+5: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+  number of items to replace is not a multiple of replacement length
+Execution halted
+----

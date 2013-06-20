@@ -1,1 +1,1 @@
-setGeneric("RVsharing", function(object) standardGeneric("RVsharing"))
+setGeneric("RVsharing", function(ped, id, dad.id, mom.id) standardGeneric("RVsharing"))
