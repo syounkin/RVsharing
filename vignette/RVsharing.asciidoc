@@ -12,6 +12,8 @@ par(mar=rep(0,4))
 @ 
 == RVSharing Examples ==
 
+Let's look at some simple pedigree structures.
+
 === Siblings ===
 
 <<RVsharing.toy2, eval = TRUE, echo = TRUE>>=
@@ -29,22 +31,22 @@ plot(test.ped)
 <<kinship, echo = FALSE, eval = FALSE>>=
 2*kinship(test.ped)
 @ 
-Apply the RVsharing method using three id vectors. // which calls the function defined in "rare_variant_sharing_v3.R"
+Apply the RVsharing method using a pedigree object. ("rare_variant_sharing_v3.R")
 <<test>>=
 RVsharing(test.ped)
 @ 
-Now use the pedigree object defined in kinship2.
+Now use three ID vectors.
 <<test2>>=
 RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
 @ 
 === First Cousins ===
-<<RVsharing.toy, eval = TRUE, echo = FALSE>>=
+<<RVsharing.toy2, eval = TRUE, echo = FALSE>>=
 id <- paste0("sub", 1:8)
 fa.id <- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5")
 ma.id <- c(NA,NA,NA,"sub2","sub2", NA,"sub4","sub6")
 test.ped <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1,2,2,2))
 @ 
-<<showped, echo = FALSE, results = hide>>=
+<<showped2, echo = FALSE, results = hide>>=
 test.ped
 @ 
 
@@ -52,37 +54,23 @@ test.ped
 plot(test.ped)
 @ 
 
-<<kinship, echo = FALSE, eval = FALSE>>=
+<<kinship2, echo = FALSE, eval = FALSE>>=
 2*kinship(test.ped)
 @ 
-For first cousins it works right now with ID
- vectors...
-<<test>>=
+<<test3>>=
 RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
 @
-...but not with the pedigree object.  I think it has to do with how the parents are indexed in the pedigree object of kinship2.
-<<test, eval = FALSE, echo = TRUE>>=
+<<test4, eval = TRUE, echo = TRUE>>=
 RVsharing(test.ped)
 @ 
-Gives the following warnings and error.
-----
-Error in fdi[nfd] = which(id == iancestors[ia]) : 
-  replacement has length zero
-In addition: Warning messages:
-1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-2: NAs introduced by coercion 
-3: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-4: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-Execution halted
-----
 === Second Cousins ===
-<<RVsharing.toy, eval = TRUE, echo = FALSE>>=
+<<RVsharing.toy3, eval = TRUE, echo = FALSE>>=
 id <- paste0("sub", 1:12)
 fa.id <- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5",NA,NA,"sub9","sub10")
 ma.id <- c(NA,NA,NA,"sub2","sub2", NA,"sub4","sub6",NA,NA,"sub7","sub8")
 test.ped <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1,2,2,2,1,1,2,2))
 @ 
-<<showped, echo = FALSE, results = hide>>=
+<<showped3, echo = FALSE, results = hide>>=
 test.ped
 @ 
 
@@ -90,25 +78,28 @@ test.ped
 plot(test.ped)
 @ 
 
-<<kinship, echo = FALSE, eval = FALSE>>=
+<<kinship3, echo = FALSE, eval = FALSE>>=
 2*kinship(test.ped)
 @ 
-<<test, echo = TRUE, eval = FALSE>>=
-RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+<<test5, echo = TRUE, eval = FALSE>>=
+#RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+RVsharing(ped = test.ped )
 @
-Not working for either.
+Not working for either class.
 ----
+Error:  chunk 19 (label = test5) 
 Error in sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],  : 
   invalid 'type' (list) of argument
 In addition: Warning messages:
 1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-2: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+2: In match(x, table, nomatch = 0L) : NAs introduced by coercion
+3: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
   number of items to replace is not a multiple of replacement length
-3: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+4: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
   number of items to replace is not a multiple of replacement length
-4: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+5: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
   number of items to replace is not a multiple of replacement length
-5: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+6: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
   number of items to replace is not a multiple of replacement length
 Execution halted
 ----

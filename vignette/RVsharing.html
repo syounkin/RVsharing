@@ -746,6 +746,7 @@ asciidoc.install(4);
 <div class="sect1">
 <h2 id="_rvsharing_examples">1. RVSharing Examples</h2>
 <div class="sectionbody">
+<div class="paragraph"><p>Let&#8217;s look at some simple pedigree structures.</p></div>
 <div class="sect2">
 <h3 id="_siblings">1.1. Siblings</h3>
 <div class="listingblock">
@@ -885,7 +886,7 @@ KACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoooo
 AKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z" />
 </div>
 </div>
-<div class="paragraph"><p>Apply the RVsharing method using three id vectors. // which calls the function defined in "rare_variant_sharing_v3.R"</p></div>
+<div class="paragraph"><p>Apply the RVsharing method using a pedigree object. ("rare_variant_sharing_v3.R")</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>&gt; RVsharing(test.ped)
@@ -909,12 +910,12 @@ $id
 [1] "sub1" "sub2" "sub3" "sub4"
 
 $dad.id
-[1] "0"    "0"    "sub1" "sub1"
+[1] NA     NA     "sub1" "sub1"
 
 $mom.id
-[1] "0"    "0"    "sub2" "sub2"</tt></pre>
+[1] NA     NA     "sub2" "sub2"</tt></pre>
 </div></div>
-<div class="paragraph"><p>Now use the pedigree object defined in kinship2.</p></div>
+<div class="paragraph"><p>Now use three ID vectors.</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>&gt; RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
@@ -1110,8 +1111,6 @@ RRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFF
 FABRRRQAUUUUAf/Z" />
 </div>
 </div>
-<div class="paragraph"><p>For first cousins it works right now with ID
- vectors&#8230;</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>&gt; RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
@@ -1154,22 +1153,47 @@ $dad.id
 $mom.id
 [1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"</tt></pre>
 </div></div>
-<div class="paragraph"><p>&#8230;but not with the pedigree object.  I think it has to do with how the parents are indexed in the pedigree object of kinship2.</p></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt>&gt; RVsharing(test.ped)</tt></pre>
-</div></div>
-<div class="paragraph"><p>Gives the following warnings and error.</p></div>
-<div class="listingblock">
-<div class="content">
-<pre><tt>Error in fdi[nfd] = which(id == iancestors[ia]) :
-  replacement has length zero
-In addition: Warning messages:
-1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-2: NAs introduced by coercion
-3: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-4: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-Execution halted</tt></pre>
+<pre><tt>&gt; RVsharing(test.ped)
+$pshare
+[1] 0.04347826
+
+$iancestors
+[1] "sub1"
+
+$desfounders
+$desfounders$sub7
+$desfounders$sub7$&lt;NA&gt;
+[1] 1
+
+$desfounders$sub7$sub2
+[1] 2
+
+$desfounders$sub7$sub1
+[1] 2
+
+
+$desfounders$sub8
+$desfounders$sub8$sub6
+[1] 1
+
+$desfounders$sub8$sub2
+[1] 2
+
+$desfounders$sub8$sub1
+[1] 2
+
+
+
+$id
+[1] "sub1" "sub2" "sub3" "sub4" "sub5" "sub6" "sub7" "sub8"
+
+$dad.id
+[1] NA     NA     NA     "sub1" "sub1" NA     "sub3" "sub5"
+
+$mom.id
+[1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"</tt></pre>
 </div></div>
 </div>
 <div class="sect2">
@@ -1401,22 +1425,25 @@ oooAKKKKACiiigAooooA/9k=" />
 </div>
 <div class="listingblock">
 <div class="content">
-<pre><tt>&gt; RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )</tt></pre>
+<pre><tt>&gt; #RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+&gt; RVsharing(ped = test.ped )</tt></pre>
 </div></div>
-<div class="paragraph"><p>Not working for either.</p></div>
+<div class="paragraph"><p>Not working for either class.</p></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt>Error in sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],  :
+<pre><tt>Error:  chunk 19 (label = test5)
+Error in sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],  :
   invalid 'type' (list) of argument
 In addition: Warning messages:
 1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-2: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+2: In match(x, table, nomatch = 0L) : NAs introduced by coercion
+3: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
   number of items to replace is not a multiple of replacement length
-3: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+4: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
   number of items to replace is not a multiple of replacement length
-4: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+5: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
   number of items to replace is not a multiple of replacement length
-5: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+6: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
   number of items to replace is not a multiple of replacement length
 Execution halted</tt></pre>
 </div></div>
@@ -1427,7 +1454,7 @@ Execution halted</tt></pre>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-06-20 15:26:09 EDT
+Last updated 2013-06-20 18:07:21 EDT
 </div>
 </div>
 </body>

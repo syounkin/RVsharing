@@ -5,6 +5,8 @@
 
 == RVSharing Examples ==
 
+Let's look at some simple pedigree structures.
+
 === Siblings ===
 
 ----
@@ -23,7 +25,7 @@ Bit size= 2
 ----
 image::figures/fig-plotped.jpg[]
 
-Apply the RVsharing method using three id vectors. // which calls the function defined in "rare_variant_sharing_v3.R"
+Apply the RVsharing method using a pedigree object. ("rare_variant_sharing_v3.R")
 ----
 > RVsharing(test.ped)
 $pshare
@@ -46,12 +48,12 @@ $id
 [1] "sub1" "sub2" "sub3" "sub4"
 
 $dad.id
-[1] "0"    "0"    "sub1" "sub1"
+[1] NA     NA     "sub1" "sub1"
 
 $mom.id
-[1] "0"    "0"    "sub2" "sub2"
+[1] NA     NA     "sub2" "sub2"
 ----
-Now use the pedigree object defined in kinship2.
+Now use three ID vectors.
 ----
 > RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
 $pshare
@@ -84,8 +86,6 @@ $mom.id
 image::figures/fig-plotped2.jpg[]
 
 
-For first cousins it works right now with ID
- vectors...
 ----
 > RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
 $pshare
@@ -127,20 +127,46 @@ $dad.id
 $mom.id
 [1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"
 ----
-...but not with the pedigree object.  I think it has to do with how the parents are indexed in the pedigree object of kinship2.
 ----
 > RVsharing(test.ped)
-----
-Gives the following warnings and error.
-----
-Error in fdi[nfd] = which(id == iancestors[ia]) : 
-  replacement has length zero
-In addition: Warning messages:
-1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-2: NAs introduced by coercion 
-3: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-4: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-Execution halted
+$pshare
+[1] 0.04347826
+
+$iancestors
+[1] "sub1"
+
+$desfounders
+$desfounders$sub7
+$desfounders$sub7$<NA>
+[1] 1
+
+$desfounders$sub7$sub2
+[1] 2
+
+$desfounders$sub7$sub1
+[1] 2
+
+
+$desfounders$sub8
+$desfounders$sub8$sub6
+[1] 1
+
+$desfounders$sub8$sub2
+[1] 2
+
+$desfounders$sub8$sub1
+[1] 2
+
+
+
+$id
+[1] "sub1" "sub2" "sub3" "sub4" "sub5" "sub6" "sub7" "sub8"
+
+$dad.id
+[1] NA     NA     NA     "sub1" "sub1" NA     "sub3" "sub5"
+
+$mom.id
+[1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"
 ----
 === Second Cousins ===
 
@@ -148,21 +174,24 @@ image::figures/fig-plotped3.jpg[]
 
 
 ----
-> RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+> #RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
+> RVsharing(ped = test.ped )
 ----
-Not working for either.
+Not working for either class.
 ----
+Error:  chunk 19 (label = test5) 
 Error in sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],  : 
   invalid 'type' (list) of argument
 In addition: Warning messages:
 1: In match(x, table, nomatch = 0L) : NAs introduced by coercion
-2: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+2: In match(x, table, nomatch = 0L) : NAs introduced by coercion
+3: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
   number of items to replace is not a multiple of replacement length
-3: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+4: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
   number of items to replace is not a multiple of replacement length
-4: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
+5: In currentnonfounders[i] = ifelse(dad.id[id == currentdad] == 0,  :
   number of items to replace is not a multiple of replacement length
-5: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
+6: In currentfounders[i] = ifelse(dad.id[id == currentdad] == 0, currentdad,  :
   number of items to replace is not a multiple of replacement length
 Execution halted
 ----
