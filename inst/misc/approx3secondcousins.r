@@ -146,16 +146,18 @@ phi.vec = compute.phi.vec(nf,2*nf-ord)
 # Loop over the estimates of phi in the vector phihat 
 for (r in 1:nrep)
   {
+  # Solve the polynomial equation to obtain the estimate of the theta parameter of the distribution of the number of distinct alleles in the founders
   theta = max(infer.theta(phihat[r],phi.vec))
+  # The approximation can be obtained only if a theta is strictly positive
   if (theta>0)
   {
+  # Computation of the approximation of the probability that a founder is the unique founder to introduce the RV in the pedigree
+  PFU.vec[r] = PFU = PFU.direct(nf,theta,ord)
   
   # Analytical approximation (for general pedigrees)
   
   numam = weighted.mean(numa,npairs)
   p0am2 = weighted.mean(p0a,npairs)
-
-  PFU.vec[r] = PFU = PFU.direct(nf,theta,ord)
   
   p.approx2 = RVsharing.approx2(fam.id,fam.dadid,fam.momid,PFU=PFU)
   
@@ -164,27 +166,30 @@ for (r in 1:nrep)
 
   papprox[r] = num.approx2/denom.approx2
   
-  # Monte Carlo approximation (specific to three second cousins)
+  # Monte Carlo approximation (some steps are for general pedigrees, others are specific to three second cousins)
   
-  # Sample number of duplicated alleles
+  # Computing distribution of the number of duplicated alleles (for general pedigrees)
   distri = c(1,theta,theta^2/2,theta^3/6,theta^4/24,theta^5/120)[1:(ord+1)]
   distri = distri/sum(distri)
 
-  # Counters of the number of Monte Carlo draws where the variant was shared and 
+  # Initialize counters of the number of Monte Carlo draws where the variant was shared and 
   # where the variant was seen among the three second cousins
   sumshared = sumseen = 0
   # Loop over the Monte Carlo draws
   for (m in 1:nsim)
   {
+  # Sample number of duplicated alleles (for general pedigrees)
   nduplic = sample(0:ord,1,prob=distri)
   
-  # Sample RV among the alleles
+  # Sample RV among the alleles (for general pedigrees)
   RV = sample.int(2*nf-nduplic,1)
   
-  # If RV is among the duplicated alleles,
+  # The rest of the MC sampling steps are specific to three second cousins
+  
+  # If RV is among the duplicated alleles (the first nduplic alleles),
   if (RV <= nduplic)
     {
-    # Sample the type of founder pair that introduces the RV
+    # Sample the type of founder pair that introduces the RV 
     pairtype = sample(rep(1:length(npairs),npairs),1)
 
     # Sample whether the RV is shared or not
