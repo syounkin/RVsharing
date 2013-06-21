@@ -10,3 +10,6 @@ setMethod("RVsharing",  signature(ped="pedigree", id = "missing",dad.id = "missi
 setMethod("RVsharing",  signature(ped = "missing", id="character",dad.id="character",mom.id="character"), function(id, dad.id, mom.id){
     RVsharing.fn( id = id, dad.id = dad.id, mom.id = mom.id )
 })
+setMethod("RVsharing",  signature(ped = "missing", id="numeric",dad.id="numeric",mom.id="numeric"), function(id, dad.id, mom.id){
+    RVsharing.fn( id = id, dad.id = dad.id, mom.id = mom.id )
+})
