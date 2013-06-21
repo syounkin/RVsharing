@@ -8,7 +8,6 @@
 *.log
 *.out
 *.tex
-data
 foo
 *.bbl
 *.blg
