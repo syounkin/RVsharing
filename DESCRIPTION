@@ -7,7 +7,7 @@ Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Samuel G. Younkin <syounkin@jhsph.edu>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
 License: THE BEER-WARE LICENSE
-Depends: R (>= 3.0.0), methods, kinship2
+Depends: R (>= 2.15.2), methods, kinship2
 Imports:
 Suggests:
 Enhances:
