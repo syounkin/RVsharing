@@ -12,7 +12,10 @@ Imports:
 Suggests:
 Enhances:
 Collate: AllGenerics.R
+	 AllClasses.R
+	 functions.R
 	 methods-pedigree.R
+	 methods-trio.R
 	 approx2_functions.R		  
 	 compute_kinship_prop_coef.R
 	 PFU.r
