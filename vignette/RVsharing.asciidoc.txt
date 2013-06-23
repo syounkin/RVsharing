@@ -603,3 +603,50 @@ $dad.id
 $mom.id
 [1] 0 0 2 2
 ----
+== Gene Dropping ==
+=== First Cousins ===
+----
+> plot(test.ped.first.cousins)
+----
+image::figures/fig-testpedfirst.jpg[]
+
+----
+> trio3 <- new("Trio", id = "sub5", spouse = "sub6", offspring = list("sub8") )
+> trio2 <- new("Trio", id = "sub4", spouse = "sub3", offspring = list("sub7") )
+> trio1 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
+> geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
+> names(geno.vec) <- paste0("sub",1:8)
+> share.vec <- c()
+> occur.vec <- c()
+> for(i in 1:1e5 ){
+       geno.vec.sim <- GeneDrop(trio1, geno.vec)
+       share.vec <- c(share.vec, geno.vec.sim["sub7"]==1 & geno.vec.sim["sub8"]==1)
+       occur.vec <- c(occur.vec, geno.vec.sim["sub7"]==1 | geno.vec.sim["sub8"]==1)
+ }
+> sum(share.vec)/sum(occur.vec)
+[1] 0.1446031
+----
+=== Second Cousins ===
+----
+> plot(test.ped.second.cousins)
+----
+image::figures/fig-testpedsecond.jpg[]
+
+----
+> trio5 <- new("Trio", id = "sub8", spouse = "sub10", offspring = list("sub12") )
+> trio4 <- new("Trio", id = "sub7", spouse = "sub9", offspring = list("sub11") )
+> trio3 <- new("Trio", id = "sub5", spouse = "sub6", offspring = list(trio5) )
+> trio2 <- new("Trio", id = "sub4", spouse = "sub3", offspring = list(trio4) )
+> trio1 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
+> geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
+> names(geno.vec) <- paste0("sub",1:12)
+> share.vec <- c()
+> occur.vec <- c()
+> for(i in 1:1e5 ){
+       geno.vec.sim <- GeneDrop(trio1, geno.vec)
+       share.vec <- c(share.vec, geno.vec.sim["sub11"]==1 & geno.vec.sim["sub12"]==1)
+       occur.vec <- c(occur.vec, geno.vec.sim["sub11"]==1 | geno.vec.sim["sub12"]==1)
+ }
+> sum(share.vec)/sum(occur.vec)
+[1] 0.06779148
+----

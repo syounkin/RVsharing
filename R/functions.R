@@ -24,12 +24,3 @@ gene.drop.fn <- function(g1,g2){
   }
   return(goff)
 }
-
-## trio5 <- new("Trio", id = "sub8", spouse = "sub11", offspring = list("sub12") )
-## trio4 <- new("Trio", id = "sub7", spouse = "sub9", offspring = list("sub10") )
-## trio3 <- new("Trio", id = "sub4", spouse = "sub6", offspring = list(trio5) )
-## trio2 <- new("Trio", id = "sub3", spouse = "sub5", offspring = list(trio4) )
-## trio1 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
-## geno.vec <- c(1,0,NA,NA,0,0,NA,NA,0,NA,0,NA)
-## names(geno.vec) <- paste0("sub",1:12)
-## GeneDrop(trio1, geno.vec)
