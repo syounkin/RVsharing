@@ -433,7 +433,7 @@ RVsharing(id = id, dad.id = fa.id, mom.id = ma.id )
 @ 
 == Gene Dropping ==
 === First Cousins ===
-<<testpedfirst, fig = TRUE>>=
+<<testpedfirst, width = 3, fig = TRUE>>=
 plot(test.ped.first.cousins)
 @
 <<firstcousins>>=
@@ -444,15 +444,19 @@ geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:8)
 share.vec <- c()
 occur.vec <- c()
-for(i in 1:1e5 ){
+for(i in 1:1e3 ){
+      founder <- sample(c(1,2,3,6),1,replace = FALSE)
+      geno.vec[founder] <- 1
       geno.vec.sim <- GeneDrop(trio1, geno.vec)
       share.vec <- c(share.vec, geno.vec.sim["sub7"]==1 & geno.vec.sim["sub8"]==1)
       occur.vec <- c(occur.vec, geno.vec.sim["sub7"]==1 | geno.vec.sim["sub8"]==1)
+      geno.vec[founder] <- 0
+
 }
 sum(share.vec)/sum(occur.vec)
 @
 === Second Cousins ===
-<<testpedsecond, fig = TRUE>>=
+<<testpedsecond, width = 3, fig = TRUE>>=
 plot(test.ped.second.cousins)
 @
 <<secondcousins, eval = TRUE, echo = TRUE>>=
@@ -465,10 +469,82 @@ geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:12)
 share.vec <- c()
 occur.vec <- c()
-for(i in 1:1e5 ){
+for(i in 1:1e3 ){
+      founder <- sample(c(1,2,3,6,9,10),1,replace = FALSE)
+      geno.vec[founder] <- 1
       geno.vec.sim <- GeneDrop(trio1, geno.vec)
       share.vec <- c(share.vec, geno.vec.sim["sub11"]==1 & geno.vec.sim["sub12"]==1)
       occur.vec <- c(occur.vec, geno.vec.sim["sub11"]==1 | geno.vec.sim["sub12"]==1)
+      geno.vec[founder] <- 0
+}
+sum(share.vec)/sum(occur.vec)
+@
+=== Inbreeding ===
+<<RVsharing.toy4, eval = FALSE, echo = FALSE>>=
+id <- paste0("sub", 1:9)
+fa.id <- c(NA,NA,NA,NA, "sub1","sub1", "sub3","sub4","sub8")
+ma.id <- c(NA,NA,NA,NA, "sub2","sub2", "sub5","sub6","sub7")
+test.ped <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,1,2,2,2,1,1))
+fa.id <- ifelse(is.na(fa.id),"0",fa.id)
+ma.id <- ifelse(is.na(ma.id),"0",ma.id)
+@ 
+<<showped4, echo = FALSE, results = hide>>=
+test.ped.second.cousins <- test.ped
+test.ped
+@ 
+
+<<inbred, eval = FALSE, echo = FALSE>>=
+trio1 <- new("Trio", id = "sub7", spouse = "sub8", offspring = list("sub9"))
+trio2 <- new("Trio", id = "sub8", spouse = "sub7", offspring = list("sub9"))
+trio3 <- new("Trio", id = "sub5", spouse = "sub3", offspring = list(trio1))
+trio4 <- new("Trio", id = "sub6", spouse = "sub4", offspring = list(trio2))
+trio5 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio3,trio4))
+
+geno.vec <- c(1,0,0,0,rep(NA,5))
+names(geno.vec) <- paste0("sub",1:9)
+share.vec <- c()
+occur.vec <- c()
+for(i in 1:1e3 ){
+      geno.vec.sim <- GeneDrop(trio5, geno.vec)
+#      share.vec <- c(share.vec, geno.vec.sim["sub11"]==1 & geno.vec.sim["sub12"]==1)
+      occur.vec <- c(occur.vec, geno.vec.sim["sub9"]==1)
+}
+sum(occur.vec)/1e3
+@
+<<RVsharing.toy5, eval = TRUE, echo = FALSE>>=
+id <- paste0("sub", 1:14)
+fa.id <- c(NA,NA,NA,NA,NA,"sub1","sub1","sub1","sub3","sub4","sub5",NA,"sub10","sub12") 
+ma.id <- c(NA,NA,NA,NA,NA,"sub2","sub2","sub2","sub6","sub7","sub8",NA,"sub9","sub11") 
+test.ped <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,1,1,2,2,2,2,1,2,1,2,2))
+fa.id <- ifelse(is.na(fa.id),"0",fa.id)
+ma.id <- ifelse(is.na(ma.id),"0",ma.id)
+@ 
+
+<<plotped5, fig = TRUE, width = 3, eval = TRUE, echo = FALSE>>=
+plot(test.ped)
+@ 
+
+<<inbred2>>=
+trio1 <- new("Trio", id = "sub9", spouse = "sub10", offspring = list("sub13"))
+trio2 <- new("Trio", id = "sub10", spouse = "sub9", offspring = list("sub13"))
+trio3 <- new("Trio", id = "sub11", spouse = "sub12", offspring = list("sub14"))
+trio4 <- new("Trio", id = "sub6", spouse = "sub3", offspring = list(trio1))
+trio5 <- new("Trio", id = "sub7", spouse = "sub4", offspring = list(trio2))
+trio6 <- new("Trio", id = "sub8", spouse = "sub5", offspring = list(trio3))
+trio7 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio4,trio5,trio6))
+
+geno.vec <- c(0,0,0,0,0,rep(NA,6),0,rep(NA,2))
+names(geno.vec) <- paste0("sub",1:14)
+share.vec <- c()
+occur.vec <- c()
+for(i in 1:1e4 ){
+      founder <- sample(c(1:5,12),1,replace = FALSE)
+      geno.vec[founder] <- 1
+      geno.vec.sim <- GeneDrop(trio7, geno.vec)
+      share.vec <- c(share.vec, geno.vec.sim["sub13"]==1 & geno.vec.sim["sub14"]==1)
+      occur.vec <- c(occur.vec, geno.vec.sim["sub13"]==1 | geno.vec.sim["sub14"]==1)
+      geno.vec[founder] <- 0
+
 }
 sum(share.vec)/sum(occur.vec)
 @

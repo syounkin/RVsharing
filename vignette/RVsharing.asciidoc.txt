@@ -618,13 +618,17 @@ image::figures/fig-testpedfirst.jpg[]
 > names(geno.vec) <- paste0("sub",1:8)
 > share.vec <- c()
 > occur.vec <- c()
-> for(i in 1:1e5 ){
+> for(i in 1:1e3 ){
+       founder <- sample(c(1,2,3,6),1,replace = FALSE)
+       geno.vec[founder] <- 1
        geno.vec.sim <- GeneDrop(trio1, geno.vec)
        share.vec <- c(share.vec, geno.vec.sim["sub7"]==1 & geno.vec.sim["sub8"]==1)
        occur.vec <- c(occur.vec, geno.vec.sim["sub7"]==1 | geno.vec.sim["sub8"]==1)
+       geno.vec[founder] <- 0
+ 
  }
 > sum(share.vec)/sum(occur.vec)
-[1] 0.1446031
+[1] 0.06976744
 ----
 === Second Cousins ===
 ----
@@ -642,11 +646,44 @@ image::figures/fig-testpedsecond.jpg[]
 > names(geno.vec) <- paste0("sub",1:12)
 > share.vec <- c()
 > occur.vec <- c()
-> for(i in 1:1e5 ){
+> for(i in 1:1e3 ){
+       founder <- sample(c(1,2,3,6,9,10),1,replace = FALSE)
+       geno.vec[founder] <- 1
        geno.vec.sim <- GeneDrop(trio1, geno.vec)
        share.vec <- c(share.vec, geno.vec.sim["sub11"]==1 & geno.vec.sim["sub12"]==1)
        occur.vec <- c(occur.vec, geno.vec.sim["sub11"]==1 | geno.vec.sim["sub12"]==1)
+       geno.vec[founder] <- 0
  }
 > sum(share.vec)/sum(occur.vec)
-[1] 0.06779148
+[1] 0.006622517
+----
+=== Inbreeding ===
+
+
+image::figures/fig-plotped5.jpg[]
+
+
+----
+> trio1 <- new("Trio", id = "sub9", spouse = "sub10", offspring = list("sub13"))
+> trio2 <- new("Trio", id = "sub10", spouse = "sub9", offspring = list("sub13"))
+> trio3 <- new("Trio", id = "sub11", spouse = "sub12", offspring = list("sub14"))
+> trio4 <- new("Trio", id = "sub6", spouse = "sub3", offspring = list(trio1))
+> trio5 <- new("Trio", id = "sub7", spouse = "sub4", offspring = list(trio2))
+> trio6 <- new("Trio", id = "sub8", spouse = "sub5", offspring = list(trio3))
+> trio7 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio4,trio5,trio6))
+> geno.vec <- c(0,0,0,0,0,rep(NA,6),0,rep(NA,2))
+> names(geno.vec) <- paste0("sub",1:14)
+> share.vec <- c()
+> occur.vec <- c()
+> for(i in 1:1e4 ){
+       founder <- sample(c(1:5,12),1,replace = FALSE)
+       geno.vec[founder] <- 1
+       geno.vec.sim <- GeneDrop(trio7, geno.vec)
+       share.vec <- c(share.vec, geno.vec.sim["sub13"]==1 & geno.vec.sim["sub14"]==1)
+       occur.vec <- c(occur.vec, geno.vec.sim["sub13"]==1 | geno.vec.sim["sub14"]==1)
+       geno.vec[founder] <- 0
+ 
+ }
+> sum(share.vec)/sum(occur.vec)
+[1] 0.02842704
 ----
