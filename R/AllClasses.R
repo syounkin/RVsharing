@@ -1,4 +1,4 @@
-setClass("Trio", slots = c( id = "character", spouse = "character", offspring = "list"))
+setClass("Trio", representation = list( id = "character", spouse = "character", offspring = "list"))
 
 setClassUnion("TrioOrChar", c("Trio","character"))
 
