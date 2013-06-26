@@ -411,7 +411,7 @@ geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:8)
 share.vec <- c()
 occur.vec <- c()
-i <- 1; n.occur <- 1e4; n.bail <- 10*n.occur
+i <- 1; n.occur <- 1e5; n.bail <- 10*n.occur
 while( sum(occur.vec) < n.occur & i <= n.bail ){
       founder <- sample(c(1,2,3,6),1,replace = FALSE)
       geno.vec[founder] <- 1
