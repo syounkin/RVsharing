@@ -50,9 +50,9 @@ for (lev in (md-1):1)
     currentdad=dad.id[id == currentnonfounders[i]]
     currentmom=mom.id[id == currentnonfounders[i]]  
     # Identify non-founder among mom and dad
-    currentnonfounders[i] = ifelse(dad.id[id == currentdad]==0,currentmom,currentdad)
+    currentnonfounders[i] = ifelse(is.na(dad.id[id == currentdad]),currentmom,currentdad)
     # Identify founder among mom and dad
-    currentfounders[i] = ifelse(dad.id[id == currentdad]==0,currentdad,currentmom)
+    currentfounders[i] = ifelse(is.na(dad.id[id == currentdad]),currentdad,currentmom)
     }
   # Adding final descendent at the current level to the currentnonfounders for the next level
   currentnonfounders[dv[fdi]==lev] = id[fdi][dv[fdi]==lev]

@@ -8,8 +8,14 @@ setMethod("RVsharing",  signature(ped="pedigree", id = "missing",dad.id = "missi
     RVsharing.fn( id = ped$id, dad.id = fa.id, mom.id = ma.id )
 })
 setMethod("RVsharing",  signature(ped = "missing", id="character",dad.id="character",mom.id="character"), function(id, dad.id, mom.id){
+    # Converting 0s to NA  in dad.id and mom.id
+    dad.id = ifelse(dad.id=="0",NA,dad.id)
+    mom.id = ifelse(mom.id=="0",NA,mom.id)
     RVsharing.fn( id = id, dad.id = dad.id, mom.id = mom.id )
 })
 setMethod("RVsharing",  signature(ped = "missing", id="numeric",dad.id="numeric",mom.id="numeric"), function(id, dad.id, mom.id){
+    # Converting 0s to NA  in dad.id and mom.id
+    dad.id = ifelse(dad.id==0,NA,dad.id)
+    mom.id = ifelse(mom.id==0,NA,mom.id)
     RVsharing.fn( id = id, dad.id = dad.id, mom.id = mom.id )
 })
