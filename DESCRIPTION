@@ -2,7 +2,7 @@ Package: Bureau
 Type: Package
 Title: Bureau
 Version: 0.0.3
-Date: Mon May 20 09:38:50 EDT 2013
+Date: Wed 26 Jun 2013 10:39:27 AM EDT
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Samuel G. Younkin <syounkin@jhsph.edu>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
@@ -26,3 +26,6 @@ Collate: AllGenerics.R
 LazyLoad: yes
 biocViews:
 Packaged: Mon May 20 09:38:50 EDT 2013
+## Local Variables:
+## time-stamp-pattern: "8/Date: %3a %3b %2d %02H:%02M:%02S %Z %:y\n"
+## End:
