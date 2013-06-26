@@ -1,6 +1,6 @@
 THISPKG <- "Bureau"
 .onAttach <- function(libname, pkgname) {
-	version <- packageDescription("Bureau", field="Version")
+	version <- packageDescription("Bureau", fields="Version")
 	packageStartupMessage(paste("
 Welcome to Bureau version ", version, "\n", sep = "" ) )
 }
