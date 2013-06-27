@@ -1,15 +1,5 @@
 # Computation of P[FjU]
 
-PFU.fromphi = function(phi.vec,theta)
-{
-# 2*nf - 2 alleles introduced
-PF2 = (2 - (Nf-1)*2*phi.vec[1])/(2*Nf-2)
-# 2*nf - 1 alleles introduced
-PF1 = (2 - (Nf-1)*2*phi.vec[2])/(2*Nf-1)
-
-PFU = (PF2 * theta^2/2 + PF1 * theta + 1/Nf)/(1 + theta + 1/2*theta^2)
-}
-
 PFU.direct = function(nf,theta,ord=2)
 {
 # Computation of P[FjU] using equation 21 of Bureau et al.
@@ -39,3 +29,14 @@ PFU.direct.order4 = function(nf,theta)
 a = (2*nf-4):(2*nf)
 weighted.mean(2/nf - 2/a,c(theta^4/24,theta^3/6,theta^2/2,theta,1))
 }
+
+## PFU.fromphi = function(phi.vec,theta)
+## {
+## # 2*nf - 2 alleles introduced
+## PF2 = (2 - (Nf-1)*2*phi.vec[1])/(2*Nf-2)
+## # 2*nf - 1 alleles introduced
+## PF1 = (2 - (Nf-1)*2*phi.vec[2])/(2*Nf-1)
+
+## PFU = (PF2 * theta^2/2 + PF1 * theta + 1/Nf)/(1 + theta + 1/2*theta^2)
+## }
+
