@@ -2,13 +2,13 @@ Package: Bureau
 Type: Package
 Title: Bureau
 Version: 0.0.3
-Date: Mon May 20 09:38:50 EDT 2013
+Date: Thu Jun 27 13:17:51 EDT 2013
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Samuel G. Younkin <syounkin@jhsph.edu>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
-License: THE BEER-WARE LICENSE
+License: GPL-2
 Depends: R (>= 2.15.2), methods, kinship2
-Imports:
+Imports: 
 Suggests:
 Enhances:
 Collate: AllGenerics.R
@@ -18,7 +18,7 @@ Collate: AllGenerics.R
 	 methods-trio.R
 	 approx2_functions.R		  
 	 compute_kinship_prop_coef.R
-	 PFU.r
+	 PFU.R
 	 rare_variant_sharing_v3.R
 	 rare_variant_sharing_approx2_v2.R 
 	 rare_variant_sharing_weighted_v2.R
@@ -26,3 +26,6 @@ Collate: AllGenerics.R
 LazyLoad: yes
 biocViews:
 Packaged: Mon May 20 09:38:50 EDT 2013
+## Local Variables:
+## time-stamp-pattern: "8/Date: %3a %3b %2d %02H:%02M:%02S %Z %:y\n"
+## End:

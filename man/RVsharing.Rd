@@ -1,14 +1,16 @@
 \name{RVsharing}
 \alias{RVsharing}
+\alias{RVsharing,pedigree,missing,missing,missing-method}
+\alias{RVsharing,missing,character,character,character-method}
+\alias{RVsharing,missing,numeric,numeric,numeric-method}
 \title{Probability of sharing a rare variant among relatives}
 \description{
 Computing probability that a rare variant is shared by a set of subjects
 in a pedigree using equation 1 of Bureau et al.
 }
 \usage{
-RVsharing(ped)
 ## Default S3 method:
-RVsharing(id, dad.id, mom.id)
+RVsharing(ped, id, dad.id, mom.id)
 }
 \arguments{
   \item{ped}{a \code{pedigree} object}
