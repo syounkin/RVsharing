@@ -260,13 +260,3 @@ dad.id[ped$findex>0] = ped$id[ped$findex]
 mom.id[ped$mindex>0] = ped$id[ped$mindex]
 RVsharing(id,dad.id,mom.id)$pshare
 } 
-
-# Returns object
-RVsharing.ped = function(ped)
-{
-id = ped$id
-dad.id = mom.id = numeric(length(id))
-dad.id[ped$findex>0] = ped$id[ped$findex]
-mom.id[ped$mindex>0] = ped$id[ped$mindex]
-RVsharing(id,dad.id,mom.id)
-} 
