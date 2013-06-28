@@ -1,4 +1,4 @@
-ped2trio = function(ped)
+ped2trio <- function(ped)
 {
 # Converts a pedigree object into a recursive list of trio objects
 # ped: a pedigree object
