@@ -1,6 +1,5 @@
 # By Alexandre Bureau
-# Version 0.1
-# 2013/02/08
+# 2013/06/28
 
 RVsharing.fn = function(id, dad.id, mom.id)
 {
@@ -18,7 +17,8 @@ md = max(dv)
 Nf = sum(dv==0)
 
 # Collecting the degrees between the sequenced children, the founders and the intermediate ancestors
-degvec = currentnonfounders = currentfounders = numeric(nfd)
+degvec = numeric(nfd)
+currentnonfounders = currentfounders = character(nfd)
 active = rep(TRUE,nfd) 
 # List of distance to founders of each final descendant
 desfounders = list()
@@ -27,7 +27,7 @@ foundersdegreedes = list()
 # List of indicators of whether each descendant of a founder is an intermediate ancestor
 iancestor.as.descendant = list()
 # List of intermediate ancestors
-iancestors = numeric(0)
+iancestors = character(0)
 # List of vectors of degrees of relatedness of final descendants below each intermediate ancestor
 ancestorsdegreedes = list()
 ia = 1
@@ -64,7 +64,7 @@ for (lev in (md-1):1)
   # If there is any, there is only one
   if (any(tab.currentnonfounders>1))
     {
-    iancestors[ia] = as.numeric(names(tab.currentnonfounders)[tab.currentnonfounders>1])
+    iancestors[ia] = names(tab.currentnonfounders)[tab.currentnonfounders>1]
     # Adding the degrees of final descendants below the current intermediate ancestor to his list
     ancestorsdegreedes[[ia]] = degvec[currentnonfounders==iancestors[ia]&active]
     # Include degrees between spouse and final descendants in list of ancestors  (assumes only one spouse)
@@ -74,16 +74,16 @@ for (lev in (md-1):1)
       iancestor.as.descendant[[ia]] = list(id[fdi][currentnonfounders==iancestors[ia]&active] == iancestors[ia-1])
     else iancestor.as.descendant[[ia]] = list(rep(FALSE,length(foundersdegreedes[[ia]][[1]])))
     # Include previous ancestors of final descendants if any
-    if (any(as.numeric(names(desfounders)) %in% id[fdi][currentnonfounders==iancestors[ia]&active]))
+    if (any(names(desfounders) %in% id[fdi][currentnonfounders==iancestors[ia]&active]))
       {
       ii = 1
-      tmp = desfounders[as.numeric(names(desfounders)) %in% id[fdi][currentnonfounders==iancestors[ia]&active]]
+      tmp = desfounders[names(desfounders) %in% id[fdi][currentnonfounders==iancestors[ia]&active]]
       # Loop over final descendants 
       for (k in 1:length(tmp))
         {
         foundersdegreedes[[ia]][(ii+1):(ii+length(tmp[[k]]))] = tmp[[k]]
         # Setting indicator of whether the descendant of all ancestors in tmp[[k]] is the previous intermediate ancestor
-        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, as.numeric(names(tmp)[k]) == iancestors[ia-1], FALSE))
+        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, names(tmp)[k] == iancestors[ia-1], FALSE))
         ii = ii + length(tmp[[k]])
         # Adding spouse of intermediate ancestor to list of founders of current final descendant
         
@@ -180,16 +180,16 @@ else
         }
       }  
     # Include previous ancestors of final descendants if any
-    if (any(as.numeric(names(desfounders)) %in% id[fdi][active]))
+    if (any(names(desfounders) %in% id[fdi][active]))
       {
       ii = length(spousevec)
-      tmp = desfounders[as.numeric(names(desfounders)) %in% id[fdi][active]]
+      tmp = desfounders[names(desfounders) %in% id[fdi][active]]
       # Loop over final descendants 
       for (k in 1:length(tmp))
         {
         foundersdegreedes[[ia]][(ii+1):(ii+length(tmp[[k]]))] = tmp[[k]]
         # Setting indicator of whether the descendant of all ancestors in tmp[[k]] is the previous intermediate ancestor
-        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, as.numeric(names(tmp)[k]) == iancestors[ia-1], FALSE))
+        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, names(tmp)[k] == iancestors[ia-1], FALSE))
         ii = ii + length(tmp[[k]])
         }
       }
