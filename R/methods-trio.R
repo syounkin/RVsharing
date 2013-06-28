@@ -1,5 +1,4 @@
 setMethod("initialize", "Trio", function(.Object, ... ){
-#  .Object@pedigree <- pedigree
   .Object <- callNextMethod()
   .Object
 })
