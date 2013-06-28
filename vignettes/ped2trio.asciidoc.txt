@@ -1,0 +1,45 @@
+:toc:
+:numbered:
+:data-uri:
+
+
+
+== First Cousins ==
+----
+> id <- paste0("sub", 1:8)
+> fa.id <- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5")
+> ma.id <- c(NA,NA,NA,"sub2","sub2", NA,"sub4","sub6")
+> test.ped.first.cousins <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1,2,2,2))
+----
+image::figures/fig-plotped2.jpg[]
+
+----
+> ped2trio.list <- Bureau:::ped2trio(test.ped.first.cousins)
+> trios <- rep(list(NA),length(ped2trio.list))
+> names(trios) <- names(ped2trio.list)
+> trio.ids <- ped2trio.list[[names(trios)[1]]] # first trio
+> trios[paste0("trio",trio.ids$id)] <- new("Trio", id = trio.ids$id, spouse = trio.ids$spouse, offspring = list(trio.ids$offspring))
+> trios
+$triosub5
+An object of class "Trio"
+Slot "id":
+[1] "sub5"
+
+Slot "spouse":
+[1] "sub6"
+
+Slot "offspring":
+[[1]]
+[[1]]$sub8
+[1] "sub8"
+
+
+
+
+$triosub4
+[1] NA
+
+$triosub1
+[1] NA
+> 
+----
