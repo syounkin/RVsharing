@@ -925,12 +925,12 @@ FABRRRQAUUUUAf/Z" />
 &gt; trio1 &lt;- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
 &gt; geno.vec &lt;- c(1,0,0,NA,NA,0,NA,NA)
 &gt; names(geno.vec) &lt;- paste0("sub",1:8)
-&gt; p.share &lt;- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)</tt></pre>
+&gt; p.share &lt;- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e5)</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>&gt; p.share
-[1] 0.06
+[1] 0.06671
 &gt; 1/15
 [1] 0.06666667</tt></pre>
 </div></div>
@@ -1181,12 +1181,12 @@ oooAKKKKACiiigAooooA/9k=" />
 &gt; trio1 &lt;- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
 &gt; geno.vec &lt;- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
 &gt; names(geno.vec) &lt;- paste0("sub",1:12)
-&gt; p.share &lt;- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e3)</tt></pre>
+&gt; p.share &lt;- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e5)</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>&gt; p.share
-[1] 0.016
+[1] 0.01543
 &gt; 1/63
 [1] 0.01587302</tt></pre>
 </div></div>
@@ -1277,7 +1277,7 @@ function (g1, g2)
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-06-28 12:00:00 EDT
+Last updated 2013-06-28 12:16:17 EDT
 </div>
 </div>
 </body>

@@ -18,11 +18,11 @@ image::figures/fig-testpedfirst.jpg[]
 > trio1 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
 > geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 > names(geno.vec) <- paste0("sub",1:8)
-> p.share <- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
+> p.share <- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e5)
 ----
 ----
 > p.share
-[1] 0.06
+[1] 0.06671
 > 1/15
 [1] 0.06666667
 ----
@@ -45,11 +45,11 @@ image::figures/fig-testpedsecond.jpg[]
 > trio1 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
 > geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
 > names(geno.vec) <- paste0("sub",1:12)
-> p.share <- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e3)
+> p.share <- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e5)
 ----
 ----
 > p.share
-[1] 0.016
+[1] 0.01543
 > 1/63
 [1] 0.01587302
 ----
