@@ -24,3 +24,19 @@ gene.drop.fn <- function(g1,g2){
   }
   return(goff)
 }
+
+GeneDropSim.fn <- function(trio, geno.vec, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1){
+  n.bail <- k*n; i <- 1;
+  share.vec <- logical(n.bail); occur.vec <- logical(n.bail);
+  while( sum(occur.vec) < n & i <= n.bail ){
+      founder <- sample(fd.indices,nf,replace = FALSE)
+      geno.vec[founder] <- 1
+      geno.vec.sim <- GeneDrop(trio, geno.vec)
+      if( any(is.na(geno.vec.sim))) stop("GeneDrop returned NA genotpye.")
+      share.vec[i] <- all( geno.vec.sim[dt.vec]==1 )
+      occur.vec[i] <- any( geno.vec.sim[dt.vec]==1 )
+      geno.vec[founder] <- 0
+      i <- i + 1
+    }
+  return(sum(share.vec)/sum(occur.vec)) # note that these vectors have length n.bail
+}
