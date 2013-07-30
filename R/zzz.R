@@ -1,8 +1,8 @@
-THISPKG <- "Bureau"
+THISPKG <- "RVsharing"
 .onAttach <- function(libname, pkgname) {
-	version <- packageDescription("Bureau", fields="Version")
+	version <- packageDescription("RVsharing", fields="Version")
 	packageStartupMessage(paste("
-Welcome to Bureau version ", version, "\n", sep = "" ) )
+Welcome to RVsharing version ", version, "\n", sep = "" ) )
 }
 
 .onUnload <- function(libpath){
