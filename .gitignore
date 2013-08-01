@@ -7,7 +7,6 @@
 *.aux
 *.log
 *.out
-*.tex
 foo
 *.bbl
 *.blg
