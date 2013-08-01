@@ -43,6 +43,7 @@ otherwise an erroneous response may be obtained.
 The function recursively processes branching individuals (intermediate ancestors) from the lowest one in the pedigree to the one who is a top founder, applying the formulas in Bureau et al. to compute the terms of P[C1 = ... = Cn = 1] and P[C1 = ... = Cn = 0] involving each branching individual.
 }
 \examples{
+data(ped.list)
 plot(ped.list[[1]])
 RVsharing(ped.list[[1]])
 }
