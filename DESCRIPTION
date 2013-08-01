@@ -1,8 +1,8 @@
 Package: RVsharing
 Type: Package
 Title: Bureau
-Version: 0.0.5
-Date: Tue Jul 30 10:56:45 EDT 2013
+Version: 0.0.6
+Date: Thu Aug  1 09:52:46 EDT 2013
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Samuel G. Younkin <syounkin@jhsph.edu>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
