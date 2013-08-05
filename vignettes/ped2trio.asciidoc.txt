@@ -17,8 +17,8 @@ image::figures/fig-plotped2.jpg[]
 > trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins)
 > geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 > names(geno.vec) <- paste0("sub",1:8)
-> RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
-[1] 0.07
+> RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e4)
+[1] 0.069
 > RVsharing(test.ped.first.cousins)
 $pshare
 [1] 0.06666667
@@ -59,7 +59,9 @@ $dad.id
 $mom.id
 [1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"
 ----
+Great!
 
+== Second Cousins ==
 ----
 > id <- paste0("sub", 1:12)
 > fa.id <- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5",NA,NA,"sub9","sub10")
@@ -68,13 +70,10 @@ $mom.id
 > plot(test.ped.second.cousins)
 > trio.obj <- RVsharing:::ped2trio(test.ped.second.cousins)
 > 
-> #geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
-> #names(geno.vec) <- paste0("sub",1:12)
-> 
-> #RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e2)
-> #RVsharing(test.ped.second.cousins)
-> 
 ----
+image::figures/fig-plotped3.jpg[]
+
+
 For second cousins there is a problem with the list formed by ped2trio.
 ----
 > trio.obj$list
