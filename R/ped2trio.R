@@ -146,7 +146,7 @@ for( i in 1:(k-1) ){
 
 trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list )
 
-trio.obj
+return(list(list = trio.obj.list, object = trio.obj))
 }
     
 # It works for:
