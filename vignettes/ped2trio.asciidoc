@@ -21,13 +21,38 @@ test.ped.first.cousins <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = 
 <<plotped2, fig = TRUE, width = 3, eval = TRUE, echo = FALSE>>=
 plot(test.ped.first.cousins)
 @ 
-<<ped2trio>>=
+<<firstcousins>>=
 
 trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins)
 
 geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:8)
 
-RVsharing:::GeneDropSim.fn( trio = trio.obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
+RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
 RVsharing(test.ped.first.cousins)
+@
+
+<<secondcousins>>=
+id <- paste0("sub", 1:12)
+fa.id <- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5",NA,NA,"sub9","sub10")
+ma.id <- c(NA,NA,NA,"sub2","sub2", NA,"sub4","sub6",NA,NA,"sub7","sub8")
+test.ped.second.cousins <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1,2,2,2,1,1,2,2))
+plot(test.ped.second.cousins)
+
+trio.obj <- RVsharing:::ped2trio(test.ped.second.cousins)
+
+#geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
+#names(geno.vec) <- paste0("sub",1:12)
+
+#RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e2)
+#RVsharing(test.ped.second.cousins)
+
+@
+For second cousins there is a problem with the list formed by ped2trio.
+<<twogens>>=
+trio.obj$list
+@
+Notice that subjects 1 and 2 do not appear.  And so, the trio object is incorrect.
+<<twogens2>>=
+trio.obj$object
 @

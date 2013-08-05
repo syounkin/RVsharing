@@ -17,8 +17,8 @@ image::figures/fig-plotped2.jpg[]
 > trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins)
 > geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 > names(geno.vec) <- paste0("sub",1:8)
-> RVsharing:::GeneDropSim.fn( trio = trio.obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
-[1] 0.05
+> RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
+[1] 0.07
 > RVsharing(test.ped.first.cousins)
 $pshare
 [1] 0.06666667
@@ -58,4 +58,142 @@ $dad.id
 
 $mom.id
 [1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"
+----
+
+----
+> id <- paste0("sub", 1:12)
+> fa.id <- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5",NA,NA,"sub9","sub10")
+> ma.id <- c(NA,NA,NA,"sub2","sub2", NA,"sub4","sub6",NA,NA,"sub7","sub8")
+> test.ped.second.cousins <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1,2,2,2,1,1,2,2))
+> plot(test.ped.second.cousins)
+> trio.obj <- RVsharing:::ped2trio(test.ped.second.cousins)
+> 
+> #geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
+> #names(geno.vec) <- paste0("sub",1:12)
+> 
+> #RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e2)
+> #RVsharing(test.ped.second.cousins)
+> 
+----
+For second cousins there is a problem with the list formed by ped2trio.
+----
+> trio.obj$list
+[[1]]
+An object of class "Trio"
+Slot "id":
+[1] "sub7"
+
+Slot "spouse":
+[1] "sub9"
+
+Slot "offspring":
+$sub11
+[1] "sub11"
+
+
+
+[[2]]
+An object of class "Trio"
+Slot "id":
+[1] "sub8"
+
+Slot "spouse":
+[1] "sub10"
+
+Slot "offspring":
+$sub12
+[1] "sub12"
+
+
+
+[[3]]
+An object of class "Trio"
+Slot "id":
+[1] "sub5"
+
+Slot "spouse":
+[1] "sub6"
+
+Slot "offspring":
+$sub8
+[1] "triosub8"
+
+
+
+[[4]]
+An object of class "Trio"
+Slot "id":
+[1] "sub4"
+
+Slot "spouse":
+[1] "sub3"
+
+Slot "offspring":
+$sub7
+[1] "triosub7"
+----
+Notice that subjects 1 and 2 do not appear.  And so, the trio object is incorrect.
+----
+> trio.obj$object
+An object of class "Trio"
+Slot "id":
+[1] "sub1"
+
+Slot "spouse":
+[1] "sub2"
+
+Slot "offspring":
+[[1]]
+An object of class "Trio"
+Slot "id":
+[1] "sub7"
+
+Slot "spouse":
+[1] "sub9"
+
+Slot "offspring":
+$sub11
+[1] "sub11"
+
+
+
+[[2]]
+An object of class "Trio"
+Slot "id":
+[1] "sub8"
+
+Slot "spouse":
+[1] "sub10"
+
+Slot "offspring":
+$sub12
+[1] "sub12"
+
+
+
+[[3]]
+An object of class "Trio"
+Slot "id":
+[1] "sub5"
+
+Slot "spouse":
+[1] "sub6"
+
+Slot "offspring":
+$sub8
+[1] "triosub8"
+
+
+
+[[4]]
+An object of class "Trio"
+Slot "id":
+[1] "sub4"
+
+Slot "spouse":
+[1] "sub3"
+
+Slot "offspring":
+$sub7
+[1] "triosub7"
 ----

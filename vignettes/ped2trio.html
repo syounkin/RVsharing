@@ -903,8 +903,8 @@ ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=" />
 <pre><tt>&gt; trio.obj &lt;- RVsharing:::ped2trio(test.ped.first.cousins)
 &gt; geno.vec &lt;- c(1,0,0,NA,NA,0,NA,NA)
 &gt; names(geno.vec) &lt;- paste0("sub",1:8)
-&gt; RVsharing:::GeneDropSim.fn( trio = trio.obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
-[1] 0.05
+&gt; RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
+[1] 0.07
 &gt; RVsharing(test.ped.first.cousins)
 $pshare
 [1] 0.06666667
@@ -945,13 +945,153 @@ $dad.id
 $mom.id
 [1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"</tt></pre>
 </div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>&gt; id &lt;- paste0("sub", 1:12)
+&gt; fa.id &lt;- c(NA,NA,NA,"sub1","sub1", NA,"sub3","sub5",NA,NA,"sub9","sub10")
+&gt; ma.id &lt;- c(NA,NA,NA,"sub2","sub2", NA,"sub4","sub6",NA,NA,"sub7","sub8")
+&gt; test.ped.second.cousins &lt;- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = c(1,2,1,2,1,2,2,2,1,1,2,2))
+&gt; plot(test.ped.second.cousins)
+&gt; trio.obj &lt;- RVsharing:::ped2trio(test.ped.second.cousins)
+&gt;
+&gt; #geno.vec &lt;- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
+&gt; #names(geno.vec) &lt;- paste0("sub",1:12)
+&gt;
+&gt; #RVsharing:::GeneDropSim.fn( trio = trio.obj$obj, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e2)
+&gt; #RVsharing(test.ped.second.cousins)
+&gt;</tt></pre>
+</div></div>
+<div class="paragraph"><p>For second cousins there is a problem with the list formed by ped2trio.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>&gt; trio.obj$list
+[[1]]
+An object of class "Trio"
+Slot "id":
+[1] "sub7"
+
+Slot "spouse":
+[1] "sub9"
+
+Slot "offspring":
+$sub11
+[1] "sub11"
+
+
+
+[[2]]
+An object of class "Trio"
+Slot "id":
+[1] "sub8"
+
+Slot "spouse":
+[1] "sub10"
+
+Slot "offspring":
+$sub12
+[1] "sub12"
+
+
+
+[[3]]
+An object of class "Trio"
+Slot "id":
+[1] "sub5"
+
+Slot "spouse":
+[1] "sub6"
+
+Slot "offspring":
+$sub8
+[1] "triosub8"
+
+
+
+[[4]]
+An object of class "Trio"
+Slot "id":
+[1] "sub4"
+
+Slot "spouse":
+[1] "sub3"
+
+Slot "offspring":
+$sub7
+[1] "triosub7"</tt></pre>
+</div></div>
+<div class="paragraph"><p>Notice that subjects 1 and 2 do not appear.  And so, the trio object is incorrect.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>&gt; trio.obj$object
+An object of class "Trio"
+Slot "id":
+[1] "sub1"
+
+Slot "spouse":
+[1] "sub2"
+
+Slot "offspring":
+[[1]]
+An object of class "Trio"
+Slot "id":
+[1] "sub7"
+
+Slot "spouse":
+[1] "sub9"
+
+Slot "offspring":
+$sub11
+[1] "sub11"
+
+
+
+[[2]]
+An object of class "Trio"
+Slot "id":
+[1] "sub8"
+
+Slot "spouse":
+[1] "sub10"
+
+Slot "offspring":
+$sub12
+[1] "sub12"
+
+
+
+[[3]]
+An object of class "Trio"
+Slot "id":
+[1] "sub5"
+
+Slot "spouse":
+[1] "sub6"
+
+Slot "offspring":
+$sub8
+[1] "triosub8"
+
+
+
+[[4]]
+An object of class "Trio"
+Slot "id":
+[1] "sub4"
+
+Slot "spouse":
+[1] "sub3"
+
+Slot "offspring":
+$sub7
+[1] "triosub7"</tt></pre>
+</div></div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-08-05 09:38:42 EDT
+Last updated 2013-08-05 10:19:33 EDT
 </div>
 </div>
 </body>
