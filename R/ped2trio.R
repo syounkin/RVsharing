@@ -127,7 +127,27 @@ for (lev in md:2)
   trio.flag[mom.trio] = TRUE
   }
 
+# from ghere down has been edited by sgy on Aug. 5, 2013
+
 # Return the list of trios
-trio.list
+#trio.list
+
+# Here is the first effort towards converting Bureau's trio list to a trio object.
+
+ped2trio.list <- trio.list
+
+trio.obj.list <- list()
+k <- length(ped2trio.list)
+for( i in 1:(k-1) ){
+
+    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = ped2trio.list[[i]]$offspring)
+
+}
+
+trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list )
+
+trio.obj
 }
     
+# It works for:
+# first cousins
