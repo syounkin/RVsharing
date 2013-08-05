@@ -14,32 +14,48 @@
 image::figures/fig-plotped2.jpg[]
 
 ----
-> ped2trio.list <- Bureau:::ped2trio(test.ped.first.cousins)
-> trios <- rep(list(NA),length(ped2trio.list))
-> names(trios) <- names(ped2trio.list)
-> trio.ids <- ped2trio.list[[names(trios)[1]]] # first trio
-> trios[paste0("trio",trio.ids$id)] <- new("Trio", id = trio.ids$id, spouse = trio.ids$spouse, offspring = list(trio.ids$offspring))
-> trios
-$triosub5
-An object of class "Trio"
-Slot "id":
-[1] "sub5"
+> trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins)
+> geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
+> names(geno.vec) <- paste0("sub",1:8)
+> RVsharing:::GeneDropSim.fn( trio = trio.obj, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
+[1] 0.05
+> RVsharing(test.ped.first.cousins)
+$pshare
+[1] 0.06666667
 
-Slot "spouse":
-[1] "sub6"
+$iancestors
+[1] "sub1"
 
-Slot "offspring":
-[[1]]
-[[1]]$sub8
-[1] "sub8"
+$desfounders
+$desfounders$sub7
+$desfounders$sub7$sub3
+[1] 1
+
+$desfounders$sub7$sub2
+[1] 2
+
+$desfounders$sub7$sub1
+[1] 2
+
+
+$desfounders$sub8
+$desfounders$sub8$sub6
+[1] 1
+
+$desfounders$sub8$sub2
+[1] 2
+
+$desfounders$sub8$sub1
+[1] 2
 
 
 
+$id
+[1] "sub1" "sub2" "sub3" "sub4" "sub5" "sub6" "sub7" "sub8"
 
-$triosub4
-[1] NA
+$dad.id
+[1] NA     NA     NA     "sub1" "sub1" NA     "sub3" "sub5"
 
-$triosub1
-[1] NA
-> 
+$mom.id
+[1] NA     NA     NA     "sub2" "sub2" NA     "sub4" "sub6"
 ----
