@@ -1,4 +1,4 @@
-ped2trio <- function(ped)
+ped2trio <- function(ped, ped.vec)
 {
 # Converts a pedigree object into a recursive list of trio objects
 # ped: a pedigree object
@@ -132,22 +132,25 @@ for (lev in md:2)
 # Return the list of trios
 #trio.list
 
-# Here is the first effort towards converting Bureau's trio list to a trio object.
-
 ped2trio.list <- trio.list
-
 trio.obj.list <- list()
-k <- length(ped2trio.list)
-for( i in 1:(k-1) ){
-
+k <- sum(ped.vec)
+if( length(ped.vec) == 2 ){
+  for( i in 1:ped.vec[1] ){
     trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = ped2trio.list[[i]]$offspring)
-
+  }
+  trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list[1:ped.vec[1]] )
+  
+}else if( length(ped.vec) == 3 ){
+  for( i in 1:ped.vec[1] ){
+    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = ped2trio.list[[i]]$offspring)
+  }
+  # there is a strange reversal of order here
+  # without the reversal the subscript for the offspring would be i - ped.vec[2]
+  for( i in ((1:ped.vec[2])+ped.vec[1]) ){
+    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = trio.obj.list[ped.vec[1] + ped.vec[2] - i + 1 ])
+  }
+  trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list[ped.vec[1] + 1:ped.vec[2] ] )
 }
-
-trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list )
-
-return(list(list = trio.obj.list, object = trio.obj))
+return(list(trio.list = ped2trio.list, obj.list = trio.obj.list, object = trio.obj))
 }
-    
-# It works for:
-# first cousins
