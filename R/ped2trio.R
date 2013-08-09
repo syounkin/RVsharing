@@ -1,9 +1,10 @@
-ped2trio <- function(ped, ped.vec)
+ped2trio <- function(ped)
 {
 # Converts a pedigree object into a recursive list of trio objects
 # ped: a pedigree object
 
 dv = kindepth(ped)
+# md is the depth of the pedigree, i.e. the number of levels of trios
 md = max(dv)
 
 # Extracting the ids of subjects and their parents from ped object
@@ -16,6 +17,8 @@ trio.flag = logical(length(id))
 names(trio.flag) = id
 
 trio.list=list()
+cumultrio.vec=numeric(md)
+
 r=1
 for (lev in md:2)
   {
@@ -70,6 +73,8 @@ for (lev in md:2)
   # We turn the trio.flag of the mom.trio to TRUE to indicate they now have a trio
   trio.flag[mom.trio] = TRUE
   }
+  # Record number of trios up to now
+  cumultrio.vec[md-lev+1] = r - 1
   }
 #  print(trio.flag)
 # Depth 1
@@ -126,15 +131,20 @@ for (lev in md:2)
   # We turn the trio.flag of the mom.trio to TRUE to indicate they now have a trio
   trio.flag[mom.trio] = TRUE
   }
+# Record the total number of trios
+cumultrio.vec[md] = r - 1 
+# Compute number of trios per level
+ped.vec = diff(c(0,cumultrio.vec))
 
-# from ghere down has been edited by sgy on Aug. 5, 2013
+# from here down has been edited by sgy on Aug. 5, 2013
 
 # Return the list of trios
 #trio.list
 
 ped2trio.list <- trio.list
 trio.obj.list <- list()
-k <- sum(ped.vec)
+k <- cumultrio.vec[md]
+
 if( length(ped.vec) == 2 ){
   for( i in 1:ped.vec[1] ){
     trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = ped2trio.list[[i]]$offspring)
@@ -147,10 +157,10 @@ if( length(ped.vec) == 2 ){
   }
   # there is a strange reversal of order here
   # without the reversal the subscript for the offspring would be i - ped.vec[2]
-  for( i in ((1:ped.vec[2])+ped.vec[1]) ){
-    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = trio.obj.list[ped.vec[1] + ped.vec[2] - i + 1 ])
+  for( i in ((1:ped.vec[2])+cumultrio.vec[1]) ){
+    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = trio.obj.list[cumultrio.vec[1] + ped.vec[2] - i + 1 ])
   }
-  trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list[ped.vec[1] + 1:ped.vec[2] ] )
+  trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list[cumultrio.vec[1] + 1:ped.vec[2] ] )
 }
 return(list(trio.list = ped2trio.list, obj.list = trio.obj.list, object = trio.obj))
 }
