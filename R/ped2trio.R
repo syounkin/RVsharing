@@ -162,5 +162,5 @@ if( length(ped.vec) == 2 ){
   }
   trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list[cumultrio.vec[1] + 1:ped.vec[2] ] )
 }
-return(list(trio.list = ped2trio.list, obj.list = trio.obj.list, object = trio.obj))
+return(list(trio.list = ped2trio.list, obj.list = trio.obj.list, object = trio.obj, fd.indices=which(dv==0)))
 }

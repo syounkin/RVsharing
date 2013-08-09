@@ -40,3 +40,9 @@ GeneDropSim.fn <- function(trio, geno.vec, dt.vec, fd.indices, n = 1e3, k = 10, 
     }
   return(sum(share.vec)/sum(occur.vec)) # note that these vectors have length n.bail
 }
+
+get.fd.indices <- function(ped){
+  dv = kindepth(ped)
+  which(dv==0)
+  }
+  
