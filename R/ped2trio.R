@@ -40,8 +40,12 @@ for (lev in md:2)
       # Create vector of children of the couple
       offspring.vec = id[dad.id==dad.trio[i] & mom.id==spousevec[j]]
       # Creating the elements of the trio object in trio.list
-      trio.obj=list(id=dad.trio[i],spouse=spousevec[j],offspring = as.list(ifelse(trio.flag[offspring.vec],paste("trio",offspring.vec,sep=""),offspring.vec)))
-      trio.list[[r]]=trio.obj
+      # I need to convert the offspring vector into a list to handle sibships that contain both trios and final descendants represented by a character string
+      offspring.list = as.list(offspring.vec)
+      # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
+      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+        offspring.list[[h]] = trio.list[paste("trio",offspring.vec,sep="")]  
+      trio.list[[r]]=new("Trio", id=dad.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",dad.trio[i],sep="")
       r = r +1
       }
@@ -64,8 +68,11 @@ for (lev in md:2)
       # Create vector of children of the couple
       offspring.vec = id[mom.id==mom.trio[i] & dad.id==spousevec[j]]
       # Creating the elements of the trio object in trio.list
-      trio.obj=list(id=mom.trio[i],spouse=spousevec[j],offspring = as.list(ifelse(trio.flag[offspring.vec],paste("trio",offspring.vec,sep=""),offspring.vec)))
-      trio.list[[r]]=trio.obj
+      offspring.list = as.list(offspring.vec)
+      # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
+      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+        offspring.list[[h]] = trio.list[paste("trio",offspring.vec,sep="")]  
+      trio.list[[r]]=new("Trio",id=mom.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",mom.trio[i],sep="")
       r = r +1
       }
@@ -97,8 +104,11 @@ for (lev in md:2)
       # Create vector of children of the couple
       offspring.vec = id[dad.id==dad.trio[i] & mom.id==spousevec[j]]
       # Creating the elements of the trio object in trio.list
-      trio.obj=list(id=dad.trio[i],spouse=spousevec[j],offspring = as.list(ifelse(trio.flag[offspring.vec],paste("trio",offspring.vec,sep=""),offspring.vec)))
-      trio.list[[r]]=trio.obj
+      offspring.list = as.list(offspring.vec)
+      # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
+      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+        offspring.list[[h]] = trio.list[paste("trio",offspring.vec,sep="")]  
+      trio.list[[r]]=new("Trio",id=dad.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",dad.trio[i],sep="")
       r = r +1
       }
@@ -122,8 +132,11 @@ for (lev in md:2)
       # Create vector of children of the couple
       offspring.vec = id[mom.id==mom.trio[i] & dad.id==spousevec[j]]
       # Creating the elements of the trio object in trio.list
-      trio.obj=list(id=mom.trio[i],spouse=spousevec[j],offspring = as.list(ifelse(trio.flag[offspring.vec],paste("trio",offspring.vec,sep=""),offspring.vec)))
-      trio.list[[r]]=trio.obj
+      offspring.list = as.list(offspring.vec)
+      # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
+      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+        offspring.list[[h]] = trio.list[paste("trio",offspring.vec,sep="")]  
+      trio.list[[r]]=list(id=mom.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",mom.trio[i],sep="")
       r = r +1
       }
@@ -134,33 +147,9 @@ for (lev in md:2)
 # Record the total number of trios
 cumultrio.vec[md] = r - 1 
 # Compute number of trios per level
-ped.vec = diff(c(0,cumultrio.vec))
+#ped.vec = diff(c(0,cumultrio.vec))
 
-# from here down has been edited by sgy on Aug. 5, 2013
+trio.obj = trio.list[[r-1]]
 
-# Return the list of trios
-#trio.list
-
-ped2trio.list <- trio.list
-trio.obj.list <- list()
-k <- cumultrio.vec[md]
-
-if( length(ped.vec) == 2 ){
-  for( i in 1:ped.vec[1] ){
-    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = ped2trio.list[[i]]$offspring)
-  }
-  trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list[1:ped.vec[1]] )
-  
-}else if( length(ped.vec) == 3 ){
-  for( i in 1:ped.vec[1] ){
-    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = ped2trio.list[[i]]$offspring)
-  }
-  # there is a strange reversal of order here
-  # without the reversal the subscript for the offspring would be i - ped.vec[2]
-  for( i in ((1:ped.vec[2])+cumultrio.vec[1]) ){
-    trio.obj.list[[i]] <- new("Trio", id = ped2trio.list[[i]]$id, spouse = ped2trio.list[[i]]$spouse, offspring = trio.obj.list[cumultrio.vec[1] + ped.vec[2] - i + 1 ])
-  }
-  trio.obj <- new("Trio", id = ped2trio.list[[k]]$id, spouse = ped2trio.list[[k]]$spouse, offspring = trio.obj.list[cumultrio.vec[1] + 1:ped.vec[2] ] )
-}
-return(list(trio.list = ped2trio.list, obj.list = trio.obj.list, object = trio.obj, fd.indices=which(dv==0)))
+return(list(obj.list = trio.list, object = trio.obj, fd.indices=which(dv==0)))
 }
