@@ -14,10 +14,10 @@ setMethod("GeneDrop", signature( trio = "Trio", geno.vec = "numeric"), function(
       }
     }else{
       # this is the case where the offspring is a trio object
-      if( is.na(geno.vec[ trio@offspring[[i]]@id])){
+      if( is.na(geno.vec[ trio@offspring[[i]][[1]]@id])){
         goff <- gene.drop.fn(g1,g2)
-        geno.vec[ trio@offspring[[i]]@id ] <- goff
-        geno.vec <- GeneDrop(trio@offspring[[i]], geno.vec)
+        geno.vec[ trio@offspring[[i]][[1]]@id ] <- goff
+        geno.vec <- GeneDrop(trio@offspring[[i]][[1]], geno.vec)
       }
     }
   }
