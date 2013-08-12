@@ -8,13 +8,13 @@
 image::figures/fig-plotped2.jpg[]
 
 ----
-> trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins, ped.vec = c(2,1) )
+> trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins )
 ----
 ----
 > geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 > names(geno.vec) <- paste0("sub",1:8)
-> RVsharing:::GeneDropSim.fn( trio = trio.obj$object, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e5)
-[1] 0.06839
+> RVsharing:::GeneDropSim.fn( trio = trio.obj$object[[1]], geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e4)
+[1] 0.0663
 > RVsharing(test.ped.first.cousins)$pshare
 [1] 0.06666667
 ----
@@ -23,16 +23,14 @@ image::figures/fig-plotped2.jpg[]
 image::figures/fig-secondcousinsplot.jpg[]
 
 ----
-> trio.obj <- RVsharing:::ped2trio(test.ped.second.cousins, ped.vec = c(2,2,1))$object
+> trio.obj <- RVsharing:::ped2trio(test.ped.second.cousins)
 ----
 
 ----
 > geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
 > names(geno.vec) <- paste0("sub",1:12)
-> Bureau:::GeneDropSim.fn(trio = trio.obj, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e5)
-[1] 0.01604
+> RVsharing:::GeneDropSim.fn(trio = trio.obj$object[[1]], geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e4)
+[1] 0.016
 > RVsharing(test.ped.second.cousins)$pshare
 [1] 0.01587302
 ----
-
-Foo!

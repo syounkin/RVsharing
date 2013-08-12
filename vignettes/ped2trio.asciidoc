@@ -22,12 +22,12 @@ test.ped.first.cousins <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex = 
 plot(test.ped.first.cousins)
 @ 
 <<firstcousins, eval = TRUE>>=
-trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins, ped.vec = c(2,1) )
+trio.obj <- RVsharing:::ped2trio(test.ped.first.cousins )
 @
 <<genedrop1, cache = FALSE>>=
 geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:8)
-RVsharing:::GeneDropSim.fn( trio = trio.obj$object, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e5)
+RVsharing:::GeneDropSim.fn( trio = trio.obj$object[[1]], geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e4)
 RVsharing(test.ped.first.cousins)$pshare
 @
 
@@ -42,14 +42,12 @@ test.ped.second.cousins <- pedigree(id = id, dadid = fa.id, momid = ma.id, sex =
 plot(test.ped.second.cousins)
 @
 <<secondcousins>>=
-trio.obj <- RVsharing:::ped2trio(test.ped.second.cousins, ped.vec = c(2,2,1))$object
+trio.obj <- RVsharing:::ped2trio(test.ped.second.cousins)
 @
 
 <<genedrop2, cache = FALSE>>=
 geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:12)
-Bureau:::GeneDropSim.fn(trio = trio.obj, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e5)
+RVsharing:::GeneDropSim.fn(trio = trio.obj$object[[1]], geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e4)
 RVsharing(test.ped.second.cousins)$pshare
 @
-
-Foo!
