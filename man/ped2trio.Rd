@@ -10,6 +10,7 @@ ped2trio(ped)
 }
 \arguments{
   \item{ped}{a \code{pedigree} object }
+  }
 \value{
   \item{object}{list of trio objects, one list for each founder couple of the pedigree}
   \item{fd.indices}{Vector of the IDs of the founders of the pedigree}
