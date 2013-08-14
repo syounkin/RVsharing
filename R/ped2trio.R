@@ -172,9 +172,8 @@ cumultrio.vec[md] = r - 1
 #ped.vec = diff(c(0,cumultrio.vec))
 
 #trio.obj = trio.list[[r-1]]
-#trio.obj=list()
-#for (l in 1:sum(foundertrios))
   trio.obj = trio.list[which(foundertrios)]
 
-return(list(obj.list = trio.list, object = trio.obj, fd.indices=which(dv==0)))
+#return(list(obj.list = trio.list, object = trio.obj, fd.indices=which(dv==0)))
+return(list(object = trio.obj, fd.indices=which(dv==0)))
 }
