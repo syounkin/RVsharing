@@ -25,14 +25,20 @@ gene.drop.fn <- function(g1,g2){
   return(goff)
 }
 
-GeneDropSim.fn <- function(trio, geno.vec, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1){
+GeneDropSim.fn <- function(trio.list, id, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1){
   n.bail <- k*n; i <- 1;
   share.vec <- logical(n.bail); occur.vec <- logical(n.bail);
+  geno.vec = rep(NA,length(id))
+  names(geno.vec) = id
+  geno.vec[fd.indices] = 0
+
   while( sum(occur.vec) < n & i <= n.bail ){
       founder <- sample(fd.indices,nf,replace = FALSE)
       geno.vec[founder] <- 1
-      geno.vec.sim <- GeneDrop(trio, geno.vec)
-      if( any(is.na(geno.vec.sim))) stop("GeneDrop returned NA genotpye.")
+      geno.vec.sim = geno.vec
+      for (j in 1:length(trio.list))
+        geno.vec.sim <- GeneDrop(trio.list[[j]], geno.vec.sim)
+      if( any(is.na(geno.vec.sim))) stop("GeneDrop returned NA genotype.")
       share.vec[i] <- all( geno.vec.sim[dt.vec]==1 )
       occur.vec[i] <- any( geno.vec.sim[dt.vec]==1 )
       geno.vec[founder] <- 0
