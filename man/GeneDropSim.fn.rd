@@ -6,7 +6,7 @@
 Estimates the probability that all subjects in a subset of pedigree members share a rare variant given that it occured in any of them by performing a Monte Carlo simulation of the transmission of the genotypes of the variant from the founders down the pedigree.
 }
 \usage{
-GeneDropSim.fn <- function(trio.list, geno.vec, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1)
+GeneDropSim.fn(trio.list, id, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1)
 }
 \arguments{
   \item{trio.list}{a list of trio objects encoding the pedigree structure }
@@ -25,11 +25,11 @@ GeneDropSim.fn <- function(trio.list, geno.vec, dt.vec, fd.indices, n = 1e3, k =
 \examples{
 data(ped.list)
 plot(ped.list[[54]])
-trio.obj = ped2trio(ped.list[[54]])                                                                                                                                                                                                                                                                                                  
-GeneDropSim.fn( trio = trio.obj$object, id=ped.list[[54]]$id, dt.vec = c("40","47"), fd.indices = trio.obj$fd.indices, n = 1e4)
+trio.obj = ped2trio(ped.list[[54]])
+         
+GeneDropSim.fn( trio.list = trio.obj$object, id=ped.list[[54]]$id, dt.vec = c("40","47"), fd.indices = trio.obj$fd.indices, n = 1e4)
+
 # Result should be very close to exact value
 RVsharing(ped.list[[54]])$pshare
 }
 \author{Samuel G. Younkin <syounkin@jhsph.edu> and Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
-}
-

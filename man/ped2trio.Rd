@@ -24,5 +24,3 @@ data(ped.list)
 ped2trio(ped.list[[1]])
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
-}
-
