@@ -912,14 +912,14 @@ FABRRRQAUUUUAf/Z" />
 </div>
 <div class="listingblock">
 <div class="content">
-<pre><tt>&gt; trio.obj &lt;- RVsharing:::ped2trio(test.ped.first.cousins )</tt></pre>
+<pre><tt>&gt; trio.obj &lt;- ped2trio(test.ped.first.cousins )</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>&gt; geno.vec &lt;- c(1,0,0,NA,NA,0,NA,NA)
 &gt; names(geno.vec) &lt;- paste0("sub",1:8)
-&gt; RVsharing:::GeneDropSim.fn( trio = trio.obj$object[[1]], geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e4)
-[1] 0.0663
+&gt; GeneDropSim.fn( trio = trio.obj$object, id = id, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e3)
+[1] 0.071
 &gt; RVsharing(test.ped.first.cousins)$pshare
 [1] 0.06666667</tt></pre>
 </div></div>
@@ -1155,14 +1155,14 @@ oooAKKKKACiiigAooooA/9k=" />
 </div>
 <div class="listingblock">
 <div class="content">
-<pre><tt>&gt; trio.obj &lt;- RVsharing:::ped2trio(test.ped.second.cousins)</tt></pre>
+<pre><tt>&gt; trio.obj &lt;- ped2trio(test.ped.second.cousins)</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>&gt; geno.vec &lt;- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
 &gt; names(geno.vec) &lt;- paste0("sub",1:12)
-&gt; RVsharing:::GeneDropSim.fn(trio = trio.obj$object[[1]], geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e4)
-[1] 0.016
+&gt; GeneDropSim.fn(trio = trio.obj$object, id = id, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e3)
+[1] 0.021
 &gt; RVsharing(test.ped.second.cousins)$pshare
 [1] 0.01587302</tt></pre>
 </div></div>
@@ -1172,7 +1172,7 @@ oooAKKKKACiiigAooooA/9k=" />
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-08-12 14:33:50 EDT
+Last updated 2013-08-19 14:59:41 EDT
 </div>
 </div>
 </body>

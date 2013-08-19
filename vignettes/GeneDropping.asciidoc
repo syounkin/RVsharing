@@ -23,7 +23,7 @@ trio2 <- new("Trio", id = "sub4", spouse = "sub3", offspring = list("sub7") )
 trio1 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
 geno.vec <- c(1,0,0,NA,NA,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:8)
-p.share <- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e5)
+p.share <- Bureau:::GeneDropSim.fn(trio = trio1, id = id, dt.vec = c("sub7","sub8"), fd.indices = c(1,2,3,6), n = 1e5)
 @
 <<psharefirstcousins>>=
 p.share
@@ -46,7 +46,7 @@ trio2 <- new("Trio", id = "sub4", spouse = "sub3", offspring = list(trio4) )
 trio1 <- new("Trio", id = "sub1", spouse = "sub2", offspring = list(trio2, trio3) )
 geno.vec <- c(1,0,0,NA,NA,0,NA,NA,0,0,NA,NA)
 names(geno.vec) <- paste0("sub",1:12)
-p.share <- Bureau:::GeneDropSim.fn(trio = trio1, geno.vec = geno.vec, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e5)
+p.share <- Bureau:::GeneDropSim.fn(trio = trio1, id = id, dt.vec = c("sub11","sub12"), fd.indices = c(1,2,3,6,9,10), n = 1e5)
 @
 <<psharesecondcousins>>=
 p.share
