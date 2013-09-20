@@ -39,7 +39,6 @@ dv = kindepth(id, dad.id, mom.id)
 md = max(dv)
 # Number of founders
 Nf = sum(dv==0)
-if (any(a<Nf | a>2*Nf)) stop("Number of distinct-by-descent gene copies must be between 0 and 1.")
 
 # Collecting the degrees between the sequenced children, the founders and the intermediate ancestors
 degvec = currentnonfounders = currentfounders = numeric(nfd)
@@ -288,7 +287,8 @@ for (i in 1:ia)
 # to introduce the variant. He is currently the only one who can have more than one spouse
 # Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
 # The summation returns in fact the value of that single non-zero term
-p0 = p0 + PFU*prod((1-1/2^ancestorsdegreedes[[ia]]) + sum(sapply(iancestor.as.descendant[[ia]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
+  tmpf = as.matrix(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk))  
+  p0 = p0 + PFU*prod((1-1/2^ancestorsdegreedes[[i]]) + apply(tmpf,1,sum))
 
 list(num=num,p0=p0,iancestors=iancestors,desfounders=desfounders,id=id,dad.id=dad.id,mom.id=mom.id)
 }
