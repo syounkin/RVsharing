@@ -20,6 +20,6 @@
     A named genotype vector.
   }
 }
-\details{Foo.}
+\details{Simulate transmission of alleles from the parents to their offsrping in a \code{Trio} object according to Mendel's laws.}
 \value{A numeric genotype vector.}
 \author{Samuel G. Younkin <syounkin@jhsph.edu>}

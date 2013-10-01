@@ -40,12 +40,14 @@ otherwise an erroneous response may be obtained.
 
 The function recursively processes branching individuals (intermediate ancestors) from the lowest one in the pedigree to the one who is a top founder, applying the formulas in Bureau et al. to compute the terms of P[C1 = ... = Cn = 1] and P[C1 = ... = Cn = 0] involving each branching individual.
 }
+\references{
+Bureau, A., Younkin, S., Parker, M.M., Bailey-Wilson, J.E., Marazita, M.L., Murray, J.C., Mangold, E., Albacha-Hejazi, H., Beaty, T.H. and Ruczinski, I. (under review) Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives.  
+} 
 \examples{
 data(ped.list)
 plot(ped.list[[1]])
 RVsharing(ped.list[[1]])
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
-\references{Bureau, A et al. Sharing of rare variants by affected relatives: building evidence for causal variants based on exact sharing probabilities. Submitted.
 }
 
