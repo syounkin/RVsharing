@@ -1,5 +1,5 @@
-\name{GeneDropSim.fn}
-\alias{GeneDropSim.fn}
+\name{GeneDropSimExcessSharing.fn}
+\alias{GeneDropSimExcessSharing.fn}
 
 \title{Estimation of the probability of sharing of a rare variant by gene dropping in a pedigree}                         
 \description{
@@ -9,16 +9,16 @@ Estimates the probability that all subjects in a subset of pedigree members shar
 GeneDropSimExcessSharing.fn(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, ord=5, n = 1e3, k = 10, nf = 1)
 }
 \arguments{
-  \item{trio.list}{a list of trio objects encoding the pedigree structure }
-  \item{id}{a vector of identifiers of the pedigree members }
+  \item{trio.list}{a list of trio objects encoding the pedigree structure. }
+  \item{id}{a vector of identifiers of the pedigree members. }
   \item{dt.vec}{ a vector of identifiers of the subset of pedigree members for which to estimate the sharing probability. Must be a subset of the \code{id} vector.}
   \item{fd.indices}{a vector of the indices of the founders of the pedigree.}
   \item{phihat}{a vector of values of the mean kinship coefficient between founders. Must be non-negative.} 
-  \item{RVfreq}{frequency of the variant in the population (optional). When missing, the variant frequency tends to 0}
-  \item{ord}{order of the polynomial approximation of the number of distinct alleles among pedigree founders}
-  \item{n}{minimal number of gene dropping replicates where the rare variant occurs in at least one member of \code{dt.vec}}
+  \item{RVfreq}{frequency of the variant in the population (optional). When missing, the variant frequency tends to 0.}
+  \item{ord}{order of the polynomial approximation of the number of distinct alleles among pedigree founders.}
+  \item{n}{minimal number of gene dropping replicates where the rare variant occurs in at least one member of \code{dt.vec}.}
   \item{k}{this number times \code{n} gives the maximal number of gene dropping replicates.}
-  \item{nf}{number of founders introducing the rare variant into the pedigree}
+  \item{nf}{number of founders introducing the rare variant into the pedigree.}
   }
 \value{
   Estimate of the probability that all subjects in a subset of pedigree members share a rare variant given that it occured in any of them 
