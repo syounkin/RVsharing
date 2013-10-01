@@ -1,10 +1,10 @@
 Package: RVsharing
 Type: Package
-Title: Bureau
-Version: 0.1.0
+Title: RVsharing
+Version: 0.2.0
 Date: Thu Aug  1 11:29:16 EDT 2013
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
-Maintainer: Samuel G. Younkin <syounkin@jhsph.edu>
+Maintainer: Samuel G. Younkin <syounkin@jhsph.edu> Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
 License: GPL-2
 Depends: R (>= 2.15.2), methods, kinship2
@@ -21,8 +21,6 @@ Collate: AllGenerics.R
 	 ped2trio.R
 	 PFU.R
 	 rare_variant_sharing_v3.R
-	 rare_variant_sharing_approx2_v2.R 
-	 rare_variant_sharing_weighted_v2.R
          zzz.R
 LazyLoad: yes
 biocViews:
