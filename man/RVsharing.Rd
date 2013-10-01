@@ -52,5 +52,5 @@ plot(ped.list[[1]])
 RVsharing(ped.list[[1]])
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
-}
+
 

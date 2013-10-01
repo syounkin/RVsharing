@@ -14,7 +14,7 @@ ped2trio(ped)
 \value{
 A symmetric matrix of ratios for all pair of final descendants in the pedigree structure contained in the \code{pedigree} object.
 }
-\detail{ 
+\details{ 
 The ratio for each pair of final descendants is computed using equation (A1) of Bureau et al. Dividing the difference between the inferred and expected kinship coefficient for each pair by this ratio gives a pair-specific estimate of the mean kinship among founders, which can then be averaged over all pairs of final descendants from the same population to obtain a global estimate of the mean kinship among founders.
 }
 \references{
@@ -29,4 +29,4 @@ plot(ped.list[[1]])
 ComputeKinshipPropCoef(ped.list[[1]])
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
-}
+
