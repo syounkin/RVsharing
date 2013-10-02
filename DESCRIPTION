@@ -2,9 +2,9 @@ Package: RVsharing
 Type: Package
 Title: RVsharing
 Version: 0.2.0
-Date: Wed Oct  2 10:41:48 CDT 2013
+Date: Wed Oct  2 11:52:49 CDT 2013
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
-Maintainer: Samuel G. Younkin <syounkin@stat.wisc.edu> Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
+Maintainer: Samuel G. Younkin <syounkin@stat.wisc.edu>, Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
 License: GPL-2
 Depends: R (>= 2.15.2), methods, kinship2
@@ -24,7 +24,4 @@ Collate: AllGenerics.R
          zzz.R
 LazyLoad: yes
 biocViews:
-Packaged: Mon May 20 09:38:50 EDT 2013
-## Local Variables:
-## time-stamp-pattern: "8/Date: %3a %3b %2d %02H:%02M:%02S %Z %:y\n"
-## End:
+Packaged: Wed 02 Oct 2013 11:52:37 AM CDT
