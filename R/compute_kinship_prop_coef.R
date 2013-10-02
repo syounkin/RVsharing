@@ -5,7 +5,7 @@
 # Version 0.1 
 # 2013/04/17
 
-compute.kinship.prop.coef <- function(obj)
+ComputeKinshipPropCoef <- function(obj)
 {
 # obj is an object returned by the function RVsharing (or RVsharing.weighted or RVsharing.approx2)
 

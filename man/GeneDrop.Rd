@@ -6,7 +6,7 @@
 
 \title{Gene Dropping method}
 
-\description{Foo!}
+\description{Simulate transmission of alleles from the parents to their offsrping according to Mendel's laws.}
 
 \usage{
 \S4method{GeneDrop}{Trio,numeric}(trio,geno.vec)
@@ -20,6 +20,6 @@
     A named genotype vector.
   }
 }
-\details{Foo.}
+\details{Simulate transmission of alleles from the parents to their offsrping in a \code{trio} object according to Mendel's laws.}
 \value{A numeric genotype vector.}
-\author{Samuel G. Younkin <syounkin@jhsph.edu>}
+\author{Samuel G. Younkin <syounkin@stat.wisc.edu>}

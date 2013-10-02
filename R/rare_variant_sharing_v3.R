@@ -244,7 +244,18 @@ for (i in 1:ia)
 # At the end, add the probability from the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
 # Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
 # The summation returns in fact the value of that single non-zero term
-p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
+  # Debugging code
+  # print (foundersdegreedes[[i]])
+  # print (ancestorsdegreedes[[i]])
+  # print (iancestor.as.descendant[[i]])
+  # print (p0)
+  # print (sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk))
+# p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
+# This remains to be tested with >1 spouse
+  tmpf = as.matrix(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk))  
+  p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + apply(tmpf,1,sum))
+    # Debugging code
+    # print (p0)
 # Sharing probability
 pshare = num/(1-p0/Nf)
 list(pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=id,dad.id=dad.id,mom.id=mom.id)
@@ -258,5 +269,5 @@ id = ped$id
 dad.id = mom.id = numeric(length(id))
 dad.id[ped$findex>0] = ped$id[ped$findex]
 mom.id[ped$mindex>0] = ped$id[ped$mindex]
-RVsharing(id,dad.id,mom.id)$pshare
+RVsharing.fn(id,dad.id,mom.id)$pshare
 } 
