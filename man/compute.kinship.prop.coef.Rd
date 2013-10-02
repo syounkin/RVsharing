@@ -6,10 +6,10 @@
 Computes, for each pair of final descendants in the pedigree structure contained in the \code{pedigree} object, the ratio of the difference between the inferred and expected kinship coefficient for the pair over the mean kinship among founders. 
 }
 \usage{
-ped2trio(ped)
+ComputeKinshipPropCoef(obj)
 }
 \arguments{
-  \item{ped}{a \code{pedigree} object.}
+  \item{obj}{obj is an object returned by the function RVsharing (or RVsharing.weighted or RVsharing.approx2)}
   }
 \value{
 A symmetric matrix of ratios for all pair of final descendants in the pedigree structure contained in the \code{pedigree} object.
