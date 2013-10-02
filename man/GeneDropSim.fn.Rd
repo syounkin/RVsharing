@@ -38,4 +38,4 @@ GeneDropSim.fn( trio.list = trio.obj$object, id=ped.list[[54]]$id, dt.vec = c("4
 # Result should be very close to exact value
 RVsharing(ped.list[[54]])$pshare
 }
-\author{Samuel G. Younkin <syounkin@jhsph.edu> and Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
+\author{Samuel G. Younkin <syounkin@stat.wisc.edu> and Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}

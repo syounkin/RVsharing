@@ -10,7 +10,7 @@
 
 \description{An object containing a character subject identifier \code{ID}, a character identifier of his/her \code{spouse} and a list of their \code{offspring}.}
 
-\author{Samuel G. Younkin <syounkin@jhsph.edu>}
+\author{Samuel G. Younkin <syounkin@stat.wisc.edu>}
 
 %% % Constructor
 %% \alias{Trio,SummarizedExperiment,PedClass-method}
