@@ -26,7 +26,7 @@ Bureau, A., Younkin, S., Parker, M.M., Bailey-Wilson, J.E., Marazita, M.L., Murr
 \examples{
 data(ped.list)
 plot(ped.list[[1]])
-ComputeKinshipPropCoef(ped.list[[1]])
+#ComputeKinshipPropCoef(ped.list[[1]])
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
 
