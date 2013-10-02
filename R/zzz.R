@@ -5,6 +5,6 @@ THISPKG <- "RVsharing"
 Welcome to RVsharing version ", version, "\n", sep = "" ) )
 }
 
-.onUnload <- function(libpath){
-	library.dynam.unload(THISPKG, libpath)
-}
+## .onUnload <- function(libpath){
+## 	library.dynam.unload(THISPKG, libpath)
+## }
