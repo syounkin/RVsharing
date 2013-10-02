@@ -1,3 +1,3 @@
 exportClasses(Trio)
 exportMethods(RVsharing, GeneDrop)
-export(ped2trio, GeneDropSim.fn)
+export(ped2trio, GeneDropSim.fn, GeneDropSimExcessSharing.fn)
