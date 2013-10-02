@@ -4,7 +4,7 @@ Title: RVsharing
 Version: 0.2.0
 Date: Wed Oct  2 11:52:49 CDT 2013
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
-Maintainer: Samuel G. Younkin <syounkin@stat.wisc.edu>, Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
+Maintainer: Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
 License: GPL-2
 Depends: R (>= 2.15.2), methods, kinship2
