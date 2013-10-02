@@ -6,7 +6,7 @@
 Estimates the probability that all subjects in a subset of pedigree members share a rare variant (RV) given that it occured in any of them by performing a Monte Carlo simulation of the transmission of the genotypes of the variant from the founders down the pedigree.
 }
 \usage{
-GeneDropSimExcessSharing.fn(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, ord=5, n = 1e3, k = 10, nf = 1)
+GeneDropSimExcessSharing.fn(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, ord=5, n = 1e3, k = 10)
 }
 \arguments{
   \item{trio.list}{a list of trio objects encoding the pedigree structure. }
@@ -18,7 +18,6 @@ GeneDropSimExcessSharing.fn(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, o
   \item{ord}{order of the polynomial approximation of the number of distinct alleles among pedigree founders.}
   \item{n}{minimal number of gene dropping replicates where the rare variant occurs in at least one member of \code{dt.vec}.}
   \item{k}{this number times \code{n} gives the maximal number of gene dropping replicates.}
-  \item{nf}{number of founders introducing the rare variant into the pedigree.}
   }
 \value{
   Estimate of the probability that all subjects in a subset of pedigree members share a rare variant given that it occured in any of them 
