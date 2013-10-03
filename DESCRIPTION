@@ -1,7 +1,7 @@
 Package: RVsharing
 Type: Package
 Title: RVsharing
-Version: 0.3.0
+Version: 1.0.1
 Date: Wed 02 Oct 2013 03:01:22 PM CDT
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>

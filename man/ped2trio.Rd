@@ -24,6 +24,6 @@ ped2trio(ped)
 }    
 \examples{
 data(ped.list)                                                                                                                                                                                                                                                                                                  
-ped2trio(ped.list[[1]])
+ped.trio1 = ped2trio(ped.list[[1]])
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}

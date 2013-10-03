@@ -33,7 +33,8 @@ data(ped.list)
 plot(ped.list[[54]])
 trio.obj = ped2trio(ped.list[[54]])
          
-GeneDropSim.fn( trio.list = trio.obj$object, id=ped.list[[54]]$id, dt.vec = c("40","47"), fd.indices = trio.obj$fd.indices, n = 1e4)
+GeneDropSim.fn( trio.list = trio.obj$object, id=ped.list[[54]]$id, dt.vec = c("40","47"),
+ fd.indices = trio.obj$fd.indices, n = 1e4)
 
 # Result should be very close to exact value
 RVsharing(ped.list[[54]])$pshare
