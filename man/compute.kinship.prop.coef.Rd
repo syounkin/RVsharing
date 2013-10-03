@@ -9,7 +9,7 @@ Computes, for each pair of final descendants in the pedigree structure contained
 ComputeKinshipPropCoef(obj)
 }
 \arguments{
-  \item{obj}{obj is an object returned by the function RVsharing (or RVsharing.weighted or RVsharing.approx2)}
+  \item{obj}{obj is an object returned by the function RVsharing}
   }
 \value{
 A symmetric matrix of ratios for all pair of final descendants in the pedigree structure contained in the \code{pedigree} object.
@@ -26,7 +26,8 @@ Bureau, A., Younkin, S., Parker, M.M., Bailey-Wilson, J.E., Marazita, M.L., Murr
 \examples{
 data(ped.list)
 plot(ped.list[[1]])
-#ComputeKinshipPropCoef(ped.list[[1]])
+obj = RVsharing(ped.list[[1]])
+ComputeKinshipPropCoef(obj)
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
 
