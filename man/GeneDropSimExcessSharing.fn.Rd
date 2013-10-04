@@ -6,7 +6,8 @@
 Estimates the probability that all subjects in a subset of pedigree members share a rare variant (RV) given that it occured in any of them by performing a Monte Carlo simulation of the transmission of the genotypes of the variant from the founders down the pedigree.
 }
 \usage{
-GeneDropSimExcessSharing.fn(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, ord=5, n = 1e3, k = 10)
+GeneDropSimExcessSharing.fn(trio.list, id, dt.vec, fd.indices, phihat,
+ RVfreq, ord=5, n = 1e3, k = 10)
 }
 \arguments{
   \item{trio.list}{a list of trio objects encoding the pedigree structure. }
@@ -36,9 +37,12 @@ data(ped.list)
 plot(ped.list[[54]])
 trio.obj = ped2trio(ped.list[[54]])
          
-GeneDropSimExcessSharing.fn( trio.list = trio.obj$object, id=ped.list[[54]]$id, dt.vec = c("40","47"), fd.indices = trio.obj$fd.indices, phihat=0.005,RVfreq=0.01, ord=5, n = 1e4)
+GeneDropSimExcessSharing.fn(trio.list = trio.obj$object, id = ped.list[[54]]$id, 
+ dt.vec = c("40","47"), fd.indices = trio.obj$fd.indices, phihat=0.005,RVfreq=0.01, 
+ ord=5, n = 2e3)
 
-# Result should be higher than exact value under the assumption of a variant frequency tending to 0 and no unknown relationship among founders
+# Result should be higher than exact value under the assumption of a variant frequency  
+# tending to 0 and no unknown relationship among founders
 RVsharing(ped.list[[54]])$pshare
 }
 \author{Samuel G. Younkin <syounkin@stat.wisc.edu> and Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
