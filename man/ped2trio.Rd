@@ -1,7 +1,7 @@
 \name{ped2trio}
 \alias{ped2trio}
 
-\title{Conversion of a \code{pedigree} object into a list of trio objects}                         
+\title{Conversion of a \code{pedigree} object into a list of trio objects} 
 \description{
 Creates trio objects representing the pedigree structure contained in the \code{pedigree} object.
 }
@@ -23,7 +23,8 @@ ped2trio(ped)
 \code{\link{pedigree}}
 }    
 \examples{
-data(ped.list)                                                                                                                                                                                                                                                                                                  
+data(ped.list) 
 ped.trio1 = ped2trio(ped.list[[1]])
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
+
