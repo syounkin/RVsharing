@@ -1,3 +1,8 @@
+setMethod("initialize", "RVsharing.prob", function(.Object, ... ){
+  .Object <- callNextMethod()
+  .Object
+})
+
 # Compute coefficients of proportionality kappa between kinship of the founders and excess sharing
 
 # By Alexandre Bureau
