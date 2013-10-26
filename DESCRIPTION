@@ -1,7 +1,7 @@
 Package: RVsharing
 Type: Package
 Title: RVsharing
-Version: 1.0.3
+Version: 1.1.0
 Date: Fri 04 Oct 2013 12:39:51 PM CDT
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
@@ -17,7 +17,7 @@ Collate: AllGenerics.R
 	 methods-pedigree.R
 	 methods-trio.R
 	 approx2_functions.R		  
-	 compute_kinship_prop_coef.R
+	 methods-RVsharing_prob.R
 	 ped2trio.R
 	 PFU.R
 	 rare_variant_sharing_v3.R
