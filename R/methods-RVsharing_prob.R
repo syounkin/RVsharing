@@ -2,10 +2,7 @@
 
 # By Alexandre Bureau
 
-# Version 0.1 
-# 2013/04/17
-
-ComputeKinshipPropCoef <- function(obj)
+setMethod("ComputeKinshipPropCoef", signature(obj="RVsharing.prob"), function(obj)
 {
 # obj is an object returned by the function RVsharing (or RVsharing.weighted or RVsharing.approx2)
 
@@ -59,4 +56,9 @@ for (i1 in 1:(N-1))
     }
   }
 kmat
-}
+} )
+
+setMethod("print", signature(obj="RVsharing.prob"), function(obj)
+{
+cat("Probability subjects",names(obj$desfounders),"share a rare variant: ",obj$pshare,".\n")
+})
