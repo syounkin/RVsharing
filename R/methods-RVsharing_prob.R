@@ -1,4 +1,4 @@
-setMethod("initialize", "RVsharing.prob", function(.Object, ... ){
+setMethod("initialize", "RVsharing_prob", function(.Object, ... ){
   .Object <- callNextMethod()
   .Object
 })
@@ -7,16 +7,16 @@ setMethod("initialize", "RVsharing.prob", function(.Object, ... ){
 
 # By Alexandre Bureau
 
-setMethod("ComputeKinshipPropCoef", signature(obj="RVsharing.prob"), function(obj)
+setMethod("ComputeKinshipPropCoef", signature(obj="RVsharing_prob"), function(obj)
 {
 # obj is an object returned by the function RVsharing (or RVsharing.weighted or RVsharing.approx2)
 
 # Extracting list of distance to founders of each final descendant (excluding the top founders)
-desfounders=obj$desfounders
-iancestors=obj$iancestors
-id = obj$id
-dad.id = obj$dad.id
-mom.id = obj$mom.id
+desfounders=obj@desfounders
+iancestors=obj@iancestors
+id = obj@id
+dad.id = obj@dad.id
+mom.id = obj@mom.id
 
 if (length(iancestors)>2) stop ("Not able yet to handle pedigree with more than 2 intermediate ancestors")
 N = length(desfounders)-(length(iancestors)-1)
@@ -63,7 +63,7 @@ for (i1 in 1:(N-1))
 kmat
 } )
 
-setMethod("print", signature(obj="RVsharing.prob"), function(obj)
+setMethod("print", signature(obj="RVsharing_prob"), function(obj)
 {
-cat("Probability subjects",names(obj$desfounders),"share a rare variant: ",obj$pshare,".\n")
+cat("Probability subjects",names(obj@desfounders),"share a rare variant: ",obj@pshare,".\n")
 })

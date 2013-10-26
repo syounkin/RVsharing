@@ -13,11 +13,11 @@ Suggests:
 Enhances:
 Collate: AllGenerics.R
 	 AllClasses.R
-	 functions.R
 	 methods-pedigree.R
 	 methods-trio.R
+ 	 methods-RVsharing_prob.R
+	 functions.R
 	 approx2_functions.R		  
-	 methods-RVsharing_prob.R
 	 ped2trio.R
 	 PFU.R
 	 rare_variant_sharing_v3.R
