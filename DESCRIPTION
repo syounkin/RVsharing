@@ -2,7 +2,7 @@ Package: RVsharing
 Type: Package
 Title: RVsharing
 Version: 1.0.3
-Date: Fri 04 Oct 2013 12:39:51 PM CDT
+Date: Sun 27 Oct 2013 10:50:08 AM CDT
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
@@ -24,4 +24,4 @@ Collate: AllGenerics.R
          zzz.R
 LazyLoad: yes
 biocViews:
-Packaged: Fri 04 Oct 2013 12:39:56 PM CDT
+Packaged: Sun 27 Oct 2013 10:50:13 AM CDT
