@@ -37,6 +37,6 @@ GeneDropSim.fn( trio.list = trio.obj$object, id=ped.list[[54]]$id, dt.vec = c("4
  fd.indices = trio.obj$fd.indices, n = 5e3)
 
 # Result should be very close to exact value
-RVsharing(ped.list[[54]])$pshare
+RVsharing(ped.list[[54]])
 }
 \author{Samuel G. Younkin <syounkin@stat.wisc.edu> and Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}

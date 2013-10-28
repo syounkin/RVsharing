@@ -17,15 +17,7 @@ RVsharing(data, dad.id, mom.id)
   \item{dad.id}{if data is a vector, character or numeric vector of father IDs. Founders' parents should be coded to NA or 0.}
   \item{mom.id}{if data is a vector, character or numeric vector of mother IDs. Founders' parents should be coded to NA or 0.}
 }
-\value{
-  \item{p.share}{probability that all final descendants in the pedigree
-share a rare variant given that a rare variant has been detected in any
-one of these final descendants.}
-  \item{iancestors}{Vector of the IDs of branching individuals (intermediate ancestors): subjects who are ancestors to final descendants through two or more of their children and have ancestors above them in the pedigree. The only exception is that one of the top founders is designated as the last branching individual.}
-  \item{desfounders}{List of vectors. Each final descendant has a vector in the list containing the distances to the founders above him.}
-  \item{id}{vector of subject IDs passed as argument.}
-  \item{dad.id}{vector of father IDs passed as argument.}
-  \item{mom.id}{vector of mother IDs passed as argument.}
+\value{ An object of class \code{RVsharingProb}
   }
   \details{
 
@@ -44,7 +36,7 @@ The function recursively processes branching individuals (intermediate ancestors
 Bureau, A., Younkin, S., Parker, M.M., Bailey-Wilson, J.E., Marazita, M.L., Murray, J.C., Mangold, E., Albacha-Hejazi, H., Beaty, T.H. and Ruczinski, I. (under review) Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives.  
 } 
 \seealso{
-\code{\link{pedigree}, \link{GeneDropSim.fn}, \link{GeneDropSimExcessSharing.fn}}
+\code{\link{pedigree}, \link{RVsharingProb}, \link{GeneDropSim.fn}, \link{GeneDropSimExcessSharing.fn}}
 }    
 \examples{
 data(ped.list)

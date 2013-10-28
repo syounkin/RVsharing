@@ -258,7 +258,7 @@ for (i in 1:ia)
     # print (p0)
 # Sharing probability
 pshare = num/(1-p0/Nf)
-new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=id,dad.id=dad.id,mom.id=mom.id)
+new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id))
 }
 
 # Wrappers for pedigree object

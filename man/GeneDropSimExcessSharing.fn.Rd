@@ -43,6 +43,6 @@ GeneDropSimExcessSharing.fn(trio.list = trio.obj$object, id = ped.list[[54]]$id,
 
 # Result should be higher than exact value under the assumption of a variant frequency  
 # tending to 0 and no unknown relationship among founders
-RVsharing(ped.list[[54]])$pshare
+RVsharing(ped.list[[54]])
 }
 \author{Samuel G. Younkin <syounkin@stat.wisc.edu> and Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
