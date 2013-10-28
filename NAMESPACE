@@ -1,3 +1,3 @@
-exportClasses(Trio, RVsharing.prob)
+exportClasses(Trio, RVsharingProb)
 exportMethods(RVsharing, GeneDrop, ComputeKinshipPropCoef, print)
 export(ped2trio, GeneDropSim.fn, GeneDropSimExcessSharing.fn, RVsharing.fn)

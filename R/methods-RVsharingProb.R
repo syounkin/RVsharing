@@ -1,4 +1,4 @@
-setMethod("initialize", "RVsharing_prob", function(.Object, ... ){
+setMethod("initialize", "RVsharingProb", function(.Object, ... ){
   .Object <- callNextMethod()
   .Object
 })
@@ -7,9 +7,9 @@ setMethod("initialize", "RVsharing_prob", function(.Object, ... ){
 
 # By Alexandre Bureau
 
-setMethod("ComputeKinshipPropCoef", signature(obj="RVsharing_prob"), function(obj)
+setMethod("ComputeKinshipPropCoef", signature(obj="RVsharingProb"), function(obj)
 {
-# obj is an object returned by the function RVsharing (or RVsharing.weighted or RVsharing.approx2)
+# obj is an object returned by the function RVsharing 
 
 # Extracting list of distance to founders of each final descendant (excluding the top founders)
 desfounders=obj@desfounders
@@ -63,7 +63,7 @@ for (i1 in 1:(N-1))
 kmat
 } )
 
-setMethod("print", signature(obj="RVsharing_prob"), function(obj)
+setMethod("print", signature(x="RVsharingProb"), function(x)
 {
-cat("Probability subjects",names(obj@desfounders),"share a rare variant: ",obj@pshare,".\n")
+cat("Probability subjects",names(x@desfounders),"share a rare variant: ",x@pshare,".\n")
 })
