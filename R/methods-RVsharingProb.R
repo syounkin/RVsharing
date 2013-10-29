@@ -63,7 +63,7 @@ for (i1 in 1:(N-1))
 kmat
 } )
 
-setMethod("print", signature(x="RVsharingProb"), function(x)
+setMethod("show", signature(object="RVsharingProb"), function(object)
 {
-cat("Probability subjects",names(x@desfounders),"share a rare variant: ",x@pshare,".\n")
+cat("Probability subjects",names(object@desfounders),"share a rare variant: ",object@pshare,"\n")
 })
