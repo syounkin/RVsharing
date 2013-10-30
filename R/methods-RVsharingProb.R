@@ -1,20 +1,22 @@
+setMethod("initialize", "RVsharingProb", function(.Object, ... ){
+  .Object <- callNextMethod()
+  .Object
+})
+
 # Compute coefficients of proportionality kappa between kinship of the founders and excess sharing
 
 # By Alexandre Bureau
 
-# Version 0.1 
-# 2013/04/17
-
-ComputeKinshipPropCoef <- function(obj)
+setMethod("ComputeKinshipPropCoef", signature(obj="RVsharingProb"), function(obj)
 {
-# obj is an object returned by the function RVsharing (or RVsharing.weighted or RVsharing.approx2)
+# obj is an object returned by the function RVsharing 
 
 # Extracting list of distance to founders of each final descendant (excluding the top founders)
-desfounders=obj$desfounders
-iancestors=obj$iancestors
-id = obj$id
-dad.id = obj$dad.id
-mom.id = obj$mom.id
+desfounders=obj@desfounders
+iancestors=obj@iancestors
+id = obj@id
+dad.id = obj@dad.id
+mom.id = obj@mom.id
 
 if (length(iancestors)>2) stop ("Not able yet to handle pedigree with more than 2 intermediate ancestors")
 N = length(desfounders)-(length(iancestors)-1)
@@ -59,4 +61,9 @@ for (i1 in 1:(N-1))
     }
   }
 kmat
-}
+} )
+
+setMethod("show", signature(object="RVsharingProb"), function(object)
+{
+cat("Probability subjects",names(object@desfounders),"share a rare variant: ",object@pshare,"\n")
+})

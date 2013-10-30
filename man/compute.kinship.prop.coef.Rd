@@ -1,15 +1,17 @@
-\name{ComputeKinshipPropCoef}
+\name{ComputeKinshipPropCoef-method}
+\docType{methods}
 \alias{ComputeKinshipPropCoef}
+\alias{ComputeKinshipPropCoef,RVsharingProb-method}
 
 \title{Ratio of excess kinship among descendants over mean kinship among founders}
 \description{
 Computes, for each pair of final descendants in the pedigree structure contained in the \code{pedigree} object, the ratio of the difference between the inferred and expected kinship coefficient for the pair over the mean kinship among founders. 
 }
 \usage{
-ComputeKinshipPropCoef(obj)
+\S4method{ComputeKinshipPropCoef}{RVsharingProb}(obj)
 }
 \arguments{
-  \item{obj}{obj is an object returned by the function RVsharing}
+  \item{obj}{obj is a \code{RVsharingProb} object returned by the function \code{RVsharing}}
   }
 \value{
 A symmetric matrix of ratios for all pair of final descendants in the pedigree structure contained in the \code{pedigree} object.

@@ -12,7 +12,7 @@ ped2trio(ped)
   \item{ped}{a \code{pedigree} object }
   }
 \value{
-  \item{object}{list of trio objects, one list for each founder couple of the pedigree}
+  \item{object}{list of \code{Trio} objects, one list for each founder couple of the pedigree}
   \item{fd.indices}{Vector of the IDs of the founders of the pedigree}
   }
   \details{
@@ -20,7 +20,7 @@ ped2trio(ped)
     The function processes the pedigree from the bottom generation to the top, adding new trio objects for each non-founder in a generation, with in their offspring list the trio objects associated to their children. At the top generation, there are as many trio objects as the number of founder couples, and these are returned as a list of trio objects. For now, only founders are allowed to have more than one spouse, non-founders can only have one spouse.
     }
 \seealso{
-\code{\link{pedigree}}
+\code{\link{pedigree},\link{Trio}}
 }    
 \examples{
 data(ped.list) 
