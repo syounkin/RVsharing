@@ -265,9 +265,5 @@ new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,
 # Returns only pshare
 RVsharing.ped.pshare = function(ped)
 {
-id = ped$id
-dad.id = mom.id = numeric(length(id))
-dad.id[ped$findex>0] = ped$id[ped$findex]
-mom.id[ped$mindex>0] = ped$id[ped$mindex]
-RVsharing.fn(id,dad.id,mom.id)$pshare
+RVsharing(ped)@pshare
 } 
