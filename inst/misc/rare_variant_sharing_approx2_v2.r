@@ -297,7 +297,9 @@ for (i in 1:ia)
 # to introduce the variant. He is currently the only one who can have more than one spouse
 # Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
 # The summation returns in fact the value of that single non-zero term
-p0 = p0 + PFU*prod((1-1/2^ancestorsdegreedes[[ia]]) + sum(sapply(iancestor.as.descendant[[ia]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[ia]],pk=pk)))
+# This remains to be tested with >1 spouse
+  tmpf = as.matrix(sapply(iancestor.as.descendant[[ia]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[ia]],pk=pk))  
+  p0 = p0 + PFU*prod((1-1/2^ancestorsdegreedes[[ia]]) + apply(tmpf,1,sum))
 
 list(num=num,p0=p0,iancestors=iancestors,desfounders=desfounders,id=id,dad.id=dad.id,mom.id=mom.id)
 }
