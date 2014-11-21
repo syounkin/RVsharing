@@ -18,6 +18,8 @@ one of these final descendants.}
   \item{id}{Character vector of subject IDs.}
   \item{dad.id}{Character vector of father IDs for the subjects in \code{id}.}
   \item{mom.id}{Character vector of mother IDs for the subjects in \code{id}.}
+  \item{carriers}{Character or numeric vector of subjects carrying the rare variant among all final descendants. May be left empty.}
+  
 }
 
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}

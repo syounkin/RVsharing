@@ -23,7 +23,7 @@ GeneDropSim.fn(trio.list, id, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1)
   \details{ The transmission of the RV down the pedigree from the \code{nf} founders introducing it is simulated according to Mendel's laws.  The events that the variant was observed in any of the subjects from \code{dt.vec} and in all of them are then recorded. The simulation continues until the number of replicates where the RV was observed in any of the subjects from \code{dt.vec} reaches \code{n} or the number of replicates reaches \code{k n}. The RV sharing probability is then estimated as the number of replicates where the RV was observed in all subjects from \code{dt.vec} over \code{n} (or the number of replicates where the RV was observed in any of the subjects when \code{k n} replicates are reached).
     }
 \references{
-Bureau, A., Younkin, S., Parker, M.M., Bailey-Wilson, J.E., Marazita, M.L., Murray, J.C., Mangold, E., Albacha-Hejazi, H., Beaty, T.H. and Ruczinski, I. (under review) Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives.  
+Bureau, A., Younkin, S., Parker, M.M., Bailey-Wilson, J.E., Marazita, M.L., Murray, J.C., Mangold, E., Albacha-Hejazi, H., Beaty, T.H. and Ruczinski, I. (2014) Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives. Bioinformatics, 30(15): 2189-96.  
 } 
 \seealso{
 \code{\link{ped2trio}, \link{GeneDropSimExcessSharing.fn}}
