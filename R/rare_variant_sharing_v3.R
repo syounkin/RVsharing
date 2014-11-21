@@ -1,7 +1,7 @@
 # By Alexandre Bureau
 # 2013/06/28
 
-RVsharing.fn = function(id, dad.id, mom.id,carriers)
+RVsharing.fn = function(id, dad.id, mom.id,carriers=NULL)
 {
 
 N = length(id)
@@ -39,6 +39,8 @@ iancestors.Nf = numeric(0)
 ancestorsdegreedes = list()
 # List of intermediate ancestors on the current pedigree degree
 lev.ia = list()
+# ia: intermediate ancestors index
+# lia: reverse level index from 1 at lev = md-1 to md-1 at lev=1
 ia = lia = 1
 
 # Initializing the currentnonfounders vector with the final descendants at the deepest level
@@ -85,7 +87,7 @@ for (lev in (md-1):1)
     # Setting indicator of whether the descendant is the previous intermediate ancestor
     if (ia>1)
       {
-      if (length(lev.ia[[lia]])>1) stop ("More than one intermediate ancestor at level ",lev," with two or more descendants.")
+      if (length(lev.ia[[lia-1]])>1) stop ("More than one subject at level ",lev," with two or more descendants (intermediate ancestors).")
       iancestor.as.descendant[[i]] = list(id[fdi][currentnonfounders==iancestors[i]&active] == iancestors[ia-1])
       # Recording number of founders below intermediate ancestor
       }
