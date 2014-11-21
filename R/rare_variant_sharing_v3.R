@@ -1,14 +1,19 @@
 # By Alexandre Bureau
 # 2013/06/28
 
-RVsharing.fn = function(id, dad.id, mom.id)
+RVsharing.fn = function(id, dad.id, mom.id,carriers)
 {
 
 N = length(id)
-# Indicator vector of final descendants
+# vector of indices of final descendants
 fdi = which(!(id%in%dad.id | id%in%mom.id))
 nfd = length(fdi)
 if (nfd < 2) stop("There are fewer than 2 descendants for which to compute a rare variant sharing probability.")
+if (!is.null(carriers))
+{
+	missc = setdiff(carriers,id)
+	if(length(missc)>0) stop(missc," not in pedigree.")
+	}
 
 # Getting the depth of each subject in the pedigree
 dv = kindepth(id, dad.id, mom.id)
@@ -28,8 +33,11 @@ foundersdegreedes = list()
 iancestor.as.descendant = list()
 # List of intermediate ancestors
 iancestors = character(0)
+# Number of founders below each intermediate ancestor
+iancestors.Nf = numeric(0)
 # List of vectors of degrees of relatedness of final descendants below each intermediate ancestor
 ancestorsdegreedes = list()
+# List of intermediate ancestors on the current pedigree degree
 lev.ia = list()
 ia = lia = 1
 
@@ -71,13 +79,15 @@ for (lev in (md-1):1)
     {
     # Adding the degrees of final descendants below the current intermediate ancestor to his list
     ancestorsdegreedes[[i]] = degvec[currentnonfounders==iancestors[i]&active]
+    names(ancestorsdegreedes[[i]]) = id[fdi][currentnonfounders==iancestors[i]&active]
     # Include degrees between spouse and final descendants in list of ancestors  (assumes only one spouse)
     foundersdegreedes[[i]] = list(degvec[currentnonfounders==iancestors[i]&active])
     # Setting indicator of whether the descendant is the previous intermediate ancestor
     if (ia>1)
       {
-      if (length(lev.ia[[lia]])>1) stop ("More than one intermediate ancestor at level ",lev," with two or more descendant")
+      if (length(lev.ia[[lia]])>1) stop ("More than one intermediate ancestor at level ",lev," with two or more descendants.")
       iancestor.as.descendant[[i]] = list(id[fdi][currentnonfounders==iancestors[i]&active] == iancestors[ia-1])
+      # Recording number of founders below intermediate ancestor
       }
     else iancestor.as.descendant[[i]] = list(rep(FALSE,length(foundersdegreedes[[i]][[1]])))
     # Include previous ancestors of final descendants if any
@@ -86,16 +96,18 @@ for (lev in (md-1):1)
       ii = 1
       tmp = desfounders[names(desfounders) %in% id[fdi][currentnonfounders==iancestors[i]&active]]
       # Loop over final descendants 
+      # check whether this is correct with more than one intermediate ancestors on the same level
       for (k in 1:length(tmp))
         {
         foundersdegreedes[[i]][(ii+1):(ii+length(tmp[[k]]))] = tmp[[k]]
         # Setting indicator of whether the descendant of all ancestors in tmp[[k]] is the previous intermediate ancestor
-        iancestor.as.descendant[[i]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, names(tmp)[k] == iancestors[i-1], FALSE))
+        iancestor.as.descendant[[i]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, names(tmp)[k] == iancestors[ia-1], FALSE))
         ii = ii + length(tmp[[k]])
         # Adding spouse of intermediate ancestor to list of founders of current final descendant
         
         }
       }
+      iancestors.Nf[i] = ifelse(any(unlist(iancestor.as.descendant[[i]])),iancestors.Nf[ia-1],0) + length(iancestor.as.descendant[[i]])
       }
     }
   # Adding the current founder ancestral to each final descendants to his list of founders
@@ -154,7 +166,10 @@ degvec[active] = degvec[active] + 1
 # Listing ancestors at current depth of final descendants and intermediate ancestors
 # The currentnonfounders are those from the previous level
 currentdads=dad.id[id %in% currentnonfounders[active]]
-currentmoms=mom.id[id %in% currentnonfounders[active]]  
+currentmoms=mom.id[id %in% currentnonfounders[active]]
+
+# The dummy intermediate ancestor has all founders below him (except himself)
+iancestors.Nf[ia] = Nf - 1 
     
 # If all subjects have the same dad, use him as last ancestor
 if (all(currentdads==currentdads[1]))
@@ -176,6 +191,7 @@ else
      
     # Adding the degrees of final descendants below the current intermediate ancestor to his list
     ancestorsdegreedes[[ia]] = degvec[active]
+    names(ancestorsdegreedes[[ia]]) = id[fdi][active]
     # Include first spouse in list of ancestors
     spousevec = unique(currentfounders)
     foundersdegreedes[[ia]]= list(degvec[currentfounders==spousevec[1]&active])
@@ -272,9 +288,73 @@ for (i in 1:ia)
   p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + apply(tmpf,1,sum))
     # Debugging code
     # print (p0)
+if (is.null(carriers))
 # Sharing probability
 pshare = num/(1-p0/Nf)
-new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id))
+else
+{
+#  ci = which(id %in% carriers)
+  noncarriers = setdiff(id[!(id%in%dad.id | id%in%mom.id)],carriers)
+  fd.subsets = list(as.matrix(carriers))
+  # Loop over number of non-carriers to include as "carrier" in the possible subset
+  if (length(noncarriers)>1)
+    for (k in 1:(length(noncarriers)-1))
+    {
+  	  tmp = combn(noncarriers,k)
+  	  fd.subsets[[k+1]] = rbind(matrix(carriers,length(carriers),ncol(tmp)),tmp)
+    }
+  subsetp = numeric(length(fd.subsets))
+  # Loop over possible subsets
+  for (k in 1:length(fd.subsets))	
+    {
+    sn = nrow(fd.subsets[[k]])
+    nsubs = ncol(fd.subsets[[k]])
+    subsetkp = numeric(nsubs)
+  	for (h in 1:nsubs)
+  	  {
+		fremoved = 0
+		insubset = logical(sn)
+  	    # Loop over intermediate ancestors
+  	    for (i in 1:ia)
+  	    {
+		    insubset[fd.subsets[[k]][,h]%in%names(ancestorsdegreedes[[i]])] = TRUE
+		    # Check if all carriers in current possible subset are descendents of current intermediate ancestor 
+ 	  		#if (all(fd.subsets[[k]][,h]%in%names(ancestorsdegreedes[[i]])))
+ 	  		if (all(insubset))
+ 	  		{
+ 	  		   if (i == 1) break
+ 	  		   else if(iancestors[i-1] %in% names(ancestorsdegreedes[[i]])) break
+			}
+		 }
+		 # Compute probability of subset
+		 numsub = 1
+		 for (ii in 1:i)
+		 {
+		      numsub = numsub * 1/2^sum(ancestorsdegreedes[[ii]][c(fd.subsets[[k]][,h],iancestors)],na.rm=TRUE)
+		 	  fdn.vec = setdiff(names(ancestorsdegreedes[[ii]]),fd.subsets[[k]][,h])
+		 	  if (length(fdn.vec)>0)
+		 	    for (fd in fdn.vec)
+		 	    {
+		 	  	ncf = names(desfounders[[fd]])
+				founder.for.other = logical(length(ncf))
+				# check if any founder of the non-carrier is also a founder for another non-carrier
+				for (z in names(desfounders[names(desfounders)!=fd])) founder.for.other = pmax(founder.for.other,ncf%in%names(desfounders[[z]]))
+				# Count number of founders unique to final descendant fd to remove them
+				fremoved = fremoved + sum(founder.for.other==0,na.rm=TRUE)
+				}
+		 }
+		 # Multiply by two for the spouses and divide by the number of founders
+		 subsetkp[h] = numsub*2/(iancestors.Nf[i]-fremoved+1)
+  	  }
+  	  subsetp[k] = sum(subsetkp)
+  	}
+  # Add joint prob for all final descendents
+  subsetp = c(subsetp,num)
+  # Computation of sharing probability of observed subset
+  numo = sum(subsetp*(-1)^(0:(length(subsetp)-1)))
+  pshare = numo/(1-p0/Nf)   
+}
+new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=as.character(carriers))
 }
 
 # Wrappers for pedigree object
