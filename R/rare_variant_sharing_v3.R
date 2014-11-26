@@ -317,22 +317,44 @@ else
 		fremoved = 0
 		insubset = logical(sn)
   	    # Loop over intermediate ancestors
-  	    for (i in 1:ia)
+  	    i = 1
+  	    iia = numeric(0)
+  	    done = FALSE
+  	    for (lia in 1:length(lev.ia))
   	    {
-		    insubset[fd.subsets[[k]][,h]%in%names(ancestorsdegreedes[[i]])] = TRUE
-		    # Check if all carriers in current possible subset are descendents of current intermediate ancestor 
- 	  		#if (all(fd.subsets[[k]][,h]%in%names(ancestorsdegreedes[[i]])))
+  	    fdsi = c(fd.subsets[[k]][,h],iancestors[iia])
+  	    insubset = c(insubset,rep(FALSE,length(iia)))
+  	    for (ian in 1:length(lev.ia[[lia]]))
+  	    {
+		    # If at least one final descendant in the current subset is below the current intermediate ancestor i, then
+		    if (any(fdsi%in%names(ancestorsdegreedes[[i]])))
+		    {
+		        # add that intermediate ancestor to the indices used in the computation for the current subset
+		    	iia = c(iia,i)
+		    	# records which final descendants from the subset are below that intermediate ancestor		    	
+		    	insubset[fdsi%in%names(ancestorsdegreedes[[i]])] = TRUE		    	
+		    }
+		    # Check if all carriers in current possible subset are descendants of current intermediate ancestor 
  	  		if (all(insubset))
  	  		{
- 	  		   if (i == 1) break
- 	  		   else if(iancestors[i-1] %in% names(ancestorsdegreedes[[i]])) break
+ 	  			# If this is the first intermediate ancestors at this level, then the following intermediate ancestors
+ 	  			# are not needed for the computation
+ 	  		   if (ian == 1) {done = TRUE; break}
 			}
+			i = i+1
 		 }
+		 if (done) break
+		 }
+#		 print (done)
+         # If not all final descendant in the current subset are below one of the intermediate ancestors up to level 1
+         # then add the last intermediate ancestor at level 0         
+		 if (!done) iia = c(iia,i)
 		 # Compute probability of subset
 		 numsub = 1
-		 for (ii in 1:i)
+		 for (ii in iia)
 		 {
-		      numsub = numsub * 1/2^sum(ancestorsdegreedes[[ii]][c(fd.subsets[[k]][,h],iancestors)],na.rm=TRUE)
+		 	# Here the intermediate ancestors in iancestors are in the list used in the computation for the current subset	
+		      numsub = numsub * 1/2^sum(ancestorsdegreedes[[ii]][c(fd.subsets[[k]][,h],iancestors[iia])],na.rm=TRUE)
 		 	  fdn.vec = setdiff(names(ancestorsdegreedes[[ii]]),fd.subsets[[k]][,h])
 		 	  if (length(fdn.vec)>0)
 		 	    for (fd in fdn.vec)
@@ -345,8 +367,8 @@ else
 				fremoved = fremoved + sum(founder.for.other==0,na.rm=TRUE)
 				}
 		 }
-		 # Multiply by two for the spouses and divide by the number of founders
-		 subsetkp[h] = numsub*2/(iancestors.Nf[i]-fremoved+1)
+		 # Multiply by two for the spouses and divide by the number of founders of the highest intermediate ancestor needed
+		 subsetkp[h] = numsub*2/(iancestors.Nf[iia[length(iia)]]-fremoved+1)
   	  }
   	  subsetp[k] = sum(subsetkp)
   	}
