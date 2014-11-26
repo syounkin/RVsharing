@@ -25,7 +25,7 @@ gene.drop.fn <- function(g1,g2){
   return(goff)
 }
 
-GeneDropSim.fn <- function(trio.list, id, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1){
+GeneDropSim.fn <- function(trio.list, id, dt.vec, fd.indices, carriers=dt.vec, n = 1e3, k = 10, nf = 1){
   n.bail <- k*n; i <- 1;
   share.vec <- logical(n.bail); occur.vec <- logical(n.bail);
   geno.vec = rep(NA,length(id))
@@ -39,7 +39,7 @@ GeneDropSim.fn <- function(trio.list, id, dt.vec, fd.indices, n = 1e3, k = 10, n
       for (j in 1:length(trio.list))
         geno.vec.sim <- GeneDrop(trio.list[[j]], geno.vec.sim)
       if( any(is.na(geno.vec.sim))) stop("GeneDrop returned NA genotype.")
-      share.vec[i] <- all( geno.vec.sim[dt.vec]==1 )
+      share.vec[i] <- all( geno.vec.sim[carriers]==1 ) & all( geno.vec.sim[setdiff(dt.vec,carriers)]==0 )      
       occur.vec[i] <- any( geno.vec.sim[dt.vec]==1 )
       geno.vec[founder] <- 0
       i <- i + 1
@@ -47,7 +47,7 @@ GeneDropSim.fn <- function(trio.list, id, dt.vec, fd.indices, n = 1e3, k = 10, n
   return(sum(share.vec)/sum(occur.vec)) # note that these vectors have length n.bail
 }
 
-GeneDropSimExcessSharing.fn <- function(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, ord=5, n = 1e3, k = 10)
+GeneDropSimExcessSharing.fn <- function(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, carriers=dt.vec, ord=5, n = 1e3, k = 10)
 {
 
 if (ord > 5) stop ("Order of the polynomial approximation cannot exceed 5.")
@@ -138,7 +138,7 @@ for (r in 1:nrep)
       for (j in 1:length(trio.list))
         geno.vec.sim <- GeneDrop(trio.list[[j]], geno.vec.sim)
       if( any(is.na(geno.vec.sim))) stop("GeneDrop returned NA genotype.")
-      share.vec[i] <- all( geno.vec.sim[dt.vec]==1 )
+      share.vec[i] <- all( geno.vec.sim[carriers]==1 & all( geno.vec.sim[setdiff(dt.vec,carriers)]==0 ) )
       occur.vec[i] <- any( geno.vec.sim[dt.vec]==1 )
       geno.vec[founder] <- 0
       # Debugging code
