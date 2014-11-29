@@ -314,7 +314,6 @@ else
     subsetkp = numeric(nsubs)
   	for (h in 1:nsubs)
   	  {
-		fremoved = 0
 		insubset = logical(sn)
   	    # Loop over intermediate ancestors
   	    i = 1
@@ -355,20 +354,9 @@ else
 		 {
 		 	# Here the intermediate ancestors in iancestors are in the list used in the computation for the current subset	
 		      numsub = numsub * 1/2^sum(ancestorsdegreedes[[ii]][c(fd.subsets[[k]][,h],iancestors[iia])],na.rm=TRUE)
-		 	  fdn.vec = setdiff(names(ancestorsdegreedes[[ii]]),fd.subsets[[k]][,h])
-		 	  if (length(fdn.vec)>0)
-		 	    for (fd in fdn.vec)
-		 	    {
-		 	  	ncf = names(desfounders[[fd]])
-				founder.for.other = logical(length(ncf))
-				# check if any founder of the non-carrier is also a founder for another non-carrier
-				for (z in names(desfounders[names(desfounders)!=fd])) founder.for.other = pmax(founder.for.other,ncf%in%names(desfounders[[z]]))
-				# Count number of founders unique to final descendant fd to remove them
-				fremoved = fremoved + sum(founder.for.other==0,na.rm=TRUE)
-				}
 		 }
 		 # Multiply by two for the spouses and divide by the number of founders of the highest intermediate ancestor needed
-		 subsetkp[h] = numsub*2/(iancestors.Nf[iia[length(iia)]]-fremoved+1)
+		 subsetkp[h] = numsub*2/Nf
   	  }
   	  subsetp[k] = sum(subsetkp)
   	}
