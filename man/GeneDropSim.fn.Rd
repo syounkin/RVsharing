@@ -6,13 +6,14 @@
 Estimates the probability that all subjects in a subset of pedigree members share a rare variant given that it occured in any of them by performing a Monte Carlo simulation of the transmission of the genotypes of the variant from the founders down the pedigree.
 }
 \usage{
-GeneDropSim.fn(trio.list, id, dt.vec, fd.indices, n = 1e3, k = 10, nf = 1)
+GeneDropSim.fn(trio.list, id, dt.vec, fd.indices, carriers=dt.vec, n = 1e3, k = 10, nf = 1)
 }
 \arguments{
   \item{trio.list}{a list of trio objects encoding the pedigree structure. }
   \item{id}{a vector of identifiers of the pedigree members. }
   \item{dt.vec}{ a vector of identifiers of the subset of pedigree members for which to estimate the sharing probability. Must be a subset of the \code{id} vector.}
   \item{fd.indices}{a vector of the indices of the founders of the pedigree.}
+  \item{carriers}{optional character vector of subjects carrying the rare variant among all final descendants. If null, all final descendants are assumed to carry the rare variant.}
   \item{n}{minimal number of gene dropping replicates where the rare variant occurs in at least one member of \code{dt.vec}.}
   \item{k}{this number times \code{n} gives the maximal number of gene dropping replicates.}
   \item{nf}{number of founders introducing the rare variant into the pedigree.}

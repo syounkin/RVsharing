@@ -7,13 +7,14 @@ Estimates the probability that all subjects in a subset of pedigree members shar
 }
 \usage{
 GeneDropSimExcessSharing.fn(trio.list, id, dt.vec, fd.indices, phihat,
- RVfreq, ord=5, n = 1e3, k = 10)
+ RVfreq, carriers=dt.vec, ord=5, n = 1e3, k = 10)
 }
 \arguments{
   \item{trio.list}{a list of trio objects encoding the pedigree structure. }
   \item{id}{a vector of identifiers of the pedigree members. }
   \item{dt.vec}{ a vector of identifiers of the subset of pedigree members for which to estimate the sharing probability. Must be a subset of the \code{id} vector.}
   \item{fd.indices}{a vector of the indices of the founders of the pedigree.}
+  \item{carriers}{optional character vector of subjects carrying the rare variant among all final descendants. If null, all final descendants are assumed to carry the rare variant.}
   \item{phihat}{a vector of values of the mean kinship coefficient between founders. Must be non-negative.} 
   \item{RVfreq}{frequency of the variant in the population (optional). When missing, the variant frequency tends to 0.}
   \item{ord}{order of the polynomial approximation of the number of distinct alleles among pedigree founders.}
