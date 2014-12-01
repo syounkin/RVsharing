@@ -310,6 +310,10 @@ else
   for (k in 1:length(fd.subsets))	
     {
     sn = nrow(fd.subsets[[k]])
+    # If there is only one final descendant in the subset, then the probability he is a carrier is 1/Nf
+    if (sn == 1) subsetp[k] = 1/Nf
+    else
+    {
     nsubs = ncol(fd.subsets[[k]])
     subsetkp = numeric(nsubs)
   	for (h in 1:nsubs)
@@ -336,9 +340,9 @@ else
 		    # Check if all carriers in current possible subset are descendants of current intermediate ancestor 
  	  		if (all(insubset))
  	  		{
- 	  			# If this is the first intermediate ancestors at this level, then the following intermediate ancestors
+ 	  			# If this is the first intermediate ancestors at this level, or all final descendants are below the current intermediate ancestor, then the following intermediate ancestors
  	  			# are not needed for the computation
- 	  		   if (ian == 1) {done = TRUE; break}
+ 	  		   if (ian == 1 | all(fdsi%in%names(ancestorsdegreedes[[i]]))) {done = TRUE; break}
 			}
 			i = i+1
 		 }
@@ -359,6 +363,7 @@ else
 		 subsetkp[h] = numsub*2/Nf
   	  }
   	  subsetp[k] = sum(subsetkp)
+  	  }
   	}
   # Add joint prob for all final descendents
   subsetp = c(subsetp,num)
