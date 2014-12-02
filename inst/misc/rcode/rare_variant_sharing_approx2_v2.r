@@ -1,49 +1,32 @@
-# Computing probability of transmission of a rare variant to sets of
-# subjects in a pedigree from a single ancestor, for the setting where
-# introduction by more than one founder is allowed (and computed
-# separately) This function applies with method 1 for approximating
-# variant sharing probabilities in presence of know or unknown
+# Computing probability of transmission of a rare variant to sets of subjects in a pedigree from a single ancestor, for 
+# the setting where introduction by more than one founder is allowed (and computed separately)
+# This function applies with method 2 for approximating variant sharing probabilities in presence of unknown 
 # relationships between founders
 
 # By Alexandre Bureau
 
 # Based on function RVsharing
 
-# Version 0.1
+# Version 0.2
+# 2013/05/15
 
-# Only a specified pair of founders are related with specified kinship
-# coefficient
+# Corrects an erroneous formula in version 0.1
 
-# Version 0.2 2013/05/01
+library(kinship2)
 
-# Many founder pairs can have non-zero kinship coefficients specified
-# in a matrix Correction of an error in Version 0.1 that gave
-# probabilities too low
-
-#library(kinship2)
-
-RVsharing.weighted = function(id, dad.id, mom.id,relfounders,phi)
+RVsharing.approx2 = function(id, dad.id, mom.id,PFU)
 {
-if (!is.matrix(phi))
-  {
-  if(length(phi)==1) phi = matrix(c(0,phi,phi,0),2,2)
-  else stop("phi must be a scalar or a square matrix.")
-  }
-if (nrow(phi)!=ncol(phi)) stop("phi is a matrix but is not square.")
-if (!any(phi[lower.tri(phi)]==phi[lower.tri(phi)])) stop("phi is a square matrix but is not symmetric.")
+# The function RV sharing computes the probability that all final descendants in the pedigree share a rare variant
+# given that a rare variant has been detected in any one of these final descendants
+# For now, there can only be one lineage of intermediate ancestors with more than one child each
+# Multiple mariages can only involve one of the top founders. Intermediate ancestors can have only one spouse
+# All final descendants must share a common ancestor or couple of ancestors, otherwise an erroneous response may be obtained
+# Correction to the extration of the kth name : names(tmp)[k]
 
-if (length(relfounders)!=nrow(phi)) stop("The number of founders must match the dimension of the matrix phi.")
-if (any(phi<0 | phi>1)) stop("Kinship coefficient must be between 0 and 1.")
+# The function RVsharing.approx2 computes the probability that all sequenced subjects inherit the variant from a single ancestor (num)
+# and the probability that no sequenced subject inherited the variant from any of the founders given that a single copy of the variant 
+# is present in the founders (p0), scaled by the probability PFU that each founder was the only one to introduce the variant. 
 
-# Make sure there are 0s on the diagonal
-diag(phi) = 0
-
-# Vector of the sum of kinship coefficients between each subject and the others
-sumphi.indiv = apply(phi,1,sum)
-print(sumphi.indiv)
-# Twice the sum of all kinship coefficients
-sumphi = sum(phi)
-print(sumphi)
 
 N = length(id)
 # Indicator vector of final descendants
@@ -271,14 +254,14 @@ for (i in 1:ia)
   num = num * 1/2^sum(ancestorsdegreedes[[i]])
 # Computation of probability of being the only one to introduce the variant for top founder or founders
 #print(iancestors[ia])
-#print(relfounders==iancestors[ia])
-pfd = 2*(sumphi - ifelse(iancestors[ia]%in%relfounders,sumphi.indiv[relfounders==iancestors[ia]],0))/(2*Nf-1) + (1-sumphi)/Nf
+
+pfd = PFU
 # If there is only one spouse, then a couple of founders can transmit a variant to all final descendents
 if (length(spousevec)==1) 
   {
   #print(spousevec)
   #print(relfounders==spousevec)
-  pfd = pfd + 2*(sumphi - ifelse(spousevec%in%relfounders,sumphi.indiv[relfounders==spousevec],0))/(2*Nf-1) + (1-sumphi)/Nf   
+  pfd = pfd + PFU   
   }
 num = num*pfd
  
@@ -294,7 +277,7 @@ for (i in 1:ia)
   # Weighting by the probability that names(foundersdegreedes[[i]])[j] was the only one to introduce the variant
   #print(names(foundersdegreedes[[i]])[j])
   #print( relfounders==names(foundersdegreedes[[i]])[j])
-    p0 = p0 + (2*(sumphi - ifelse(names(foundersdegreedes[[i]])[j]%in%relfounders,sumphi.indiv[relfounders==names(foundersdegreedes[[i]])[j]],0))/(2*Nf-1) + (1-sumphi)/Nf)*prod((1-1/2^foundersdegreedes[[i]][[j]]) + ifelse(iancestor.as.descendant[[i]][[j]],(1/2^foundersdegreedes[[i]][[j]])*pk,0))
+    p0 = p0 + PFU*prod((1-1/2^foundersdegreedes[[i]][[j]]) + ifelse(iancestor.as.descendant[[i]][[j]],(1/2^foundersdegreedes[[i]][[j]])*pk,0))
   }
   # Updating the probability for the previous intermediate ancestor, who becomes the current intermediate ancestor
   # For now, intermediate ancestors can have only one spouse, this is why we take the indicators of the first founder attached to him
@@ -304,7 +287,8 @@ for (i in 1:ia)
 # to introduce the variant. He is currently the only one who can have more than one spouse
 # Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
 # The summation returns in fact the value of that single non-zero term
-p0 = p0 + (2*(sumphi - ifelse(iancestors[ia]%in%relfounders,sumphi.indiv[relfounders==iancestors[ia]],0))/(2*Nf-1) + (1-sumphi)/Nf)*prod((1-1/2^ancestorsdegreedes[[ia]]) + sum(sapply(iancestor.as.descendant[[ia]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
+  tmpf = as.matrix(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk))  
+  p0 = p0 + PFU*prod((1-1/2^ancestorsdegreedes[[i]]) + apply(tmpf,1,sum))
 
 list(num=num,p0=p0,iancestors=iancestors,desfounders=desfounders,id=id,dad.id=dad.id,mom.id=mom.id)
 }

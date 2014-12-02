@@ -1,20 +1,31 @@
-# Computing probability of transmission of a rare variant to sets of subjects in a pedigree from a single ancestor, for 
-# the setting where introduction by more than one founder is allowed (and computed separately)
-# This function applies with method 2 for approximating variant sharing probabilities in presence of unknown 
-# relationships between founders
+# Computing probability that a rare variant is shared by a set of subjects in a pedigree
 
 # By Alexandre Bureau
 
-# Based on function RVsharing
+# Version 0.1
+# 2013/02/08
 
 # Version 0.2
-# 2013/05/15
+# 2013/02/12
+# Addition of a wrapper for pedigree objects
 
-# Corrects an erroneous formula in version 0.1
+# Change of fdi from a logical vector to a vector of indices, to correct a problem occuring when 
+# an intermediate ancestor is before the final descendants in the ID list
+# Restriction of currentnonfounders to the active ones when determining whether there is an intermediate ancestor
+# Removed currentfounders that are NA when computing how many there are.
+# At depth 0, Include previous ancestors of only the final descendants that are active
+
+# Version 0.3
+# 2013/04/08
+
+# Adding the names of the founders to the desfounders list of degrees between final descendants and founders
+# Moving the inactivation of final descendants below an intermediate ancestor and the removal of the spouse of the intermediate ancestor
+# after the update of the List of distance to founders of each final descendant to insure inclusion of the spouse in the list
+# Adding desfounders, id, dad.id and mom.id to the list of returned elements for further computations with other functions
 
 library(kinship2)
 
-RVsharing.approx2 = function(id, dad.id, mom.id,PFU)
+RVsharing.copies = function(id, dad.id, mom.id,a)
 {
 # The function RV sharing computes the probability that all final descendants in the pedigree share a rare variant
 # given that a rare variant has been detected in any one of these final descendants
@@ -23,10 +34,13 @@ RVsharing.approx2 = function(id, dad.id, mom.id,PFU)
 # All final descendants must share a common ancestor or couple of ancestors, otherwise an erroneous response may be obtained
 # Correction to the extration of the kth name : names(tmp)[k]
 
-# The function RVsharing.approx2 computes the probability that all sequenced subjects inherit the variant from a single ancestor (num)
+# The function RVsharing.weighted computes the probability that all sequenced subjects inherit the variant from a single ancestor (num)
 # and the probability that no sequenced subject inherited the variant from any of the founders given that a single copy of the variant 
-# is present in the founders (p0), scaled by the probability PFU that each founder was the only one to introduce the variant. 
+# is present in the founders (p0), weighted by the probability that each founder was the only one to introduce the variant.
 
+# Version 0.1 : Only a specified pair of founders are related with specified kinship coefficient
+# Version 0.2 : Many founder pairs can have non-zero kinship coefficients specified in a matrix
+#               Correction of an error in Version 0.1 that gave probabilities too low
 
 N = length(id)
 # Indicator vector of final descendants
@@ -40,6 +54,7 @@ md = max(dv)
 # Number of founders
 Nf = sum(dv==0)
 if (any(a<Nf | a>2*Nf)) stop("Number of distinct-by-descent gene copies must be between 0 and 1.")
+
 
 # Collecting the degrees between the sequenced children, the founders and the intermediate ancestors
 degvec = currentnonfounders = currentfounders = numeric(nfd)
@@ -256,13 +271,13 @@ for (i in 1:ia)
 # Computation of probability of being the only one to introduce the variant for top founder or founders
 #print(iancestors[ia])
 
-pfd = PFU
+pfd = 2*(a-Nf)*(2*(a-Nf)-1)/(a*Nf*(2*Nf-1)) + (a-Nf)*2*(2*Nf-a)/(a*((a-Nf)*2*(2*Nf-a) + (a-Nf)*(2*(a-Nf)-1) + 2*(2*Nf-a)*(2*Nf-a-1)))
 # If there is only one spouse, then a couple of founders can transmit a variant to all final descendents
 if (length(spousevec)==1) 
   {
   #print(spousevec)
   #print(relfounders==spousevec)
-  pfd = pfd + PFU   
+  pfd = pfd + 2*(a-Nf)*(2*(a-Nf)-1)/(a*Nf*(2*Nf-1)) + (a-Nf)*2*(2*Nf-a)/(a*((a-Nf)*2*(2*Nf-a) + (a-Nf)*(2*(a-Nf)-1) + 2*(2*Nf-a)*(2*Nf-a-1)))   
   }
 num = num*pfd
  
@@ -278,7 +293,7 @@ for (i in 1:ia)
   # Weighting by the probability that names(foundersdegreedes[[i]])[j] was the only one to introduce the variant
   #print(names(foundersdegreedes[[i]])[j])
   #print( relfounders==names(foundersdegreedes[[i]])[j])
-    p0 = p0 + PFU*prod((1-1/2^foundersdegreedes[[i]][[j]]) + ifelse(iancestor.as.descendant[[i]][[j]],(1/2^foundersdegreedes[[i]][[j]])*pk,0))
+    p0 = p0 + (2*(a-Nf)*(2*(a-Nf)-1)/(a*Nf*(2*Nf-1)) + (a-Nf)*2*(2*Nf-a)/(a*((a-Nf)*2*(2*Nf-a) + (a-Nf)*(2*(a-Nf)-1) + 2*(2*Nf-a)*(2*Nf-a-1))))*prod((1-1/2^foundersdegreedes[[i]][[j]]) + ifelse(iancestor.as.descendant[[i]][[j]],(1/2^foundersdegreedes[[i]][[j]])*pk,0))
   }
   # Updating the probability for the previous intermediate ancestor, who becomes the current intermediate ancestor
   # For now, intermediate ancestors can have only one spouse, this is why we take the indicators of the first founder attached to him
@@ -288,7 +303,7 @@ for (i in 1:ia)
 # to introduce the variant. He is currently the only one who can have more than one spouse
 # Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
 # The summation returns in fact the value of that single non-zero term
-p0 = p0 + PFU*prod((1-1/2^ancestorsdegreedes[[ia]]) + sum(sapply(iancestor.as.descendant[[ia]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
+p0 = p0 + (2*(a-Nf)*(2*(a-Nf)-1)/(a*Nf*(2*Nf-1)) + (a-Nf)*2*(2*Nf-a)/(a*((a-Nf)*2*(2*Nf-a) + (a-Nf)*(2*(a-Nf)-1) + 2*(2*Nf-a)*(2*Nf-a-1))))*prod((1-1/2^ancestorsdegreedes[[ia]]) + sum(sapply(iancestor.as.descendant[[ia]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
 
 list(num=num,p0=p0,iancestors=iancestors,desfounders=desfounders,id=id,dad.id=dad.id,mom.id=mom.id)
 }

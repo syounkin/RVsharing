@@ -1,21 +1,27 @@
-Package: Bureau
+Package: RVsharing
 Type: Package
-Title: Bureau
-Version: 0.0.2
-Date: Mon May 20 08:16:52 EDT 2013
+Title: RVsharing
+Version: 1.2.0
+Date: Sat 29 Nov 2014
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
-Maintainer: Samuel G. Younkin <syounkin@jhsph.edu>
+Maintainer: Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
-License: THE BEER-WARE LICENSE
-Depends: R (>= 3.0.0), methods, kinship2
-Imports:
+License: GPL-2
+Depends: R (>= 2.15.2), utils, methods, kinship2
+Imports: 
 Suggests:
 Enhances:
-Collate: approx2_functions.r		  
-	 compute_kinship_prop_coef.R	  
-	 rare_variant_sharing_approx2_v2.r 
-	 rare_variant_sharing_weighted_v2.r
+Collate: AllGenerics.R
+	 AllClasses.R
+	 methods-pedigree.R
+	 methods-trio.R
+ 	 methods-RVsharingProb.R
+	 functions.R
+	 approx2_functions.R		  
+	 ped2trio.R
+	 PFU.R
+	 rare_variant_sharing_v3.R
          zzz.R
 LazyLoad: yes
 biocViews:
-Packaged: Mon May 20 08:25:28 EDT 2013
+Packaged: Fri 04 Oct 2013 12:39:56 PM CDT
