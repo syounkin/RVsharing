@@ -195,10 +195,10 @@ else
     names(ancestorsdegreedes[[ia]]) = id[fdi][active]
     # Include first spouse in list of ancestors
     spousevec = unique(currentfounders)
-    foundersdegreedes[[ia]]= list(degvec[currentfounders==spousevec[1]&active])
+    foundersdegreedes[[ia]]= list(degvec[active][currentfounders==spousevec[1]])
     # Setting indicator of whether the descendant is the previous intermediate ancestor
     if (ia>1)
-      iancestor.as.descendant[[ia]] = list(id[fdi][currentfounders==spousevec[1]&active] %in% lev.ia[[lia-1]])
+      iancestor.as.descendant[[ia]] = list(id[fdi[active]][currentfounders==spousevec[1]] %in% lev.ia[[lia-1]])
     else iancestor.as.descendant[[ia]] = list(rep(FALSE,length(foundersdegreedes[[ia]][[1]])))
     # Add additional spouses if any
     # Warning! This is going to work only if all previous intermediate descendents are under the same spouse
@@ -206,17 +206,17 @@ else
       {
       for (i in 2:length(spousevec))
         {
-        foundersdegreedes[[ia]][[i]] = degvec[currentfounders==spousevec[i]&active]
+        foundersdegreedes[[ia]][[i]] = degvec[active][currentfounders==spousevec[i]]
         if (ia>1)
-          iancestor.as.descendant[[ia]][[i]] = id[fdi][currentfounders==spousevec[i]&active] %in% lev.ia[[lia-1]]
+          iancestor.as.descendant[[ia]][[i]] = id[fdi[active]][currentfounders==spousevec[i]] %in% lev.ia[[lia-1]]
         else iancestor.as.descendant[[ia]][[i]] = rep(FALSE,length(foundersdegreedes[[ia]][[i]]))
         }
       }  
     # Include previous ancestors of final descendants if any
-    if (any(names(desfounders) %in% id[fdi][active]))
+    if (any(names(desfounders) %in% id[fdi[active]]))
       {
       ii = length(spousevec)
-      tmp = desfounders[names(desfounders) %in% id[fdi][active]]
+      tmp = desfounders[names(desfounders) %in% id[fdi[active]]]
       # Loop over final descendants 
       for (k in 1:length(tmp))
         {
