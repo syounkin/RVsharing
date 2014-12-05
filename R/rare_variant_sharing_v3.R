@@ -318,6 +318,9 @@ else
     subsetkp = numeric(nsubs)
   	for (h in 1:nsubs)
   	  {
+  	  # If there is more than one intermediate ancestor
+  	  if (ia>1)
+  	    {
 		insubset = logical(sn)
   	    # Loop over intermediate ancestors
   	    i = 1
@@ -352,6 +355,9 @@ else
          # If not all final descendant in the current subset are below one of the intermediate ancestors up to level 1
          # then add the last intermediate ancestor at level 0         
 		 if (!done) iia = c(iia,i)
+		 }
+		 else iia = 1
+		 
 		 # Compute probability of subset
 		 numsub = 1
 		 for (ii in iia)
