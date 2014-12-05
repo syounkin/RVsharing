@@ -1,5 +1,4 @@
 # By Alexandre Bureau
-# 2013/06/28
 
 RVsharing.fn = function(id, dad.id, mom.id,carriers=NULL)
 {
@@ -295,8 +294,9 @@ if (is.null(carriers))
 pshare = num/(1-p0/Nf)
 else
 {
-#  ci = which(id %in% carriers)
   noncarriers = setdiff(id[!(id%in%dad.id | id%in%mom.id)],carriers)
+  if (length(noncarriers)>0)
+  {
   fd.subsets = list(as.matrix(carriers))
   # Loop over number of non-carriers to include as "carrier" in the possible subset
   if (length(noncarriers)>1)
@@ -369,6 +369,8 @@ else
   subsetp = c(subsetp,num)
   # Computation of sharing probability of observed subset
   numo = sum(subsetp*(-1)^(0:(length(subsetp)-1)))
+  }
+  else numo = num
   pshare = numo/(1-p0/Nf)   
 }
 new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=as.character(carriers))
