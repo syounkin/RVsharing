@@ -1,6 +1,6 @@
 # By Alexandre Bureau
 
-RVsharing.fn = function(id, dad.id, mom.id,carriers=NULL)
+RVsharing.fn = function(id, dad.id, mom.id,carriers)
 {
 
 N = length(id)
@@ -8,7 +8,7 @@ N = length(id)
 fdi = which(!(id%in%dad.id | id%in%mom.id))
 nfd = length(fdi)
 if (nfd < 2) stop("There are fewer than 2 descendants for which to compute a rare variant sharing probability.")
-if (!is.null(carriers))
+if (!missing(carriers))
 {
 	missc = setdiff(carriers,id)
 	if(length(missc)>0) stop(missc," not in pedigree.")
@@ -289,7 +289,7 @@ for (i in 1:ia)
   p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + apply(tmpf,1,sum))
     # Debugging code
     # print (p0)
-if (is.null(carriers))
+if (missing(carriers))
 # Sharing probability
 pshare = num/(1-p0/Nf)
 else
@@ -379,7 +379,9 @@ else
   else numo = num
   pshare = numo/(1-p0/Nf)   
 }
-new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=as.character(carriers))
+if (missing(carriers)) carrier.vec = as.character(id[fdi])
+else carrier.vec=as.character(carriers)
+new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=carrier.vec)
 }
 
 # Wrappers for pedigree object
