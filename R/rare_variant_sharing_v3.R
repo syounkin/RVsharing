@@ -6,13 +6,17 @@ RVsharing.fn = function(id, dad.id, mom.id,carriers)
 N = length(id)
 # vector of indices of final descendants
 fdi = which(!(id%in%dad.id | id%in%mom.id))
-nfd = length(fdi)
+nfd = nfd0 = length(fdi)
 if (nfd < 2) stop("There are fewer than 2 descendants for which to compute a rare variant sharing probability.")
 if (!missing(carriers))
 {
 	missc = setdiff(carriers,id)
 	if(length(missc)>0) stop(missc," not in pedigree.")
-	}
+	# Check all carriers are non-founders
+  names(dad.id) = id
+  if (any(is.na(dad.id[as.character(carriers)])))
+    stop ("Carriers ",carriers[is.na(dad.id[as.character(carriers)])]," are founders. This is not supported by RVsharing.")
+}
 
 # Getting the depth of each subject in the pedigree
 dv = kindepth(id, dad.id, mom.id)
@@ -294,8 +298,43 @@ if (missing(carriers))
 pshare = num/(1-p0/Nf)
 else
 {
+  carriers0 = carriers
+  # Initialize meiosis reduction counter
+  meir = 0
+  for (cr in carriers)
+    {
+    if (!(cr %in% id[fdi][1:nfd0]))
+    {
+    # check if carrier is intermediate ancestor (other than the last)
+    if (cr %in% iancestors[-ia])
+      {
+      	# If he has at least one descendant in the subset then discard him
+      if (any(carriers %in% names(ancestorsdegreedes[[which(iancestors==cr)]])))
+        carriers = setdiff(carriers,cr)
+        # Else do nothing, and the intermediate ancestor should be recognized as a descendant of
+        # the intermediate ancestor above him, and treated as a final descendant
+      }
+    else
+      {
+      # check if carrier is parent of a final descendant or intermediate ancestor
+      if (cr %in% union(dad.id[fdi],mom.id[fdi]))
+      {
+      	# discard him
+        carriers = setdiff(carriers,cr)
+        # If he or she does not have at least one descendant among the carriers then add one of his children to the carriers in his place and increment the meiosis reduction counter
+      if (!any(carriers %in% id[dad.id==cr | mom.id==cr]))
+        {
+        carriers = c(carriers,id[fdi][dad.id[fdi]==cr | mom.id[fdi]==cr][1])    	
+        meir = meir + 1      	
+        }
+      }
+      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
+    }
+    }
+    }
+  cat (meir,"\n")
   noncarriers = setdiff(id[!(id%in%dad.id | id%in%mom.id)],carriers)
-  if (length(noncarriers)>0)
+  if (length(noncarriers)>0 | meir>0)
   {
   fd.subsets = list(as.matrix(carriers))
   # Loop over number of non-carriers to include as "carrier" in the possible subset
@@ -328,6 +367,7 @@ else
   	    done = FALSE
   	    for (lia in 1:length(lev.ia))
   	    {
+  	    # At first iteration, iia is length 0, so no iancestor gets added
   	    fdsi = c(fd.subsets[[k]][,h],iancestors[iia])
   	    insubset = c(insubset,rep(FALSE,length(iia)))
   	    for (ian in 1:length(lev.ia[[lia]]))
@@ -365,9 +405,11 @@ else
 		 	# Here the intermediate ancestors in iancestors are in the list used in the computation for the current subset	
 		      numsub = numsub * 1/2^sum(ancestorsdegreedes[[ii]][c(fd.subsets[[k]][,h],iancestors[iia])],na.rm=TRUE)
 		 }
+		 # Correction for replacing parent by his child
+		 if (meir>0) numsub = numsub * 2^meir
 		 # Multiply by two for the spouses and divide by the number of founders of the highest intermediate ancestor needed
 		 subsetkp[h] = numsub*2/Nf
-  	  }
+  	     }
   	  subsetp[k] = sum(subsetkp)
   	  }
   	}
@@ -376,11 +418,12 @@ else
   # Computation of sharing probability of observed subset
   numo = sum(subsetp*(-1)^(0:(length(subsetp)-1)))
   }
+  # Else there are no non-carriers, i.e. all affected subjects are carriers
   else numo = num
   pshare = numo/(1-p0/Nf)   
 }
 if (missing(carriers)) carrier.vec = as.character(id[fdi])
-else carrier.vec=as.character(carriers)
+else carrier.vec=as.character(carriers0)
 new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=carrier.vec)
 }
 
