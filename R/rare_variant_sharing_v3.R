@@ -24,10 +24,6 @@ md = max(dv)
 # Number of founders
 Nf = sum(dv==0)
 
-# Collecting the degrees between the sequenced children, the founders and the intermediate ancestors
-degvec = numeric(nfd)
-currentnonfounders = currentfounders = character(nfd)
-active = rep(TRUE,nfd) 
 # List of distance to founders of each final descendant
 desfounders = list()
 # List of list of final descendants and intermediate ancestors below each founder below each ancestor
@@ -46,7 +42,12 @@ lev.ia = list()
 # lia: reverse level index from 1 at lev = md-1 to md-1 at lev=1
 ia = lia = 1
 
-# Initializing the currentnonfounders vector with the final descendants at the deepest level
+# Collecting the degrees between the sequenced children, the founders and the intermediate ancestors
+degvec = numeric(nfd)
+currentnonfounders = currentfounders = character(nfd)
+active = rep(TRUE,nfd) 
+
+# Initializing the currentnonfounders vector with the final descendants or carriers at the deepest level
 currentnonfounders[dv[fdi]==md] = id[dv==md]
 
 # Loop from highest to lowest depth
@@ -68,7 +69,7 @@ for (lev in (md-1):1)
     # Identify founder among mom and dad
     currentfounders[i] = ifelse(is.na(dad.id[id == currentdad]),currentdad,currentmom)
     }
-  # Adding final descendent at the current level to the currentnonfounders for the next level
+  # Adding final descendants at the current level to the currentnonfounders for the next level
   currentnonfounders[dv[fdi]==lev] = id[fdi][dv[fdi]==lev]
 
   # Checking if there is an intermediate ancestor with more than one descendant at the current level
@@ -274,9 +275,10 @@ for (i in 1:ia)
   {
   for (j in 1:length(foundersdegreedes[[i]]))
     p0 = p0 + prod((1-1/2^foundersdegreedes[[i]][[j]]) + ifelse(iancestor.as.descendant[[i]][[j]],(1/2^foundersdegreedes[[i]][[j]])*pk,0))
-  # Updating the probability for the previous intermediate ancestor, who becomes the current intermediate ancestor
+  # The previous intermediate ancestor becomes the current intermediate ancestor
+  # Updates its probability, unless he is a carrier, in which case we keep it 1
   # For now, intermediate ancestors can have only one spouse, this is why we take the indicators of the first founder attached to him
-  if (i<ia) pk = prod((1-1/2^ancestorsdegreedes[[i]]) + ifelse(iancestor.as.descendant[[i]][[1]],1/2^ancestorsdegreedes[[i]]*pk,0))
+  if (i<ia & !(i%in%carriers)) pk = prod((1-1/2^ancestorsdegreedes[[i]]) + ifelse(iancestor.as.descendant[[i]][[1]],1/2^ancestorsdegreedes[[i]]*pk,0))
   }
 # At the end, add the probability from the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
 # Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
