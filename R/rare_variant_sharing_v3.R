@@ -301,42 +301,8 @@ pshare = num/(1-p0/Nf)
 else
 {
   carriers0 = carriers
-  # Initialize meiosis reduction counter
-  meir = 0
-  for (cr in carriers)
-    {
-    if (!(cr %in% id[fdi][1:nfd0]))
-    {
-    # check if carrier is intermediate ancestor (other than the last)
-    if (cr %in% iancestors[-ia])
-      {
-      	# If he has at least one descendant in the subset then discard him
-      if (any(carriers %in% names(ancestorsdegreedes[[which(iancestors==cr)]])))
-        carriers = setdiff(carriers,cr)
-        # Else do nothing, and the intermediate ancestor should be recognized as a descendant of
-        # the intermediate ancestor above him, and treated as a final descendant
-      }
-    else
-      {
-      # check if carrier is parent of a final descendant or intermediate ancestor
-      if (cr %in% union(dad.id[fdi],mom.id[fdi]))
-      {
-      	# discard him
-        carriers = setdiff(carriers,cr)
-        # If he or she does not have at least one descendant among the carriers then add one of his children to the carriers in his place and increment the meiosis reduction counter
-      if (!any(carriers %in% id[dad.id==cr | mom.id==cr]))
-        {
-        carriers = c(carriers,id[fdi][dad.id[fdi]==cr | mom.id[fdi]==cr][1])    	
-        meir = meir + 1      	
-        }
-      }
-      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
-    }
-    }
-    }
-  cat (meir,"\n")
   noncarriers = setdiff(id[!(id%in%dad.id | id%in%mom.id)],carriers)
-  if (length(noncarriers)>0 | meir>0)
+  if (length(noncarriers)>0)
   {
   fd.subsets = list(as.matrix(carriers))
   # Loop over number of non-carriers to include as "carrier" in the possible subset
@@ -371,6 +337,41 @@ else
   	    {
   	    # At first iteration, iia is length 0, so no iancestor gets added
   	    fdsi = c(fd.subsets[[k]][,h],iancestors[iia])
+  	    
+  	    # Initialize meiosis reduction counter
+  meir = 0
+  for (cr in carriers)
+    {
+    if (!(cr %in% fd.subsets[[k]][,h]))
+    {
+    # check if carrier is intermediate ancestor (other than the last)
+    if (cr %in% iancestors[-ia])
+      {
+      	# If he has at least one descendant in the subset then discard him
+      if (any(carriers %in% names(ancestorsdegreedes[[which(iancestors==cr)]])))
+        carriers = setdiff(carriers,cr)
+        # Else do nothing, and the intermediate ancestor should be recognized as a descendant of
+        # the intermediate ancestor above him, and treated as a final descendant
+      }
+    else
+      {
+      # check if carrier is parent of a final descendant or intermediate ancestor
+      if (cr %in% union(dad.id[fdi],mom.id[fdi]))
+      {
+      	# discard him
+        carriers = setdiff(carriers,cr)
+        # If he or she does not have at least one descendant among the carriers then add one of his children to the carriers in his place and increment the meiosis reduction counter
+      if (!any(carriers %in% id[dad.id==cr | mom.id==cr]))
+        {
+        carriers = c(carriers,id[fdi][dad.id[fdi]==cr | mom.id[fdi]==cr][1])    	
+        meir = meir + 1      	
+        }
+      }
+      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
+    }
+    }
+    }
+  cat (meir,"\n")
   	    insubset = c(insubset,rep(FALSE,length(iia)))
   	    for (ian in 1:length(lev.ia[[lia]]))
   	    {
@@ -411,6 +412,8 @@ else
 		 if (meir>0) numsub = numsub * 2^meir
 		 # Multiply by two for the spouses and divide by the number of founders of the highest intermediate ancestor needed
 		 subsetkp[h] = numsub*2/Nf
+		 # set carriers vector back to initial carrier vector
+		 carriers = carriers0
   	     }
   	  subsetp[k] = sum(subsetkp)
   	  }
