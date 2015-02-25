@@ -51,7 +51,7 @@ currentnonfounders = currentfounders = character(nfd)
 active = rep(TRUE,nfd) 
 
 # Initializing the currentnonfounders vector with the final descendants or carriers at the deepest level
-currentnonfounders[dv[fdi]==md] = id[dv==md]
+currentnonfounders[dv[fdi]==md] = id[fdi][dv[fdi]==md]
 
 # Loop from highest to lowest depth
 if (md > 1)
@@ -347,7 +347,6 @@ else
     }
     }
     }
-  cat (meir,"\n")
   	    insubset = c(insubset,rep(FALSE,length(iia)))
   	    for (ian in 1:length(pl$lev.ia[[lia]]))
   	    {
