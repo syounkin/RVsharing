@@ -381,7 +381,7 @@ else
 		 for (ii in iia)
 		 {
 		 	# Here the intermediate ancestors in iancestors are in the list used in the computation for the current subset	
-		      numsub = numsub * 1/2^sum(pl$ancestorsdegreedes[[ii]][c(fd.subsets[[k]][,h],pl$iancestors[iia])],na.rm=TRUE)
+		      numsub = numsub * 1/2^sum(pl$ancestorsdegreedes[[ii]][unique(c(fd.subsets[[k]][,h],pl$iancestors[iia]))],na.rm=TRUE)
 		 }
 		 # Correction for replacing parent by his child
 		 if (meir>0) numsub = numsub * 2^meir
@@ -404,7 +404,7 @@ else
 
 # Computation of denominator
 
-# Remove children of carriers from list of final descendants if there are any
+# Remove children of carriers (except intermediate ancestors) from list of final descendants if there are any
   if (!all(carriers %in% id[pl$fdi]))
   {
   fdci = fdi
