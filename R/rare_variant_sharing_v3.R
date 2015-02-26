@@ -400,11 +400,9 @@ else
   }
   # Else there are no non-carriers, i.e. all affected subjects are carriers
   else numo = num
-}
-
-# Computation of denominator
 
 # Remove children of carriers (except intermediate ancestors) from list of final descendants if there are any
+# for computation of denominator
   if (!all(carriers %in% id[pl$fdi]))
   {
   fdci = fdi
@@ -418,6 +416,9 @@ else
       }
   pl = ped_datastruct(fdci,dv)
   }
+}
+
+# Computation of denominator
     	
 # Probability that no variant has been transmitted
 p0 = 0
@@ -427,11 +428,20 @@ for (i in 1:pl$ia)
   {
   for (j in 1:length(pl$foundersdegreedes[[i]]))
     p0 = p0 + prod((1-1/2^pl$foundersdegreedes[[i]][[j]]) + ifelse(pl$iancestor.as.descendant[[i]][[j]],(1/2^pl$foundersdegreedes[[i]][[j]])*pk,0))
+  if (i < pl$ia)
+    {
   # The previous intermediate ancestor becomes the current intermediate ancestor
   # Updates its probability, unless he is a carrier, in which case we keep it 1
   # For now, intermediate ancestors can have only one spouse, this is why we take the indicators of the first founder attached to him
-  if (i<ia & !(pl$iancestors[i]%in%carriers)) pk = prod((1-1/2^pl$ancestorsdegreedes[[i]]) + ifelse(pl$iancestor.as.descendant[[i]][[1]],1/2^pl$ancestorsdegreedes[[i]]*pk,0))
-  else pk=0
+    if (missing(carriers)) compute.pk = TRUE
+    else 
+      {
+      if (pl$iancestors[i]%in%carriers) compute.pk = FALSE 
+      else compute.pk = TRUE
+      }
+    if (compute.pk) pk = prod((1-1/2^pl$ancestorsdegreedes[[i]]) + ifelse(pl$iancestor.as.descendant[[i]][[1]],1/2^pl$ancestorsdegreedes[[i]]*pk,0))
+    else pk=0
+    }
   }
 # At the end, add the probability from the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
 # Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
