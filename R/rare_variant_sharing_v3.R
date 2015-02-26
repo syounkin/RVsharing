@@ -318,7 +318,8 @@ else
   meir = 0
   for (cr in carriers)
     {
-    if (!(cr %in% fd.subsets[[k]][,h]))
+    # Check that the current carrier is a final descendant or intermediate ancestor in the current subset sharing a RV
+    if (!(cr %in% intersect(fd.subsets[[k]][,h],id[pl$fdi])))
     {
     # check if carrier is intermediate ancestor (other than the last)
     if (cr %in% pl$iancestors[-ia])
