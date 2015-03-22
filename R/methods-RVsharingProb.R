@@ -65,5 +65,5 @@ kmat
 
 setMethod("show", signature(object="RVsharingProb"), function(object)
 {
-cat("Probability subjects",object@carriers,"among",union(carriers,setdiff(names(object@desfounders),object@iancestors)),"share a rare variant: ",object@pshare,"\n")
+cat("Probability subjects",object@carriers,"among",union(object@carriers,setdiff(names(object@desfounders),object@iancestors)),"share a rare variant: ",object@pshare,"\n")
 })
