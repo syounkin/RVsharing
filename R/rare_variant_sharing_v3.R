@@ -209,7 +209,7 @@ else
       iancestor.as.descendant[[ia]] = list(id[fdi[active]][currentfounders==spousevec[1]] %in% lev.ia[[lia-1]])
     else iancestor.as.descendant[[ia]] = list(rep(FALSE,length(foundersdegreedes[[ia]][[1]])))
     # Add additional spouses if any
-    # Warning! This is going to work only if all previous intermediate descendents are under the same spouse
+    # Warning! This is going to work only if all previous intermediate ancestors are under the same spouse
     if(length(spousevec)>1)
       {
       for (i in 2:length(spousevec))
@@ -376,7 +376,11 @@ else
 		 if (!done) iia = c(iia,i)
 		 }
 		 # Else there is only one intermediate ancestor
-		 else iia = 1
+		 else 
+		 {
+		 	done = FALSE
+		 	iia = 1
+		 }
 		 
 		 # Compute probability of subset
 		 numsub = 1
@@ -387,8 +391,10 @@ else
 		 }
 		 # Correction for replacing parent by his child
 		 if (meir>0) numsub = numsub * 2^meir
-		 # Multiply by two for the spouses and divide by the number of founders of the highest intermediate ancestor needed
-		 subsetkp[h] = numsub*2/Nf
+		 # If there is only one spouse, then a couple of founders can transmit a variant to all final descendents
+		 if (done | length(pl$spousevec)==1) numsub = 2*numsub
+		 # Divide by the number of founders of the highest intermediate ancestor needed
+		 subsetkp[h] = numsub/Nf
 		 # set carriers vector back to initial carrier vector
 		 carriers = carriers0
   	     }
@@ -446,18 +452,17 @@ for (i in 1:pl$ia)
     }
   }
 # At the end, add the probability from the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
-# Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
-# The summation returns in fact the value of that single non-zero term
+# Since only one of his spouses can be the parent of the previous intermediate ancestor, ifelse returns only one non-zero term.
   # Debugging code
   # print (foundersdegreedes[[i]])
   # print (ancestorsdegreedes[[i]])
   # print (iancestor.as.descendant[[i]])
   # print (p0)
-  # print (sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk))
-# p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
-# This remains to be tested with >1 spouse
-  tmpf = as.matrix(sapply(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=pl$ancestorsdegreedes[[i]],pk=pk))  
-  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + apply(tmpf,1,sum))
+  tmpf = ifelse(unlist(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)]), (1/2^pl$ancestorsdegreedes[[i]]) * pk,0)
+  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + tmpf)
+
+#  tmpf = as.list(sapply(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=pl$ancestorsdegreedes[[i]],pk=pk))  
+#  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + sapply(tmpf,sum))
     # Debugging code
     # print (p0)
     
