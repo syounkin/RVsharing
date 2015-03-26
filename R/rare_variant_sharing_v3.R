@@ -237,9 +237,9 @@ else
       # Adding the current founder couple ancestral to each final descendants to his list of founders
       # This is not required for the sharing probability computation, but is used for kinship estimation
     # print(currentfounders)
+      j = 1
     for (i in (1:nfd)[active])
       {
-      j = 1
       # If there are at least i elements in desfounders
       if (length(desfounders)>=i)
         {
