@@ -389,6 +389,9 @@ else
 		 	# Here the intermediate ancestors in iancestors are in the list used in the computation for the current subset	
 		      numsub = numsub * 1/2^sum(pl$ancestorsdegreedes[[ii]][unique(c(fd.subsets[[k]][,h],pl$iancestors[iia]))],na.rm=TRUE)
 		 }
+		 # If all members of the current subset have the same ancestor among the spouses of the final iancestor, then
+		 # done is set to true to count transmissions from that ancestor in addition to those from the final iancestor
+		 if (length(unique(sapply(pl$desfounders[fd.subsets[[k]][,h]],function (vec) names(vec)[length(vec)-1])))==1) done = TRUE
 		 # Correction for replacing parent by his child
 		 if (meir>0) numsub = numsub * 2^meir
 		 # If there is only one spouse, then a couple of founders can transmit a variant to all final descendents
