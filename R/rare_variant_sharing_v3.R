@@ -272,7 +272,10 @@ for (i in 1:pl$ia)
 if (length(pl$spousevec)==1) num = num*2
 # Division by the number of founders
 num = num/Nf
- 
+
+# Initialisation of counter of removed subjects
+ncremoved = 0
+
 if (missing(carriers))
 numo = num
 else
@@ -440,7 +443,6 @@ else
 
 # Remove children of carriers (except intermediate ancestors) from list of final descendants if there are any
 # for computation of denominator
-ncremoved = 0
   if (!all(carriers %in% id[pl$fdi]))
   {
   fdci = fdi
