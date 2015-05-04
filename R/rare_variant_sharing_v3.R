@@ -326,7 +326,7 @@ else
 		    if (!(cr %in% intersect(fd.subsets[[k]][,h],id[pl$fdi])))
 		    {
 		    # check if carrier is intermediate ancestor (other than the last)
-		    if (cr %in% pl$iancestors[-ia])
+		    if (cr %in% pl$iancestors[-pl$ia])
 		      {
 		      	# If he has at least one descendant in the current subset sharing a RV then discard him
 		      if (any(fd.subsets[[k]][,h] %in% names(pl$ancestorsdegreedes[[which(pl$iancestors==cr)]])))
