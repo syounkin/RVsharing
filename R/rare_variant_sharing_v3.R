@@ -209,7 +209,7 @@ else
       iancestor.as.descendant[[ia]] = list(id[fdi[active]][currentfounders==spousevec[1]] %in% lev.ia[[lia-1]])
     else iancestor.as.descendant[[ia]] = list(rep(FALSE,length(foundersdegreedes[[ia]][[1]])))
     # Add additional spouses if any
-    # Warning! This is going to work only if all previous intermediate descendents are under the same spouse
+    # Warning! This is going to work only if all previous intermediate ancestors are under the same spouse
     if(length(spousevec)>1)
       {
       for (i in 2:length(spousevec))
@@ -237,9 +237,9 @@ else
       # Adding the current founder couple ancestral to each final descendants to his list of founders
       # This is not required for the sharing probability computation, but is used for kinship estimation
     # print(currentfounders)
+      j = 1
     for (i in (1:nfd)[active])
       {
-      j = 1
       # If there are at least i elements in desfounders
       if (length(desfounders)>=i)
         {
@@ -258,7 +258,8 @@ else
       names(desfounders)[i] = id[fdi][i]
       j = j+1
       }
-      list(fdi=fdi,ia=ia,lev.ia=lev.ia,iancestors=iancestors,iancestor.as.descendant=iancestor.as.descendant,desfounders=desfounders,foundersdegreedes=foundersdegreedes,ancestorsdegreedes=ancestorsdegreedes,spousevec=spousevec)
+# fdi in ouput contains indices of intermediate ancestors in addition to final descendants 
+list(fdi=fdi,ia=ia,lev.ia=lev.ia,iancestors=iancestors,iancestor.as.descendant=iancestor.as.descendant,desfounders=desfounders,foundersdegreedes=foundersdegreedes,ancestorsdegreedes=ancestorsdegreedes,spousevec=spousevec)
 }
 
 pl = ped_datastruct(fdi,dv)
@@ -271,7 +272,10 @@ for (i in 1:pl$ia)
 if (length(pl$spousevec)==1) num = num*2
 # Division by the number of founders
 num = num/Nf
- 
+
+# Initialisation of counter of removed subjects
+ncremoved = 0
+
 if (missing(carriers))
 numo = num
 else
@@ -293,7 +297,7 @@ else
   for (k in 1:length(fd.subsets))	
     {
     sn = nrow(fd.subsets[[k]])
-    # If there is only one final descendant in the subset, then the probability he is a carrier is 1/Nf
+    # If there is only one final descendant or carrier in the subset, then the probability he is a carrier is 1/Nf
     if (sn == 1) subsetp[k] = 1/Nf
     else
     {
@@ -301,6 +305,8 @@ else
     subsetkp = numeric(nsubs)
   	for (h in 1:nsubs)
   	  {
+  	  # Initialize meiosis reduction counter
+      meir = 0
   	  # If there is more than one intermediate ancestor
   	  if (pl$ia>1)
   	    {
@@ -314,40 +320,38 @@ else
   	    # At first iteration, iia is length 0, so no iancestor gets added
   	    fdsi = c(fd.subsets[[k]][,h],pl$iancestors[iia])
   	    
-  	    # Initialize meiosis reduction counter
-  meir = 0
-  for (cr in carriers)
-    {
-    # Check that the current carrier is a final descendant or intermediate ancestor in the current subset sharing a RV
-    if (!(cr %in% intersect(fd.subsets[[k]][,h],id[pl$fdi])))
-    {
-    # check if carrier is intermediate ancestor (other than the last)
-    if (cr %in% pl$iancestors[-ia])
-      {
-      	# If he has at least one descendant in the subset then discard him
-      if (any(carriers %in% names(pl$ancestorsdegreedes[[which(pl$iancestors==cr)]])))
-        carriers = setdiff(carriers,cr)
-        # Else do nothing, and the intermediate ancestor should be recognized as a descendant of
-        # the intermediate ancestor above him, and treated as a final descendant
-      }
-    else
-      {
-      # check if carrier is parent of a final descendant or intermediate ancestor
-      if (cr %in% union(dad.id[fdi],mom.id[fdi]))
-      {
-      	# discard him
-        carriers = setdiff(carriers,cr)
-        # If he or she does not have at least one descendant among the carriers then add one of his children to the carriers in his place and increment the meiosis reduction counter
-      if (!any(carriers %in% id[dad.id==cr | mom.id==cr]))
-        {
-        carriers = c(carriers,id[fdi][dad.id[fdi]==cr | mom.id[fdi]==cr][1])    	
-        meir = meir + 1      	
-        }
-      }
-      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
-    }
-    }
-    }
+		  for (cr in carriers)
+		    {
+		    # Check that the current carrier is a final descendant or intermediate ancestor in the current subset sharing a RV
+		    if (!(cr %in% intersect(fd.subsets[[k]][,h],id[pl$fdi])))
+		    {
+		    # check if carrier is intermediate ancestor (other than the last)
+		    if (cr %in% pl$iancestors[-pl$ia])
+		      {
+		      	# If he has at least one descendant in the current subset sharing a RV then discard him
+		      if (any(fd.subsets[[k]][,h] %in% names(pl$ancestorsdegreedes[[which(pl$iancestors==cr)]])))
+		        carriers = setdiff(carriers,cr)
+		        # Else do nothing, and the intermediate ancestor should be recognized as a descendant of
+		        # the intermediate ancestor above him, and treated as a final descendant
+		      }
+		    else
+		      {
+		      # check if carrier is parent of a final descendant or intermediate ancestor
+		      if (cr %in% union(dad.id[pl$fdi],mom.id[pl$fdi]))
+		      {
+		      	# discard him
+		        carriers = setdiff(carriers,cr)
+		        # If he or she does not have at least one child among the current subset sharing a RV then add one of his children to the carriers in his place and increment the meiosis reduction counter
+		      if (!any(fd.subsets[[k]][,h] %in% id[dad.id==cr | mom.id==cr]))
+		        {
+		        carriers = c(carriers,id[pl$fdi][dad.id[pl$fdi]==cr | mom.id[pl$fdi]==cr][1])    	
+		        meir = meir + 1      	
+		        }
+		      }
+		      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
+		    }
+		  }
+		}
   	    insubset = c(insubset,rep(FALSE,length(iia)))
   	    for (ian in 1:length(pl$lev.ia[[lia]]))
   	    {
@@ -375,19 +379,54 @@ else
          # then add the last intermediate ancestor at level 0         
 		 if (!done) iia = c(iia,i)
 		 }
-		 else iia = 1
+		 # Else there is only one intermediate ancestor
+		 else 
+		 {
+		 	done = FALSE
+		 	iia = 1
+		    for (cr in carriers)
+		      {
+		      # Check that the current carrier is a final descendant in the current subset sharing a RV
+		      if (!(cr %in% intersect(fd.subsets[[k]][,h],id[fdi])))
+		      {
+		      # check if carrier is parent of a final descendant
+		      if (cr %in% union(dad.id[fdi],mom.id[fdi]))
+		      {
+		      	# discard him
+		        carriers = setdiff(carriers,cr)
+		        # If he or she does not have at least one child among the current subset sharing a RV then add one of his children to the carriers in his place and increment the meiosis reduction counter
+		      if (!any(fd.subsets[[k]][,h] %in% id[dad.id==cr | mom.id==cr]))
+		        {
+		        carriers = c(carriers,id[fdi][dad.id[fdi]==cr | mom.id[fdi]==cr][1])    	
+		        meir = meir + 1      	
+		        }
+		      }
+		      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
+		      }
+		    }	
+		 }
 		 
 		 # Compute probability of subset
 		 numsub = 1
+		 # Correction for replacing parent by his child
+		 if (meir>0) 
+		 { 
+		 	numsub = numsub * 2^meir
+		 	# Substitution of carriers in the current subset
+		 	fd.subsets[[k]][1:length(carriers),h] = carriers
+		 }
 		 for (ii in iia)
 		 {
 		 	# Here the intermediate ancestors in iancestors are in the list used in the computation for the current subset	
 		      numsub = numsub * 1/2^sum(pl$ancestorsdegreedes[[ii]][unique(c(fd.subsets[[k]][,h],pl$iancestors[iia]))],na.rm=TRUE)
 		 }
-		 # Correction for replacing parent by his child
-		 if (meir>0) numsub = numsub * 2^meir
-		 # Multiply by two for the spouses and divide by the number of founders of the highest intermediate ancestor needed
-		 subsetkp[h] = numsub*2/Nf
+		 # If all members of the current subset have the same ancestor among the spouses of the final iancestor, then
+		 # done is set to true to count transmissions from that ancestor in addition to those from the final iancestor
+		 if (length(unique(sapply(pl$desfounders[intersect(fd.subsets[[k]][,h],as.character(id[fdi]))],function (vec) names(vec)[length(vec)-1])))==1) done = TRUE
+		 # If there is only one spouse, then a couple of founders can transmit a variant to all final descendents
+		 if (done | length(pl$spousevec)==1) numsub = 2*numsub
+		 # Divide by the number of founders of the highest intermediate ancestor needed
+		 subsetkp[h] = numsub/Nf
 		 # set carriers vector back to initial carrier vector
 		 carriers = carriers0
   	     }
@@ -410,10 +449,13 @@ else
   for (cr in carriers)
     if (cr %in% union(dad.id[fdi],mom.id[fdi]) & !(cr %in% pl$iancestors))
       {
-      	# Remove children of carriers from list of final descendants
+      	# Remove child of carriers from list of final descendants 
+      	# (he can only have one, otherwise he would be intermediate ancestor)
       	fdci = setdiff(fdci,which(dad.id==cr | mom.id==cr))
     	# Add carrier to list of final descendants
     	fdci = c(fdci,which(id==cr))
+    	# increment number of children removed
+    	ncremoved = ncremoved + 1
       }
   pl = ped_datastruct(fdci,dv)
   }
@@ -445,18 +487,19 @@ for (i in 1:pl$ia)
     }
   }
 # At the end, add the probability from the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
-# Since only one of his spouses can be the parent of the previous intermediate ancestor, sapply returns only one non-zero term.
-# The summation returns in fact the value of that single non-zero term
+# Since only one of his spouses can be the parent of the previous intermediate ancestor, ifelse returns only one non-zero term.
   # Debugging code
   # print (foundersdegreedes[[i]])
   # print (ancestorsdegreedes[[i]])
   # print (iancestor.as.descendant[[i]])
   # print (p0)
-  # print (sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk))
-# p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + sum(sapply(iancestor.as.descendant[[i]][1:length(spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=ancestorsdegreedes[[i]],pk=pk)))
-# This remains to be tested with >1 spouse
-  tmpf = as.matrix(sapply(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=pl$ancestorsdegreedes[[i]],pk=pk))  
-  p0 = p0 + prod((1-1/2^ancestorsdegreedes[[i]]) + apply(tmpf,1,sum))
+  tmpf = ifelse(unlist(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)]), (1/2^pl$ancestorsdegreedes[[i]]) * pk,0)
+  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + tmpf)
+
+#  tmpf = as.list(sapply(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=pl$ancestorsdegreedes[[i]],pk=pk))  
+#  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + sapply(tmpf,sum))
+  # If children have been removed, add the probability that their other parent did not transmit them the RV
+  p0 = p0 +  (1/2)*ncremoved
     # Debugging code
     # print (p0)
     
@@ -465,7 +508,7 @@ for (i in 1:pl$ia)
   
 if (missing(carriers)) carrier.vec = as.character(id[fdi])
 else carrier.vec=as.character(carriers0)
-new("RVsharingProb",pshare=pshare,iancestors=iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=carrier.vec)
+new("RVsharingProb",pshare=pshare,iancestors=pl$iancestors,desfounders=pl$desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=carrier.vec)
 }
 
 # Wrappers for pedigree object
