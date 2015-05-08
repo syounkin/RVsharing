@@ -6,7 +6,8 @@
 Estimates the probability that all subjects in a subset of pedigree members share a rare variant given that it occured in any of them by performing a Monte Carlo simulation of the transmission of the genotypes of the variant from the founders down the pedigree.
 }
 \usage{
-GeneDropSim.fn(trio.list, id, dt.vec, fd.indices, carriers=dt.vec, n = 1e3, k = 10, nf = 1)
+GeneDropSim.fn(trio.list, id, dt.vec, fd.indices, carriers=dt.vec, n = 1e3,
+ k = 10, nf = 1)
 }
 \arguments{
   \item{trio.list}{a list of trio objects encoding the pedigree structure. }
