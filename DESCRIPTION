@@ -1,14 +1,14 @@
 Package: RVsharing
 Type: Package
 Title: RVsharing
-Version: 1.3.2
-Date: Fri 8 May 2015
+Version: 1.3.1
+Date: Thu 2 Apr 2015
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
 License: GPL-2
-Depends: R (>= 2.15.2)
-Imports: utils, methods, kinship2
+Depends: R (>= 2.15.2), utils, methods, kinship2
+Imports: 
 Suggests:
 Enhances:
 Collate: AllGenerics.R
