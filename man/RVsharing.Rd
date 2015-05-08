@@ -1,15 +1,18 @@
 \name{RVsharing}
 \alias{RVsharing}
-\alias{RVsharing,pedigree,missing,missing-method}
-\alias{RVsharing,character,character,character-method}
-\alias{RVsharing,numeric,numeric,numeric-method}
+\alias{RVsharing,pedigree,missing,missing,character-method}
+\alias{RVsharing,pedigree,missing,missing,missing-method}
+\alias{RVsharing,character,character,character,character-method}
+\alias{RVsharing,character,character,character,missing-method}
+\alias{RVsharing,numeric,numeric,numeric,numeric-method}
+\alias{RVsharing,numeric,numeric,numeric,missing-method}
 \title{Probability of sharing a rare variant among relatives}
 \description{
 Computing probability that a rare variant is shared by a set of subjects
 in a pedigree using equation (1) of Bureau et al. and a generalization to a subset of subjects.
 }
 \usage{
-RVsharing(data, dad.id, mom.id, carriers=NULL)
+RVsharing(data, dad.id, mom.id, carriers)
 }
 \arguments{
   \item{data}{a \code{pedigree} object or character/numeric vector of
