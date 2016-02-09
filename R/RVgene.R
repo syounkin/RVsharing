@@ -20,13 +20,26 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 	
 	if (missing(fams))
 	{
-		fams.vec = sites.alongfams = minor.allele.alongfams = NULL
-		for (i in 1:length(sites))
+		fams.vec = sites.alongfams = NULL
+		if (type=="alleles") 
 		{
-		fams.site = unique(ped.mat[ped.mat[,6]==2 & (ped.mat[,5+2*sites[i]]==minor.allele.vec[i] | ped.mat[,6+2*sites[i]]==minor.allele.vec[i]),1])
-		fams.vec = c(fams.vec,fams.site)
-		sites.alongfams = c(sites.alongfams,rep(sites[i],length(fams.site)))
-		if (type=="alleles") minor.allele.alongfams = c(minor.allele.alongfams,rep(minor.allele.vec[i],length(fams.site)))
+			minor.allele.alongfams = NULL
+			for (i in 1:length(sites))
+			{
+			fams.site = unique(ped.mat[ped.mat[,6]==2 & (ped.mat[,5+2*sites[i]]==minor.allele.vec[i] | ped.mat[,6+2*sites[i]]==minor.allele.vec[i]),1])
+			fams.vec = c(fams.vec,fams.site)
+			sites.alongfams = c(sites.alongfams,rep(sites[i],length(fams.site)))
+			minor.allele.alongfams = c(minor.allele.alongfams,rep(minor.allele.vec[i],length(fams.site)))
+			}
+		}
+		else
+		{
+			for (i in 1:length(sites))
+			{
+			fams.site = unique(ped.mat[ped.mat[,6]==2 & ped.mat[,6+sites[i]]>0,1])
+			fams.vec = c(fams.vec,fams.site)
+			sites.alongfams = c(sites.alongfams,rep(sites[i],length(fams.site)))			
+			}
 		}
 	}
 	else 
