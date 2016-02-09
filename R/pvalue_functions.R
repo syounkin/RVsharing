@@ -13,8 +13,8 @@ get.psubset = function(vec,not,pshare.data)
 	# If all families share the variant, then return 1
 	if (length(not)==length(vec)) return (1)
 		
-p.vec = pshare.data$pshare[pshare$ped.tocompute.vec%in%vec]
-names(p.vec) = pshare.data$ped.tocompute.vec[pshare$ped.tocompute.vec%in%vec]
+p.vec = pshare.data$pshare[pshare.data$ped.tocompute.vec%in%vec]
+names(p.vec) = pshare.data$ped.tocompute.vec[pshare.data$ped.tocompute.vec%in%vec]
 nf = length(p.vec)
 nnot = sum(names(p.vec)%in%not)
 
