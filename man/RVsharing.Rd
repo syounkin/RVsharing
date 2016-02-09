@@ -26,7 +26,7 @@ RVsharing(data, dad.id, mom.id, carriers)
   \details{
 
     The function \code{RVsharing} computes the probability that all subjects identified as carriers of a rare variant in the vector \code{carriers} (or all final
-descendants in the pedigree if \code{carriers = NULL}) share that rare variant given that the rare
+descendants in the pedigree if \code{carriers = NULL}) share that rare variant AND the final descendants not included in \code{carriers} do not carry it, given that the rare
 variant has been detected in any subject in the union of the carriers and the final descendants of the pedigree. A final descendant is defined as a subject without descendant in the pedigree, it it not necessarily in the youngest generation. Multiple mariages can only involve one of the top
 founders. Branching individuals (intermediate ancestors) can have only one spouse. Other restrictions remain on the pedigree structure; the function will exit with an error message if such restriction is violated. All final
 descendants must share a common ancestor or couple of ancestors, otherwise an erroneous response may be obtained. 
