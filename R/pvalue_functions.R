@@ -7,9 +7,15 @@ get.psubset = function(vec,not,pshare.data)
 	#    pshare : vector of RV sharing probabilities
 	#    ped.tocompute.vec : vector of names of the families whose sharing probability is contained in pshare. 
 	#						 The names in the arguments "vec" and "not" must be found in ped.tocompute.vec.
-	
-	# check: "not" contains at least one family and not all families
+
+	# check: "not" contains at least one family 
 	if (length(not)==0) stop ("Vector 'not' of families not sharing the RV is empty.")
+    # check: all families in not are also in vec
+    if (!all(not%in%vec)) stop("Vector 'not' contains families not in 'vec'")
+    
+    # check: all families in vec are also in pshare.data$ped.tocompute.vec
+    if (!all(vec%in%pshare.data$ped.tocompute.vec)) stop("Vector 'vec' contains families not in 'pshare.data$ped.tocompute.vec'")
+        	
 	# If all families share the variant, then return 1
 	if (length(not)==length(vec)) return (1)
 		
