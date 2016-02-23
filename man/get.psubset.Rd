@@ -11,10 +11,12 @@ get.psubset(vec,not,pshare.data)
   \item{vec}{a vector of names of all families where a variant is seen.}
   \item{not}{a vector of names of families where not all affected subjects share the rare variant (RV). }
   \item{pshare.data}{a data frame with at least the two following columns:
-	    \code{pshare} : vector of RV sharing probabilities;
-	    \code{ped.tocompute.vec} : vector of names of the families whose sharing probability is contained in pshare. 
+  	  \itemize{
+    	\item \code{pshare} : vector of RV sharing probabilities;
+	    \item \code{ped.tocompute.vec} : vector of names of the families whose sharing probability is contained in pshare. 
 							 The names in the arguments \code{vec} and \code{not} must be found in \code{ped.tocompute.vec}.}
 		}
+	}
 \value{
 P-value of the exact rare variant sharing test requiring sharing by all affected subjects.
 	  }
