@@ -31,7 +31,9 @@ Bureau, A., Younkin, S., Parker, M.M., Bailey-Wilson, J.E., Marazita, M.L., Murr
 \examples{
 data(ped.list)
 # Setting up pshare.data data frame
-pshare.data=data.frame(pshare=sapply(ped.list[1:39],function(ped) RVsharing(ped)@pshare),ped.tocompute.vec=sapply(ped.list[1:39],function(ped) ped$famid[1]))
+pshare.data=data.frame(pshare=sapply(ped.list[1:39],function(ped) 
+RVsharing(ped)@pshare),ped.tocompute.vec=sapply(ped.list[1:39],function(ped) ped$famid[1]))
+
 vec = c("15008","15053","15157")
 get.psubset(vec,not="15008",pshare.data)
 get.psubset(vec,not=c("15008","15053"),pshare.data)

@@ -5,10 +5,11 @@
 \description{
 Computing probability of sharing of rare variants in a family sample within a genomic region such as a gene.}
 \usage{
-RVgene(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,N.list,type="alleles",minor.allele.vec,precomputed.prob=list(0))
+RVgene(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,N.list,
+type="alleles",minor.allele.vec,precomputed.prob=list(0))
 }
 \arguments{
-  \item{ped.mat}{a data.frame or matrix encoding the pedigree information and genotype data in the standard LINKAGE ped format (see PLINK web site [1]). In fact, only the family ID in the first column, the subject ID in the second column, the affection status in the sixth column and the genotype data starting in the seventh column are used (columns 3 to 5 are ignored). Also, family members without genotype data do not need to appear in this matrix. The genotype of each variant can be coded in two ways, each corresponding to a different value of the \code{type} option: a minor allele count on one column, as returned for example by the \code{\link{genotypeToSnpMatrix}} function (\code{type}="count") or the identity of the two alleles on two consecutive columns (\code{type}="alleles").}
+  \item{ped.mat}{a data.frame or matrix encoding the pedigree information and genotype data in the standard LINKAGE ped format (see PLINK web site [1]). In fact, only the family ID in the first column, the subject ID in the second column, the affection status in the sixth column and the genotype data starting in the seventh column are used (columns 3 to 5 are ignored). Also, family members without genotype data do not need to appear in this matrix. The genotype of each variant can be coded in two ways, each corresponding to a different value of the \code{type} option: a minor allele count on one column, as returned for example by the \code{genotypeToSnpMatrix} function (\code{type}="count") or the identity of the two alleles on two consecutive columns (\code{type}="alleles").}
   \item{ped.listfams}{a list of \code{pedigree} objects, one object for each pedigree in \code{ped.mat}. }
   \item{sites}{a vector of the column indices of the variant sites to test in \code{ped.mat}. If the argument \code{fams} is provided, the variant sites are tested in each corresponding family in the \code{fams} vector (a variant present in multiple families must then be repeated for every families where it appears).}
   \item{fams}{ an optional character vector of the names of families in \code{ped.mat} and \code{ped.listfams} carrying the variants listed in the corresponding position in \code{sites}. If missing, the names of the families carrying the minor allele at each position in \code{sites} are extracted from \code{ped.mat}.}
@@ -70,6 +71,7 @@ names(ex.ped.obj) = c("15157","28003")
 sites = c(92,119)
 minor.allele.vec=c(1,4)
 
-RVgene(ex.ped.mat,ex.ped.obj,sites,pattern.prob.list=ex.pattern.prob.list,nequiv.list=ex.nequiv.list,N.list=ex.N.list,minor.allele.vec=minor.allele.vec)
+RVgene(ex.ped.mat,ex.ped.obj,sites,pattern.prob.list=ex.pattern.prob.list,
+nequiv.list=ex.nequiv.list,N.list=ex.N.list,minor.allele.vec=minor.allele.vec)
 }
 \author{Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>}
