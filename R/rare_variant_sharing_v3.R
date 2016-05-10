@@ -204,7 +204,7 @@ else
     # Include first spouse in list of ancestors
     spousevec = unique(currentfounders)
     foundersdegreedes[[ia]]= list(degvec[active][currentfounders==spousevec[1]])
-    # Setting indicator of whether the descendant is the previous intermediate ancestor
+    # Setting indicator of whether the descendant is one of the intermediate ancestors at the previous level
     if (ia>1)
       iancestor.as.descendant[[ia]] = list(id[fdi[active]][currentfounders==spousevec[1]] %in% lev.ia[[lia-1]])
     else iancestor.as.descendant[[ia]] = list(rep(FALSE,length(foundersdegreedes[[ia]][[1]])))
@@ -482,12 +482,13 @@ for (i in 1:pl$ia)
       if (pl$iancestors[i]%in%carriers) compute.pk = FALSE 
       else compute.pk = TRUE
       }
+      # Here we assume a single intermediate ancestor at the previous level
     if (compute.pk) pk = prod((1-1/2^pl$ancestorsdegreedes[[i]]) + ifelse(pl$iancestor.as.descendant[[i]][[1]],1/2^pl$ancestorsdegreedes[[i]]*pk,0))
     else pk=0
     }
   }
 # At the end, add the probability from the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
-# Since only one of his spouses can be the parent of the previous intermediate ancestor, ifelse returns only one non-zero term.
+# but only one of his spouses can be the parent of the previous intermediate ancestors.
   # Debugging code
   # print (foundersdegreedes[[i]])
   # print (ancestorsdegreedes[[i]])
@@ -496,8 +497,6 @@ for (i in 1:pl$ia)
   tmpf = ifelse(unlist(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)]), (1/2^pl$ancestorsdegreedes[[i]]) * pk,0)
   p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + tmpf)
 
-#  tmpf = as.list(sapply(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=pl$ancestorsdegreedes[[i]],pk=pk))  
-#  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + sapply(tmpf,sum))
   # If children have been removed, add the probability that their other parent did not transmit them the RV
   p0 = p0 +  (1/2)*ncremoved
     # Debugging code
