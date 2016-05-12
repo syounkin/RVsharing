@@ -36,7 +36,7 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 		{
 			for (i in 1:length(sites))
 			{
-			fams.site = unique(ped.mat[ped.mat[,6]==2 & ped.mat[,6+sites[i]]>0,1])
+			fams.site = unique(ped.mat[ped.mat[,6]==2 & !is.na(ped.mat[,6+sites[i]]),1])
 			fams.vec = c(fams.vec,fams.site)
 			sites.alongfams = c(sites.alongfams,rep(sites[i],length(fams.site)))			
 			}
@@ -66,7 +66,7 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 	{
 		# get carriers list
 		if (type=="alleles")
-		  carriers = extract_carriers(ped.mat,sites.alongfams[f],fams.vec[f],type=type,minor.allele.alongfams[f])
+		  carriers = extract_carriers(ped.mat,sites.alongfams[f],fams.vec[f],type="alleles",minor.allele.alongfams[f])
 		else carriers = extract_carriers(ped.mat,sites.alongfams[f],fams.vec[f],type=type)
 				
 		# Computation of RV sharing probability
