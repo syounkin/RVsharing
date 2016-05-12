@@ -1,8 +1,8 @@
 Package: RVsharing
 Type: Package
 Title: Probability of Sharing Rare Variants among Relatives
-Version: 1.4.0
-Date: 2016-02-23
+Version: 1.5.0
+Date: 2016-05-13
 Author: Alexandre Bureau, Ingo Ruczinski, Samuel G. Younkin
 Maintainer: Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 Description: Computes estimates of the probability of related individuals sharing a rare variant.
