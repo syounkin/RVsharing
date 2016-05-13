@@ -20,7 +20,7 @@ Collate: AllGenerics.R
 	 approx2_functions.R		  
 	 ped2trio.R
 	 PFU.R
-	 rare_variant_sharing_v3.R
+	 RVsharing.fn.R
 	 extract_carriers.R
 	 pvalue_functions.R
 	 RVgene.R
