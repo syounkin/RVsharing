@@ -31,7 +31,7 @@ md = max(dv)
 desfounders = list()
 # List of list of final descendants and intermediate ancestors below each founder below each ancestor
 foundersdegreedes = list()
-# List of indicators of whether each descendant of a founder is an intermediate ancestor
+# List of each descendant of a founder who is an intermediate ancestor (others are NAs)
 iancestor.as.descendant = list()
 # List of intermediate ancestors
 iancestors = character(0)
@@ -94,11 +94,12 @@ for (lev in (md-1):1)
     # Setting indicator of whether the descendant is the previous intermediate ancestor
     if (ia>1)
       {
-      if (length(lev.ia[[lia-1]])>1) stop ("More than one subject at level ",lev," with two or more descendants (intermediate ancestors).")
-      iancestor.as.descendant[[i]] = list(id[fdi][currentnonfounders==iancestors[i]&active] == iancestors[ia-1])
+#      if (length(lev.ia[[lia-1]])>1) stop ("More than one subject at level ",lev," with two or more descendants (intermediate ancestors).")
+#      iancestor.as.descendant[[i]] = list(id[fdi][currentnonfounders==iancestors[i]&active] == iancestors[ia-1])
+	   iancestor.as.descendant[[i]] = list(ifelse(id[fdi][currentnonfounders==iancestors[i]&active] %in% lev.ia[[lia-1]],id[fdi][currentnonfounders==iancestors[i]&active],NA))
       # Recording number of founders below intermediate ancestor
       }
-    else iancestor.as.descendant[[i]] = list(rep(FALSE,length(foundersdegreedes[[i]][[1]])))
+    else iancestor.as.descendant[[i]] = list(rep(NA,length(foundersdegreedes[[i]][[1]])))
     # Include previous ancestors of final descendants if any
     if (any(names(desfounders) %in% id[fdi][currentnonfounders==iancestors[i]&active]))
       {
@@ -109,14 +110,16 @@ for (lev in (md-1):1)
       for (k in 1:length(tmp))
         {
         foundersdegreedes[[i]][(ii+1):(ii+length(tmp[[k]]))] = tmp[[k]]
-        # Setting indicator of whether the descendant of all ancestors in tmp[[k]] is the previous intermediate ancestor
-        iancestor.as.descendant[[i]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, names(tmp)[k] == iancestors[ia-1], FALSE))
+        # Recording whether the descendant of all ancestors in tmp[[k]] is the previous intermediate ancestor
+ 		if (ia>1)
+        iancestor.as.descendant[[i]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse(names(tmp)[k] %in% lev.ia[[lia-1]],names(tmp)[k], NA))
+        else iancestor.as.descendant[[i]][(ii+1):(ii+length(tmp[[k]]))] = NA
         ii = ii + length(tmp[[k]])
         # Adding spouse of intermediate ancestor to list of founders of current final descendant
         
         }
       }
-      iancestors.Nf[i] = ifelse(any(unlist(iancestor.as.descendant[[i]])),iancestors.Nf[ia-1],0) + length(iancestor.as.descendant[[i]])
+      iancestors.Nf[i] = ifelse(any(!is.na(unlist(iancestor.as.descendant[[i]]))),iancestors.Nf[ia-1],0) + length(iancestor.as.descendant[[i]])
       }
     }
   # Adding the current founder ancestral to each final descendants to his list of founders
@@ -204,10 +207,10 @@ else
     # Include first spouse in list of ancestors
     spousevec = unique(currentfounders)
     foundersdegreedes[[ia]]= list(degvec[active][currentfounders==spousevec[1]])
-    # Setting indicator of whether the descendant is the previous intermediate ancestor
+    # Setting indicator of whether the descendant is one of the intermediate ancestors at the previous level
     if (ia>1)
-      iancestor.as.descendant[[ia]] = list(id[fdi[active]][currentfounders==spousevec[1]] %in% lev.ia[[lia-1]])
-    else iancestor.as.descendant[[ia]] = list(rep(FALSE,length(foundersdegreedes[[ia]][[1]])))
+      iancestor.as.descendant[[ia]] = list(ifelse(id[fdi[active]][currentfounders==spousevec[1]] %in% lev.ia[[lia-1]],id[fdi[active]][currentfounders==spousevec[1]],NA))
+    else iancestor.as.descendant[[ia]] = list(rep(NA,length(foundersdegreedes[[ia]][[1]])))
     # Add additional spouses if any
     # Warning! This is going to work only if all previous intermediate ancestors are under the same spouse
     if(length(spousevec)>1)
@@ -216,8 +219,8 @@ else
         {
         foundersdegreedes[[ia]][[i]] = degvec[active][currentfounders==spousevec[i]]
         if (ia>1)
-          iancestor.as.descendant[[ia]][[i]] = id[fdi[active]][currentfounders==spousevec[i]] %in% lev.ia[[lia-1]]
-        else iancestor.as.descendant[[ia]][[i]] = rep(FALSE,length(foundersdegreedes[[ia]][[i]]))
+          iancestor.as.descendant[[ia]][[i]] = ifelse(id[fdi[active]][currentfounders==spousevec[i]] %in% lev.ia[[lia-1]], id[fdi[active]][currentfounders==spousevec[i]], NA)
+        else iancestor.as.descendant[[ia]][[i]] = rep(NA,length(foundersdegreedes[[ia]][[i]]))
         }
       }  
     # Include previous ancestors of final descendants if any
@@ -230,7 +233,9 @@ else
         {
         foundersdegreedes[[ia]][(ii+1):(ii+length(tmp[[k]]))] = tmp[[k]]
         # Setting indicator of whether the descendant of all ancestors in tmp[[k]] is a previous intermediate ancestor
-        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (ia>1, names(tmp)[k] %in% iancestors[lev.ia[[lia-1]]], FALSE))
+ 		if (ia>1)
+        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (names(tmp)[k] %in% iancestors[lev.ia[[lia-1]]],names(tmp)[k], NA))
+        else iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = NA
         ii = ii + length(tmp[[k]])
         }
       }
@@ -461,43 +466,96 @@ else
   }
 }
 
-# Computation of denominator
-    	
+denom.branch = function(current_ia,pl,carriers)
+{
 # Probability that no variant has been transmitted
 p0 = 0
-# Probability that no variant has been transmitted from previous intermediate ancestor
-pk = 1
-for (i in 1:pl$ia)
-  {
-  for (j in 1:length(pl$foundersdegreedes[[i]]))
-    p0 = p0 + prod((1-1/2^pl$foundersdegreedes[[i]][[j]]) + ifelse(pl$iancestor.as.descendant[[i]][[j]],(1/2^pl$foundersdegreedes[[i]][[j]])*pk,0))
-  if (i < pl$ia)
-    {
-  # The previous intermediate ancestor becomes the current intermediate ancestor
-  # Updates its probability, unless he is a carrier, in which case we keep it 1
-  # For now, intermediate ancestors can have only one spouse, this is why we take the indicators of the first founder attached to him
+
+if (current_ia %in% pl$iancestors)
+{
+# Current intermediate ancestor
+i = which(pl$iancestors==current_ia)
+
+# Probability that no variant has been transmitted from previous intermediate ancestors : 
+pk.vec = numeric(length(pl$ancestorsdegreedes[[i]]))
+names(pk.vec) = names(pl$ancestorsdegreedes[[i]])
+
+for (k in 1:length(pk.vec))
+{
+  		plist = denom.branch(names(pl$ancestorsdegreedes[[i]])[k],pl)
+  		pk.vec[k] = plist$pk 
+		# Increment p0 with value obtained for founders below names(pl$ancestorsdegreedes[[i]])[k]
+  		p0 = p0 + plist$p0   		
+}
+
     if (missing(carriers)) compute.pk = TRUE
     else 
       {
-      if (pl$iancestors[i]%in%carriers) compute.pk = FALSE 
+      if (current_ia%in%carriers) compute.pk = FALSE 
       else compute.pk = TRUE
       }
-    if (compute.pk) pk = prod((1-1/2^pl$ancestorsdegreedes[[i]]) + ifelse(pl$iancestor.as.descendant[[i]][[1]],1/2^pl$ancestorsdegreedes[[i]]*pk,0))
+      
+# Update p0
+for (j in 1:length(pl$foundersdegreedes[[i]]))
+{
+	p0 = p0 + prod((1-1/2^pl$foundersdegreedes[[i]][[j]]) + ifelse(is.na(pl$iancestor.as.descendant[[i]][[j]]),0,(1/2^pl$foundersdegreedes[[i]][[j]])*pk.vec[as.character(pl$iancestor.as.descendant[[i]][[j]])]))
+}  
+  # Updates the probability of the current intermediate ancestor, unless he is a carrier, in which case we keep it 1  
+  # For now, intermediate ancestors can have only one spouse, this is why we take the indicators of the first founder attached to him
+    if (compute.pk)     pk = prod((1-1/2^pl$ancestorsdegreedes[[i]]) + ifelse(is.na(pl$iancestor.as.descendant[[i]][[1]]),0,1/2^pl$ancestorsdegreedes[[i]]*pk.vec))	
     else pk=0
-    }
-  }
-# At the end, add the probability from the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
-# Since only one of his spouses can be the parent of the previous intermediate ancestor, ifelse returns only one non-zero term.
+}
+else 
+{
+	pk=1
+	p0=0
+}    
+    list(pk=pk,p0=p0)
+}
+  
+ # Computation of denominator
+     
+# First call denom.branch for final intermediate ancestor
+plist = denom.branch(pl$iancestors[pl$ia],pl,carriers) 
+
+# Probability that no variant has been transmitted 
+p0 = plist$p0
+
+# Process the dummy "intermediate" ancestor. He is currently the only one who can have more than one spouse
+# but only one of his spouses can be the parent of the previous intermediate ancestors.
   # Debugging code
   # print (foundersdegreedes[[i]])
   # print (ancestorsdegreedes[[i]])
   # print (iancestor.as.descendant[[i]])
   # print (p0)
-  tmpf = ifelse(unlist(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)]), (1/2^pl$ancestorsdegreedes[[i]]) * pk,0)
-  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + tmpf)
-
-#  tmpf = as.list(sapply(pl$iancestor.as.descendant[[i]][1:length(pl$spousevec)],function(lv,deg,pk) ifelse(lv, (1/2^deg) * pk,0), deg=pl$ancestorsdegreedes[[i]],pk=pk))  
-#  p0 = p0 + prod((1-1/2^pl$ancestorsdegreedes[[i]]) + sapply(tmpf,sum))
+if (length(pl$spousevec)>1)
+{
+	ptmp2 = 1
+  	ia.tmp = unlist(pl$iancestor.as.descendant[[pl$ia]][1:length(pl$spousevec)])
+  	# Note: iancestor.as.descendant and ancestorsdegreedes are constructed such that they are of same length
+  	# The structure of ancestorsdegreedes will need to be changed to allow intermediate ancestors below more than one spouse
+  	for (j in 1:length(pl$ancestorsdegreedes[[pl$ia]]))
+  	{
+  		# If descendant is an intermediate ancestor
+  		if (!is.na(ia.tmp[j]))
+  		{
+  			# Here the name of the intermediate ancestor to process is obtained from pl$ancestorsdegreedes
+   			plist = denom.branch(names(pl$ancestorsdegreedes[[pl$ia]])[j],pl,carriers)
+  			# Increment with value obtained for founders below names(pl$ancestorsdegreedes[[i]][j])
+  			ptmp = (1/2^pl$ancestorsdegreedes[[pl$ia]][j]) * plist$pk 
+  	   		}
+  	   	else ptmp = 0
+   		# adding probability of non transmission to descendant j
+   		ptmp = ptmp + 1-1/2^pl$ancestorsdegreedes[[pl$ia]][j]
+   		# Contribution to p0
+   		ptmp2 = ptmp2 * ptmp
+  	}
+  p0 = p0 + ptmp2
+  }
+  # If there is only one spouse, the contribution of the final intermediate ancestor to p0 equals pk
+  # returned by denom.branch
+  else p0 = p0 + plist$pk
+  
   # If children have been removed, add the probability that their other parent did not transmit them the RV
   p0 = p0 +  (1/2)*ncremoved
     # Debugging code

@@ -1,4 +1,5 @@
 exportClasses(Trio, RVsharingProb)
 exportMethods(RVsharing, GeneDrop, ComputeKinshipPropCoef)
-export(ped2trio, GeneDropSim.fn, GeneDropSimExcessSharing.fn)
+export(ped2trio, GeneDropSim.fn, GeneDropSimExcessSharing.fn, RVgene, get.psubset)
 import(utils, methods, kinship2)
+importFrom("stats", "dbinom", "weighted.mean")

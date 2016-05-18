@@ -45,10 +45,12 @@ for (lev in md:2)
       # I need to convert the offspring vector into a list to handle sibships that contain both trios and final descendants represented by a character string
       offspring.list = as.list(offspring.vec)
       # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
-      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+      for (h in which(trio.flag[offspring.vec]))
         {
-        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]
-        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+#        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]
+#        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[h],sep="")]]  
+        foundertrios[offspring.vec[h]] = FALSE
         }  
       trio.list[[r]]=new("Trio", id=dad.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",dad.trio[i],sep="")
@@ -77,10 +79,12 @@ for (lev in md:2)
       # Creating the elements of the trio object in trio.list
       offspring.list = as.list(offspring.vec)
       # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
-      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+      for (h in which(trio.flag[offspring.vec]))
         {
-        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]  
-        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+#        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]  
+#        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[h],sep="")]]  
+        foundertrios[offspring.vec[h]] = FALSE
         }  
       trio.list[[r]]=new("Trio",id=mom.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",mom.trio[i],sep="")
@@ -118,10 +122,12 @@ for (lev in md:2)
       # Creating the elements of the trio object in trio.list
       offspring.list = as.list(offspring.vec)
       # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
-      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+      for (h in which(trio.flag[offspring.vec]))
         {
-        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]  
-        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+#        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]  
+#        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[h],sep="")]]  
+        foundertrios[offspring.vec[h]] = FALSE
         }  
       trio.list[[r]]=new("Trio",id=dad.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",dad.trio[i],"_",j,sep="")
@@ -151,10 +157,12 @@ for (lev in md:2)
       # Creating the elements of the trio object in trio.list
       offspring.list = as.list(offspring.vec)
       # For children who already have their own trio, replace their name by the actual trio object in the list of offspring
-      for (h in (1:length(offspring.vec))[trio.flag[offspring.vec]])
+      for (h in which(trio.flag[offspring.vec]))
         {
-        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]  
-        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+#        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[trio.flag[offspring.vec]][h],sep="")]]  
+#        foundertrios[offspring.vec[trio.flag[offspring.vec]][h]] = FALSE
+        offspring.list[[h]] = trio.list[[paste("trio",offspring.vec[h],sep="")]]  
+        foundertrios[offspring.vec[h]] = FALSE
         }  
       trio.list[[r]]=list(id=mom.trio[i],spouse=spousevec[j],offspring = offspring.list)
       names(trio.list)[r]=paste("trio",mom.trio[i],"_",j,sep="")
