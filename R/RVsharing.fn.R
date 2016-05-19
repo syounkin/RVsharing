@@ -268,6 +268,8 @@ list(fdi=fdi,ia=ia,lev.ia=lev.ia,iancestors=iancestors,iancestor.as.descendant=i
 }
 
 pl = ped_datastruct(fdi,dv)
+desfounders=pl$desfounders
+
 # Computation of numerator
 num = 1
 for (i in 1:pl$ia)
@@ -322,9 +324,10 @@ else
   	    done = FALSE
   	    for (lia in 1:length(pl$lev.ia))
   	    {
-  	    # At first iteration, iia is length 0, so no iancestor gets added
+  	    # At first iteration over lia, iia is length 0, so no iancestor gets added
   	    fdsi = c(fd.subsets[[k]][,h],pl$iancestors[iia])
   	    
+  	      carriers.tmp = NULL
 		  for (cr in carriers)
 		    {
 		    # Check that the current carrier is a final descendant or intermediate ancestor in the current subset sharing a RV
@@ -335,7 +338,7 @@ else
 		      {
 		      	# If he has at least one descendant in the current subset sharing a RV then discard him
 		      if (any(fd.subsets[[k]][,h] %in% names(pl$ancestorsdegreedes[[which(pl$iancestors==cr)]])))
-		        carriers = setdiff(carriers,cr)
+		        carriers.tmp = setdiff(carriers,cr)
 		        # Else do nothing, and the intermediate ancestor should be recognized as a descendant of
 		        # the intermediate ancestor above him, and treated as a final descendant
 		      }
@@ -344,19 +347,26 @@ else
 		      # check if carrier is parent of a final descendant or intermediate ancestor
 		      if (cr %in% union(dad.id[pl$fdi],mom.id[pl$fdi]))
 		      {
-		      	# discard him
-		        carriers = setdiff(carriers,cr)
+		      	# discard him or her
+		        carriers.tmp = setdiff(carriers,cr)
+		        fdsi = setdiff(fdsi,cr)
 		        # If he or she does not have at least one child among the current subset sharing a RV then add one of his children to the carriers in his place and increment the meiosis reduction counter
 		      if (!any(fd.subsets[[k]][,h] %in% id[dad.id==cr | mom.id==cr]))
 		        {
-		        carriers = c(carriers,id[pl$fdi][dad.id[pl$fdi]==cr | mom.id[pl$fdi]==cr][1])    	
+		        carriers.tmp = c(carriers.tmp,id[pl$fdi][dad.id[pl$fdi]==cr | mom.id[pl$fdi]==cr][1])    	
+		        fdsi = c(fdsi,id[pl$fdi][dad.id[pl$fdi]==cr | mom.id[pl$fdi]==cr][1])    	
 		        meir = meir + 1      	
+				# Substitution of carriers in the current subset
+				fd.subsets[[k]][1:length(carriers.tmp),h] = carriers.tmp
+				#fdsi = c(fd.subsets[[k]][,h],pl$iancestors[iia])
 		        }
 		      }
 		      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
 		    }
 		  }
 		}
+		if(!is.null(carriers.tmp)) carriers  = carriers.tmp
+		
   	    insubset = c(insubset,rep(FALSE,length(iia)))
   	    for (ian in 1:length(pl$lev.ia[[lia]]))
   	    {
@@ -398,12 +408,16 @@ else
 		      if (cr %in% union(dad.id[fdi],mom.id[fdi]))
 		      {
 		      	# discard him
-		        carriers = setdiff(carriers,cr)
+		        carriers.tmp = setdiff(carriers,cr)
+				fdsi = setdiff(c(fd.subsets[[k]][,h],pl$iancestors[iia]),cr)
 		        # If he or she does not have at least one child among the current subset sharing a RV then add one of his children to the carriers in his place and increment the meiosis reduction counter
 		      if (!any(fd.subsets[[k]][,h] %in% id[dad.id==cr | mom.id==cr]))
 		        {
-		        carriers = c(carriers,id[fdi][dad.id[fdi]==cr | mom.id[fdi]==cr][1])    	
+		        carriers.tmp = c(carriers.tmp,id[fdi][dad.id[fdi]==cr | mom.id[fdi]==cr][1])    	
 		        meir = meir + 1      	
+				# Substitution of carriers in the current subset
+				fd.subsets[[k]][1:length(carriers.tmp),h] = carriers.tmp
+				fdsi = c(fd.subsets[[k]][,h],pl$iancestors[iia])
 		        }
 		      }
 		      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
@@ -417,8 +431,8 @@ else
 		 if (meir>0) 
 		 { 
 		 	numsub = numsub * 2^meir
-		 	# Substitution of carriers in the current subset
-		 	fd.subsets[[k]][1:length(carriers),h] = carriers
+		 	# Substitution of carriers in the current subset (moved earlier)
+		 	# fd.subsets[[k]][1:length(carriers),h] = carriers
 		 }
 		 for (ii in iia)
 		 {
@@ -566,7 +580,7 @@ if (length(pl$spousevec)>1)
   
 if (missing(carriers)) carrier.vec = as.character(id[fdi])
 else carrier.vec=as.character(carriers0)
-new("RVsharingProb",pshare=pshare,iancestors=pl$iancestors,desfounders=pl$desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=carrier.vec)
+new("RVsharingProb",pshare=pshare,iancestors=pl$iancestors,desfounders=desfounders,id=as.character(id),dad.id=as.character(dad.id),mom.id=as.character(mom.id),carriers=carrier.vec)
 }
 
 # Wrappers for pedigree object
