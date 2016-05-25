@@ -496,7 +496,7 @@ names(pk.vec) = names(pl$ancestorsdegreedes[[i]])
 
 for (k in 1:length(pk.vec))
 {
-  		plist = denom.branch(names(pl$ancestorsdegreedes[[i]])[k],pl)
+  		plist = denom.branch(names(pl$ancestorsdegreedes[[i]])[k],pl,carriers)
   		pk.vec[k] = plist$pk 
 		# Increment p0 with value obtained for founders below names(pl$ancestorsdegreedes[[i]])[k]
   		p0 = p0 + plist$p0   		
