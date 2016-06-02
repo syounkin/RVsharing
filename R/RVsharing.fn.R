@@ -322,6 +322,7 @@ else
   	    i = 1
   	    iia = numeric(0)
   	    done = FALSE
+  	    ia.is.carrier = FALSE
   	    for (lia in 1:length(pl$lev.ia))
   	    {
   	    # At first iteration over lia, iia is length 0, so no iancestor gets added
@@ -378,13 +379,13 @@ else
 		    	# records which final descendants from the subset are below that intermediate ancestor		    	
 		    	insubset[fdsi%in%names(pl$ancestorsdegreedes[[i]])] = TRUE		    	
 		    }
-		    # Check if all carriers in current possible subset are descendants of current intermediate ancestor 
- 	  		if (all(insubset))
- 	  		{
- 	  			# If this is the first intermediate ancestors at this level, or all final descendants are below the current intermediate ancestor, then the following intermediate ancestors
+		    # Check if all carriers in current possible subset are descendants of current intermediate ancestor and this is the first intermediate ancestors at this level, or all final descendants are below the current intermediate ancestor, then the following intermediate ancestors
  	  			# are not needed for the computation
- 	  		   if (ian == 1 | all(fdsi%in%names(pl$ancestorsdegreedes[[i]]))) {done = TRUE; break}
-			}
+ 	  		if (all(insubset) & (ian == 1 | all(fdsi%in%names(pl$ancestorsdegreedes[[i]])))) {done = TRUE; ia.is.carrier = FALSE; break}
+ 	  		# Alternatively, one of the carriers in current possible subset can be the intermediate ancestor
+ 	  		# This will affect the numerator computation, so record the fact that the IA is carrier.
+ 	  		if (all(insubset | fdsi %in% pl$iancestors[iia]) & (ian == 1 | all(fdsi%in%names(pl$ancestorsdegreedes[[i]])))) {done = TRUE; ia.is.carrier = TRUE; break}
+
 			i = i+1
 		 }
 		 if (done) break
@@ -439,11 +440,16 @@ else
 		 	# Here the intermediate ancestors in iancestors are in the list used in the computation for the current subset	
 		      numsub = numsub * 1/2^sum(pl$ancestorsdegreedes[[ii]][unique(c(fd.subsets[[k]][,h],pl$iancestors[iia]))],na.rm=TRUE)
 		 }
+		 # If the intermediate ancestor above the current subset is not a carrier, then we have
+		 # to count the transmission for his or her spouse, if that spouse is also above the current subset.
+		 if (!ia.is.carrier)
+		 {
 		 # If all members of the current subset have the same ancestor among the spouses of the final iancestor, then
 		 # done is set to true to count transmissions from that ancestor in addition to those from the final iancestor
 		 if (length(unique(sapply(pl$desfounders[intersect(fd.subsets[[k]][,h],as.character(id[fdi]))],function (vec) names(vec)[length(vec)-1])))==1) done = TRUE
 		 # If there is only one spouse, then a couple of founders can transmit a variant to all final descendents
 		 if (done | length(pl$spousevec)==1) numsub = 2*numsub
+		 }
 		 # Divide by the number of founders of the highest intermediate ancestor needed
 		 subsetkp[h] = numsub/Nf
 		 # set carriers vector back to initial carrier vector
