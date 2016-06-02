@@ -361,6 +361,8 @@ else
 				fd.subsets[[k]][1:length(carriers.tmp),h] = carriers.tmp
 				#fdsi = c(fd.subsets[[k]][,h],pl$iancestors[iia])
 		        }
+		      # If fdsi was shortened, then shorten insubset also
+			  insubset = insubset[1:length(fdsi)]
 		      }
 		      else stop("Probability computations for subsets of carriers including ",cr," cannot be performed by RVsharing.")
 		    }
@@ -399,6 +401,8 @@ else
 		 else 
 		 {
 		 	done = FALSE
+		 	# For now we don't allow founders like the last intermediate ancestor to be affected
+  	    		ia.is.carrier = FALSE
 		 	iia = 1
 		    for (cr in carriers)
 		      {
