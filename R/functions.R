@@ -47,6 +47,29 @@ GeneDropSim.fn <- function(trio.list, id, dt.vec, fd.indices, carriers=dt.vec, n
   return(sum(share.vec)/sum(occur.vec)) # note that these vectors have length n.bail
 }
 
+GeneDropSim.allsubsets.fn <- function(trio.list, id, dt.vec, fd.indices, carriers=dt.vec, n = 1e3, k = 10, nf = 1){
+  n.bail <- k*n; i <- 1;
+  share.vec <- character(n.bail); occur.vec <- logical(n.bail);
+  geno.vec = rep(NA,length(id))
+  names(geno.vec) = id
+  geno.vec[fd.indices] = 0
+
+  while( sum(occur.vec) < n & i <= n.bail ){
+      founder <- sample(fd.indices,nf,replace = FALSE)
+      geno.vec[founder] <- 1
+      geno.vec.sim = geno.vec
+      for (j in 1:length(trio.list))
+        geno.vec.sim <- GeneDrop(trio.list[[j]], geno.vec.sim)
+      if( any(is.na(geno.vec.sim))) stop("GeneDrop returned NA genotype.")
+      if (all( geno.vec.sim[setdiff(dt.vec,carriers)]==0 ) & any( geno.vec.sim[dt.vec]>0 )) share.vec[i] <- paste(carriers[geno.vec.sim[carriers]>0],collapse=";")     
+      occur.vec[i] <- any( geno.vec.sim[dt.vec]>0 )
+      geno.vec[founder] <- 0
+      i <- i + 1
+    }
+    
+  return(table(share.vec[share.vec!=""])/sum(occur.vec)) # note that these vectors have length n.bail
+}
+
 GeneDropSimExcessSharing.fn <- function(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, carriers=dt.vec, ord=5, n = 1e3, k = 10)
 {
 
