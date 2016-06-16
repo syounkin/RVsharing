@@ -234,7 +234,7 @@ else
         foundersdegreedes[[ia]][(ii+1):(ii+length(tmp[[k]]))] = tmp[[k]]
         # Setting indicator of whether the descendant of all ancestors in tmp[[k]] is a previous intermediate ancestor
  		if (ia>1)
-        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (names(tmp)[k] %in% iancestors[lev.ia[[lia-1]]],names(tmp)[k], NA))
+        iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = list(ifelse (names(tmp)[k] %in% lev.ia[[lia-1]],names(tmp)[k], NA))
         else iancestor.as.descendant[[ia]][(ii+1):(ii+length(tmp[[k]]))] = NA
         ii = ii + length(tmp[[k]])
         }
