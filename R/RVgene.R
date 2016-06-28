@@ -27,6 +27,7 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 			for (i in 1:length(sites))
 			{
 			fams.site = unique(ped.mat[ped.mat[,6]==2 & (ped.mat[,5+2*sites[i]]==minor.allele.vec[i] | ped.mat[,6+2*sites[i]]==minor.allele.vec[i]),1])
+			if (is.factor(fams.site)) fams.site=as.character(fams.site)
 			fams.vec = c(fams.vec,fams.site)
 			sites.alongfams = c(sites.alongfams,rep(sites[i],length(fams.site)))
 			minor.allele.alongfams = c(minor.allele.alongfams,rep(minor.allele.vec[i],length(fams.site)))
@@ -38,7 +39,8 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 			{
 			# Remove subjects with missing genotype
 			ped.obs = ped.mat[!is.na(ped.mat[,6+sites[i]]),]
-			fams.site = unique(ped.obs[ped.mat[,6]==2 & ped.obs[,6+sites[i]]>0,1])
+			fams.site = unique(ped.obs[ped.obs[,6]==2 & ped.obs[,6+sites[i]]>0,1])
+			if (is.factor(fams.site)) fams.site=as.character(fams.site)
 			fams.vec = c(fams.vec,fams.site)
 			sites.alongfams = c(sites.alongfams,rep(sites[i],length(fams.site)))			
 			}
