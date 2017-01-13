@@ -92,12 +92,21 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 	# Identify number of informative families
 	fam.info = names(famRVprob)[!is.na(famRVprob)]
 #	print(fam.info)
+    	nfam.info = length(fam.info)
+    if (nfam.info>0)
     mdim = prod(sapply(N.list[fam.info],length))
+    else mdim = 0
 #    cat(mdim,"\n")
-    if (mdim > maxdim) stop ("Number of possible combinations of sharing patterns is too high.")   
+    if (mdim > maxdim) 
+    {
+    	warning ("Number of possible combinations of sharing patterns is too high.")   
+	 	compute.p = FALSE   	
+    }
+    else compute.p = TRUE
     
-	nfam.info = length(fam.info)
 
+    if (compute.p)
+    {
 	# No informative family	
 	if (nfam.info == 0) p = pall = 1
 	# One informative family
@@ -169,20 +178,29 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 			nequiv.array = outer(outer(outer(outer(outer(outer(outer(outer(outer(nequiv.list[[fam.info[1]]],nequiv.list[[fam.info[2]]]),nequiv.list[[fam.info[3]]]),nequiv.list[[fam.info[4]]]),nequiv.list[[fam.info[5]]]),nequiv.list[[fam.info[6]]]),nequiv.list[[fam.info[7]]]),nequiv.list[[fam.info[8]]]),nequiv.list[[fam.info[9]]]) ,nequiv.list[[fam.info[10]]])	
 		N.array = outer(outer(outer(outer(outer(outer(outer(outer(outer(N.list[[fam.info[1]]],N.list[[fam.info[2]]],"+"),N.list[[fam.info[3]]],"+"),N.list[[fam.info[4]]],"+"),N.list[[fam.info[5]]],"+"),N.list[[fam.info[6]]],"+"),N.list[[fam.info[7]]],"+"),N.list[[fam.info[8]]],"+"),N.list[[fam.info[9]]],"+"),N.list[[fam.info[10]]],"+") 
 	} 
-	else stop ("More than 10 informative families.")
+	else 
+	{
+	warning ("More than 10 informative families.")
+	compute.p = FALSE
+	}
+	}
 	
 	if (nfam.info>1)
 	{
-		dvec=dim(pattern.prob.array)
 		# Computing p-value
 		pobs =  round(prod(famRVprob[fam.info]),5)
-		p = sum((nequiv.array*pattern.prob.array)[round(pattern.prob.array)<=pobs & N.array>=sum(famNcarriers[fam.info])])
+		if (compute.p) p = sum((nequiv.array*pattern.prob.array)[round(pattern.prob.array)<=pobs & N.array>=sum(famNcarriers[fam.info])])
+		else p = NA
 		maxN = sapply(N.list[fam.info],max)
 		not = fam.info[famNcarriers[fam.info]<maxN]
 		if (length(not)>0)
 		{
-		  pshare = list(ped.tocompute.vec=fam.info,pshare=sapply(pattern.prob.list[fam.info],min))
-		  pall = get.psubset(fam.info,not,pshare)
+		if (2^nfam.info <= maxdim)
+			{
+		  	pshare = list(ped.tocompute.vec=fam.info,pshare=sapply(pattern.prob.list[fam.info],min))
+		  	pall = get.psubset(fam.info,not,pshare)
+			}
+		else pall = NA
 		}
 		else pall = prod(sapply(pattern.prob.list[fam.info],min))
 	}
