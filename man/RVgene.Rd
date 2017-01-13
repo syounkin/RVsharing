@@ -6,7 +6,7 @@
 Computing probability of sharing of rare variants in a family sample within a genomic region such as a gene.}
 \usage{
 RVgene(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,N.list,
-type="alleles",minor.allele.vec,precomputed.prob=list(0))
+type="alleles",minor.allele.vec,precomputed.prob=list(0),maxdim = 1e9)
 }
 \arguments{
   \item{ped.mat}{a data.frame or matrix encoding the pedigree information and genotype data in the standard LINKAGE ped format (see PLINK web site [1]). In fact, only the family ID in the first column, the subject ID in the second column, the affection status in the sixth column and the genotype data starting in the seventh column are used (columns 3 to 5 are ignored). Also, family members without genotype data do not need to appear in this matrix. The genotype of each variant can be coded in two ways, each corresponding to a different value of the \code{type} option: a minor allele count on one column, as returned for example by the \code{genotypeToSnpMatrix} function, with missing values coded \code{NA} (\code{type}="count") or the identity of the two alleles on two consecutive columns, with missing values coded 0 (\code{type}="alleles").}
@@ -19,6 +19,7 @@ type="alleles",minor.allele.vec,precomputed.prob=list(0))
   \item{type}{an optional character string taking value "alleles" or "count". Default is "alleles".}
   \item{minor.allele.vec}{an optional vector of the minor alleles at each site in the \code{sites} vector. It is not needed if \code{type}="count". If it is missing and \code{type}="alleles", the minor allele is assumed to take the value 2.}
   \item{precomputed.prob}{an optional list of vectors precomputed rare variant sharing probabilities for families in \code{ped.mat} and \code{ped.listfams}. The vectors represent probabilities for all the possible values of \code{N.list} for the corresponding family (one probability per value of \code{N.list}).}
+  \item{maxdim}{upper bound on the dimension of the array containing the joint distribution of the sharing patterns for all families in \code{fams} (to avoid running out of memory).}
   }
 \value{
 A list with items:
