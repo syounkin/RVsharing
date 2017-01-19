@@ -104,18 +104,19 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
     }
     else compute.p = TRUE
     
-
-    if (compute.p)
-    {
 	# No informative family	
-	if (nfam.info == 0) p = pall = 1
+	if (nfam.info == 0) p = pall = potentialp = 1
 	# One informative family
 	else if (nfam.info == 1)
 	{
 		p = sum((nequiv.list[[fam.info]]*pattern.prob.list[[fam.info]])[round(pattern.prob.list[[fam.info]],5)<=round(famRVprob[fam.info],5) & N.list[[fam.info]]>=famNcarriers[fam.info]])
-		pall = ifelse(famNcarriers[fam.info]==max(N.list[[fam.info]]),min(pattern.prob.list[[fam.info]]),1)
+		potentialp = min(pattern.prob.list[[fam.info]])
+		pall = ifelse(famNcarriers[fam.info]==max(N.list[[fam.info]]),potentialp,1)
 	}
-	else if (nfam.info == 2)
+	else 
+	if (compute.p)
+    {
+	if (nfam.info == 2)
 	{
 		# Creating matrices of joint probabilities, number of equivalent patterns and number of carriers for the two informative families
 		pattern.prob.array = outer(pattern.prob.list[[fam.info[1]]],pattern.prob.list[[fam.info[2]]])
@@ -187,6 +188,8 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 	
 	if (nfam.info>1)
 	{
+		# Computing potential p-value
+		potentialp = prod(sapply(pattern.prob.list[fam.info],min))
 		# Computing p-value
 		pobs =  round(prod(famRVprob[fam.info]),5)
 		if (compute.p) p = sum((nequiv.array*pattern.prob.array)[round(pattern.prob.array)<=pobs & N.array>=sum(famNcarriers[fam.info])])
@@ -202,7 +205,7 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 			}
 		else pall = NA
 		}
-		else pall = prod(sapply(pattern.prob.list[fam.info],min))
+		else pall = potentialp
 	}
-	list(p=p,pall=pall)	
+	list(p=p,pall=pall,potentialp=potentialp)	
 }
