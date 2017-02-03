@@ -24,6 +24,7 @@ Collate: AllGenerics.R
 	 extract_carriers.R
 	 pvalue_functions.R
 	 RVgene.R
+	 RVgene_allshare.R
          zzz.R
 LazyLoad: yes
 biocViews:
