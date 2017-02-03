@@ -53,6 +53,7 @@ GeneDropSim.allsubsets.fn <- function(trio.list, id, dt.vec, fd.indices, carrier
   geno.vec = rep(NA,length(id))
   names(geno.vec) = id
   geno.vec[fd.indices] = 0
+  carriers = sort(carriers)
 
   while( sum(occur.vec) < n & i <= n.bail ){
       founder <- sample(fd.indices,nf,replace = FALSE)
