@@ -18,7 +18,7 @@ type="alleles",minor.allele.vec,precomputed.prob=list(0),maxdim = 1e9)
   \item{N.list}{a vector of the number of affected subjects sharing a rare variant in the corresponding pattern in \code{pattern.prob.list}.}
   \item{type}{an optional character string taking value "alleles" or "count". Default is "alleles".}
   \item{minor.allele.vec}{an optional vector of the minor alleles at each site in the \code{sites} vector. It is not needed if \code{type}="count". If it is missing and \code{type}="alleles", the minor allele is assumed to take the value 2.}
-  \item{precomputed.prob}{an optional list of vectors precomputed rare variant sharing probabilities for families in \code{ped.mat} and \code{ped.listfams}. The vectors represent probabilities for all the possible values of \code{N.list} for the corresponding family (one probability per value of \code{N.list}).}
+  \item{precomputed.prob}{an optional list of vectors precomputed rare variant sharing probabilities for families in \code{ped.mat} and \code{ped.listfams}.  If the vectors are named, the names must be strings formed by the concatenation of the sorted carrier names separated by semi-columns, as in the output of \code{GeneDropSim.allsubsets.fn}. If the vectors are not named, the vectors must represent probabilities for all the possible values of \code{N.list} for the corresponding family (one probability per value of \code{N.list}).}
   \item{maxdim}{upper bound on the dimension of the array containing the joint distribution of the sharing patterns for all families in \code{fams} (to avoid running out of memory).}
   }
 \value{

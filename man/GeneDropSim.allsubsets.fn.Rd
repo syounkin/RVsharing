@@ -20,7 +20,7 @@ GeneDropSim.allsubsets.fn(trio.list, id, dt.vec, fd.indices, carriers=dt.vec, n 
   \item{nf}{number of founders introducing the rare variant into the pedigree.}
   }
 \value{
-  Vector of estimates of the probabilities of sharing of a rare variant for all subsets of subjects of a specified set of pedigree members given the rare variant occured in any of them. The names of the vector elements are the names of the subjects in the corresponding subset, separated by semi-columns.
+  Vector of estimates of the probabilities of sharing of a rare variant for all subsets of subjects of a specified set of pedigree members given the rare variant occured in any of them. The names of the vector elements are the concatenation of the sorted names of the subjects in the corresponding subset, separated by semi-columns.
   }
   \details{ The transmission of the RV down the pedigree from the \code{nf} founders introducing it is simulated according to Mendel's laws.  The events that the variant was observed in any of the subjects from \code{dt.vec} and in all subsets of subjects included in \code{carriers} are then recorded. The simulation continues until the number of replicates where the RV was observed in any of the subjects from \code{dt.vec} reaches \code{n} or the number of replicates reaches \code{k n}. The RV sharing probabilities are then estimated as the number of replicates where the RV was observed in each subset over \code{n} (or the number of replicates where the RV was observed in any of the subjects when \code{k n} replicates are reached).
     }
