@@ -25,6 +25,7 @@ type="alleles",minor.allele.vec,precomputed.prob=list(0),maxdim = 1e9)
 A list with items:
 \item{p}{P-value of the exact rare variant sharing test allowing for sharing by a subset of affected subjects.}
 \item{pall}{P-value of the exact rare variant sharing test requiring sharing by all affected subjects.}
+\item{potentialp}{Minimum achievable p-value if all affected subjects were carriers of a rare variant.}
 	  }
   \details{ The function extracts the carriers of the minor allele at each entry in \code{sites} in each family where it is present in \code{ped.mat} (or in the families specified in \code{fams} if that argument is specified). It then computes exact rare variant sharing probabilities in each family for each variant by calling \code{RVsharing}. If multiple rare variants are seen in the same family, the smallest sharing probability among all rare variants is retained. 
   	The joint rare variant sharing probability over all families is obtained as the product of the family-specific probabilities. The p-value of the test allowing for sharing by a subset of affected subjects over the rare variants in the genomic region is then computed as the sum of the probabilities of the possible combinations of sharing patterns among all families with a probability less than or equal to the observed joint probability and a total number of carriers greater than or equal to the sum of the number of carriers in all families, using the values in \code{pattern.prob.list}, \code{nequiv.list} and \code{N.list}.
