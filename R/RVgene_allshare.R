@@ -85,7 +85,7 @@ RVgene_allshare = function(ped.mat,ped.listfams,sites,fams,pshare.vec,type="alle
 	if (nfam.info>1)
 	{
 		# Computing potential p-value
-		potentialp = prod(sapply(pattern.prob.list[fam.info],min))
+		potentialp = prod(pshare.vec[fam.info])
 		# Extraction of the number of affected subjects in each informative family
 		ped.info = ped.mat[ped.mat[,1]%in%fam.info,]
 		maxN = tapply(ped.info[,6],ped.info[,1],function(vec) sum(vec==2))
