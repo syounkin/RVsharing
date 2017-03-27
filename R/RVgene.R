@@ -88,7 +88,7 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 				# separated by ; and the probability for the current carriers
 				# is extracted
 				else
-					tmp = precomputed.prob[[fams.vec[f]]][paste(carriers,collapse=";")]
+					tmp = precomputed.prob[[fams.vec[f]]][paste(sort(carriers),collapse=";")]
 			} 
 			else tmp = RVsharing(ped.listfams[[fams.vec[f]]],carriers=carriers)@pshare
 			# If the RV has lower sharing probability, we keep it for this family
@@ -203,7 +203,7 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 		potentialp = prod(sapply(pattern.prob.list[fam.info],min))
 		# Computing p-value
 		pobs =  round(prod(famRVprob[fam.info]),5)
-		if (compute.p) p = sum((nequiv.array*pattern.prob.array)[round(pattern.prob.array)<=pobs & N.array>=sum(famNcarriers[fam.info])])
+		if (compute.p) p = sum((nequiv.array*pattern.prob.array)[round(pattern.prob.array,5)<=pobs & N.array>=sum(famNcarriers[fam.info])])
 		else p = NA
 		maxN = sapply(N.list[fam.info],max)
 		not = fam.info[famNcarriers[fam.info]<maxN]
