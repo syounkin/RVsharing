@@ -82,13 +82,13 @@ RVgene = function(ped.mat,ped.listfams,sites,fams,pattern.prob.list,nequiv.list,
 				# If the precomputed probabilities for the current family
 				# have no name, then assume the probabilities are listed
 				# for each possible number of carriers in the family
-				if (is.null(names(precomputed.prob[[fams.vec[f]]])))
-					tmp = precomputed.prob[[fams.vec[f]]][length(carriers)]
+				if (is.null(names(precomputed.prob[[as.character(fams.vec[f])]])))
+					tmp = precomputed.prob[[as.character(fams.vec[f])]][length(carriers)]
 				# Otherwise, the names are assumed to be carrier subsets 
 				# separated by ; and the probability for the current carriers
 				# is extracted
 				else
-					tmp = precomputed.prob[[fams.vec[f]]][paste(sort(carriers),collapse=";")]
+					tmp = precomputed.prob[[as.character(fams.vec[f])]][paste(sort(carriers),collapse=";")]
 			} 
 			else tmp = RVsharing(ped.listfams[[fams.vec[f]]],carriers=carriers)@pshare
 			# If the RV has lower sharing probability, we keep it for this family
