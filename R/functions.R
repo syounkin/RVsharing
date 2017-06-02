@@ -74,7 +74,7 @@ GeneDropSim.allsubsets.fn <- function(trio.list, id, dt.vec, fd.indices, carrier
 GeneDropSimExcessSharing.fn <- function(trio.list, id, dt.vec, fd.indices, phihat, RVfreq, carriers=dt.vec, ord=5, n = 1e3, k = 10)
 {
 
-if (ord > 5) stop ("Order of the polynomial approximation cannot exceed 5.")
+#if (ord > 5) stop ("Order of the polynomial approximation cannot exceed 5.")
 if (ord <= 0) stop ("Order of the polynomial approximation must be at least 1.")
 if (any(phihat < 0)) stop ("Mean kinship between founders must be non-negative.")
 
@@ -103,7 +103,7 @@ for (r in 1:nrep)
   share.vec <- logical(n.bail); occur.vec <- logical(n.bail);
 
   # Distribution of number of duplicated alleles
-  distri = c(1,theta,theta^2/2,theta^3/6,theta^4/24,theta^5/120)[1:(ord+1)]
+  distri = theta^(0:ord)/factorial(0:ord)
   distri = distri/sum(distri)
 
   while( sum(occur.vec) < n & i <= n.bail )
@@ -162,8 +162,8 @@ for (r in 1:nrep)
       for (j in 1:length(trio.list))
         geno.vec.sim <- GeneDrop(trio.list[[j]], geno.vec.sim)
       if( any(is.na(geno.vec.sim))) stop("GeneDrop returned NA genotype.")
-      share.vec[i] <- all( geno.vec.sim[carriers]==1 & all( geno.vec.sim[setdiff(dt.vec,carriers)]==0 ) )
-      occur.vec[i] <- any( geno.vec.sim[dt.vec]==1 )
+      share.vec[i] <- all( geno.vec.sim[carriers]>0 & all( geno.vec.sim[setdiff(dt.vec,carriers)]==0 ) )
+      occur.vec[i] <- any( geno.vec.sim[dt.vec]>0 )
       geno.vec[founder] <- 0
       # Debugging code
       #print (geno.vec)
@@ -171,6 +171,7 @@ for (r in 1:nrep)
     }
     pMC[r] = sum(share.vec)/sum(occur.vec) # note that these vectors have length n.bail
     }
+    else warning(paste("Negative mean value for the truncated Poisson approximation to the distribution for the number of alleles distinct by descent among the founders when phihat = ",phihat[r]," Try increasing ord."))
   }
   return(pMC)
 }
