@@ -40,7 +40,7 @@ infer.theta = function(phi,phi.vec)
 {
 ord = length(phi.vec)
 phi.diff = (phi - phi.vec)
-coef.vec = c(1,1/2,1/6,1/24,1/120)[1:ord]
+coef.vec = 1/factorial(1:ord)
 racines = polyroot(c(phi,phi.diff[ord:1]*coef.vec))
 # Return only the real roots
 Re(racines)[abs(Im(racines))<1e-10]
