@@ -8,12 +8,12 @@ PFU.direct = function(nf,theta,ord=2)
 # nf: number of founders of the pedigree
 # theta : value of the parameter of the polynomial distribution
 # ord : order of the polynomial approximation to the distribution of the number 
-#       of distinct alleles in the founders (noted d in Bureau et al.) Must be <= 5.
+#       of distinct alleles in the founders (noted d in Bureau et al.).
 
 # Value: P[FjU] (scalar)
 
 a = (2*nf):(2*nf-ord)
-distri = c(1,theta,theta^2/2,theta^3/6,theta^4/24,theta^5/120)[1:(ord+1)]
+distri = theta^(0:ord)/factorial(0:ord)
 weighted.mean(2/nf - 2/a,distri)
 }
 
